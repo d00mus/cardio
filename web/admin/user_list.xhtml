@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Список сотрудников</title>
+    </h:head>
+    <h:body>
+        <ui:include src="../ui/login_menu.xhtml"/> 
+        <h:form>
+            <style type="text/css">
+                /* Important required because row */
+                .ui-datatable-odd {
+                    background-color:lightgray !important;
+                    background-position-y: -1400px; /* IE7 hack */
+                }
+                .ui-widget {
+                    /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                    font-size: 0.90em/*{fsDefault}*/;
+                }                
+            </style>
+            <p:panel header="Список сотрудников">
+                <h:panelGrid columns="1">
+                    <br/>
+                    <p:commandButton action="#{userListBean.goCreateNew()}"
+                                     value="Завести нового сотрудника"
+                                     ajax="false"
+                                     rendered="#{loginBean.admin or loginBean.chief or loginBean.buch}"
+                                     />
+                    <br/>
+                    <h:commandButton value="Показать всех"
+                                     type="button"
+                                     actionListener="#{userListBean.clearFilter}"
+                                     >
+                        <f:ajax execute="@this" render="userList"/>
+
+                    </h:commandButton>
+
+                    <p:dataTable id="userList"
+                                 value="#{userListBean.items}"
+                                 var="row"
+                                 paginator="true"
+                                 paginatorPosition="bottom" 
+                                 rows="20"
+                                 filteredValue="#{userListBean.filteredUsers}"
+                                 filterDelay="250"
+                                 emptyMessage="Записей не найдено"
+                                 widgetVar="userTable"
+
+                                 >
+
+                        <p:column id="UserLogin" headerText="Логин" sortBy="#{row.userName}"
+                                  filterBy="#{row.userName}" filterMatchMode="contains"
+                                  >
+                            <h:outputText id="UserLoginCell" value="#{row.userName}"/>
+                        </p:column>
+
+
+                        <p:column id="UserLastName" headerText="Фамилия" sortBy="#{row.lastName}"
+                                  filterBy="#{row.lastName}" filterMatchMode="contains"
+                                  >
+                            <h:outputText id="lastNameCell" value="#{row.lastName}"/>
+                        </p:column>
+
+                        <p:column id="UserFirstName" headerText="Имя" sortBy="#{row.firstName}"
+                                  filterBy="#{row.firstName}" filterMatchMode="contains"
+                                  >
+                            <h:outputText id="firstNameCell" value="#{row.firstName}"/>
+                        </p:column>
+
+                        <p:column id="UserSecondName" headerText="Отчество" sortBy="#{row.middleName}"
+                                  filterBy="#{row.middleName}" filterMatchMode="contains"
+                                  >
+                            <h:outputText id="middleNameCell" value="#{row.middleName}"/>
+                        </p:column>
+
+                        <p:column id="UserBirthDate" headerText="Дата рождения"
+                                  sortBy="#{row.birthDate}"
+                                  filterBy="#{row.birthDate.month}"
+                                  filterMatchMode="exact"
+                                  >
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('userTable').filter()" >
+                                    <f:selectItem itemLabel="Месяц рождения" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="(01)Январь" itemValue="0"/>
+                                    <f:selectItem itemLabel="(02)Февраль" itemValue="1"/>
+                                    <f:selectItem itemLabel="(03)Март" itemValue="2"/>
+                                    <f:selectItem itemLabel="(04)Апрель" itemValue="3"/>
+                                    <f:selectItem itemLabel="(05)Май" itemValue="4"/>
+                                    <f:selectItem itemLabel="(06)Июнь" itemValue="5"/>
+                                    <f:selectItem itemLabel="(07)Июль" itemValue="6"/>
+                                    <f:selectItem itemLabel="(08)Август" itemValue="7"/>
+                                    <f:selectItem itemLabel="(09)Сентябрь" itemValue="8"/>
+                                    <f:selectItem itemLabel="(10)Октябрь" itemValue="9"/>
+                                    <f:selectItem itemLabel="(11)Ноябрь" itemValue="10"/>
+                                    <f:selectItem itemLabel="(12)Декабрь" itemValue="11"/>
+                                </p:selectOneMenu>
+                            </f:facet>                            
+                            <h:outputText id="UserBirthDateCell" value="#{row.birthDate}">
+                                <f:convertDateTime timeStyle="GMT" pattern="dd.MM.yyyy"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column id="UsrAddrState" headerText="Область" sortBy="#{row.adrState.rusName}"
+                                  filterBy="#{row.adrState.rusName}" filterMatchMode="contains"
+
+                                  >
+                            <h:outputText id="UsrAddrStateCell" value="#{row.adrState.rusName}"/>
+                        </p:column>
+
+
+                        <p:column id="UsrAddrTown" headerText="Город" sortBy="#{row.adrTown.rusName}"
+                                  filterBy="#{row.adrTown.rusName}" filterMatchMode="contains"
+
+                                  >
+                            <h:outputText id="UsrAddressCityCell" value="#{row.adrTown.rusName}"/>
+                        </p:column>
+
+
+
+                        <p:column id="UsrProfileLink" headerText="Действия">
+                            <h:panelGroup rendered="#{loginBean.admin or loginBean.chief or loginBean.buch}">
+                                <h:commandButton value="Править" action="#{userListBean.goEdit(row)}"/>
+                            </h:panelGroup>
+
+                            <h:commandButton value="Печать" action="#{userListBean.print(row)}"/>
+<!--                                
+                            <h:outputLink value="../../webresources/report/user/#{row.id}">
+                                <h:outputText value="Печать анкеты"/>
+                            </h:outputLink>
+                            -->
+                        </p:column>
+                        
+                    </p:dataTable>
+                </h:panelGrid>
+            </p:panel>
+
+            <br/>
+            <h:commandButton value="Обновить" action="#{userListBean.refresh()}"/>
+
+        </h:form>
+    </h:body>
+</html>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Учреждения</title>
+    </h:head>
+    <h:body>
+        <ui:include src="../ui/login_menu.xhtml"/> 
+        <h:form>
+            <style type="text/css">
+                /* Important required because row */
+                .ui-datatable-odd {
+                    background-color:lightgray !important;
+                    background-position-y: -1400px; /* IE7 hack */
+                }
+                .ui-widget {
+                    /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                    font-size: 0.90em/*{fsDefault}*/;
+                }                
+            </style>
+
+            <p:growl id="growl" binding="#{bnd.growl}" showDetail="true" />
+
+            <p:panel header="Список учреждений">
+                <h:panelGrid columns="1">
+                    <br/>
+                    <p:commandButton action="#{partnerListBean.goCreateNew()}"
+                                     value="Завести новое учреждение"
+                                     ajax="false"
+                                     />
+                    <br/>
+                    <h:commandButton value="Показать всех"
+                                     type="button"
+                                     actionListener="#{partnerListBean.clearFilter}"
+                                     >
+                        <f:ajax execute="@this" render=":#{bnd.partnerList.clientId}"/>
+
+                    </h:commandButton>
+
+                    <p:dataTable id="partnerList"
+                                 binding="#{bnd.partnerList}"
+                                 value="#{partnerListBean.value}" 
+                                 var="row"
+                                 paginator="true"
+                                 paginatorPosition="bottom" 
+                                 rows="20"
+                                 filteredValue="#{partnerListBean.filtered}"
+                                 filterDelay="250"
+                                 emptyMessage="Записей не найдено"
+                                 resizableColumns="true"
+
+                                 >
+
+                        <p:column headerText="Название"
+                                  sortBy="#{row.name}"
+                                  filterBy="#{row.name}"
+                                  filterMatchMode="contains"
+                                  width="400"
+                                  >          
+                            <p:commandLink action="#{partnerListBean.goEdit(row)}">
+                                <h:outputText value="#{row.name}"/>
+                            </p:commandLink>
+
+                        </p:column>
+
+                        <p:column headerText="ИНН"
+                                  sortBy="#{row.inn}"
+                                  filterBy="#{row.inn}"
+                                  filterMatchMode="contains"
+                                  >          
+                            <p:commandLink action="#{partnerListBean.goEdit(row)}">
+                                <h:outputText value="#{row.inn}"/>
+                            </p:commandLink>
+                        </p:column>
+
+
+                        <p:column headerText="Тип"
+                                  sortBy="#{row.type.name}"
+                                  filterBy="#{row.type.name}"
+                                  filterMatchMode="contains"
+                                  >          
+                            <h:outputText value="#{row.type.name}"/>
+                        </p:column>
+
+
+                        <p:column headerText="Область"
+                                  sortBy="#{row.jurAddrUaState.rusName}"
+                                  filterBy="#{row.jurAddrUaState.rusName}"
+                                  filterMatchMode="contains"
+                                  >          
+                            <h:outputText value="#{row.jurAddrUaState.rusName}"/>
+                        </p:column>
+
+                        <p:column headerText="Город"
+                                  sortBy="#{row.jurAddrUaTown.rusName}"
+                                  filterBy="#{row.jurAddrUaTown.rusName}"
+                                  filterMatchMode="contains"
+                                  >          
+                            <h:outputText value="#{row.jurAddrUaTown.rusName}"/>
+                        </p:column>
+
+                        <p:column headerText="Адрес"
+                                  sortBy="#{row.address}"
+                                  filterBy="#{row.address}"
+                                  filterMatchMode="contains"
+                                  >          
+                            <h:outputText value="#{row.address}"/>
+                        </p:column>
+
+                        <p:column headerText="Менеджер"
+                                  sortBy="#{row.manager.toString()}"
+                                  filterBy="#{row.manager.toString()}"
+                                  filterMatchMode="contains"
+                                  >          
+                            <h:outputText value="#{row.manager.toString()}"/>
+                        </p:column>
+
+                        <p:column headerText="Телефон(ы)"
+                                  sortBy="#{row.phone}"
+                                  filterBy="#{row.phone}"
+                                  filterMatchMode="contains"
+                                  >          
+                            <h:outputText value="#{row.phone}"/>
+                        </p:column>
+
+                        <p:column headerText="email"
+                                  sortBy="#{row.email}"
+                                  filterBy="#{row.email}"
+                                  filterMatchMode="contains"
+                                  rendered="false"
+                                  >          
+                            <h:outputText value="#{row.email}"/>
+                        </p:column>
+
+                        <p:column headerText="Сайт"
+                                  sortBy="#{row.www}"
+                                  filterBy="#{row.www}"
+                                  filterMatchMode="contains"
+                                  rendered="false"
+                                  >
+                            <h:outputLink value="#{row.www}">
+                                <h:outputText value="#{row.www}"/>
+                            </h:outputLink>
+                        </p:column>
+
+                        <p:column headerText="Действия">
+                            <p:commandButton value="Править" action="#{partnerListBean.goEdit(row)}"/>
+
+                            <p:commandButton
+                                value="Удалить"
+                                rendered="#{loginBean.admin}"
+                                action="#{partnerListBean.closePartner(row)}"
+                                ajax="true"
+                                update=":#{bnd.partnerList.clientId} :#{bnd.growl.clientId}"
+                                process="@this"
+                                >
+                                <p:confirm header="Подтверждение" message="Точно удалить? На самом деле все данные останутся в базе, просто их не будет видно" icon="ui-icon-alert">
+                                </p:confirm>
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                                        <p:commandButton value="Да" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                        <p:commandButton value="Нет" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    </p:confirmDialog>            
+                            </p:commandButton>
+
+                        </p:column>
+
+                    </p:dataTable>
+
+                </h:panelGrid>
+            </p:panel>
+
+        </h:form>
+    </h:body>
+</html>

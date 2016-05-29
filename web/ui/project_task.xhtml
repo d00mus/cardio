@@ -1,0 +1,646 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <h:head>
+
+        <title>Проекты/задачи</title>
+
+        <script type="text/javascript">
+            PrimeFaces.locales ['ru'] = {
+                closeText: 'Закрыть',
+                prevText: 'Назад',
+                nextText: 'Вперёд',
+                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Субота'],
+                dayNamesShort: ['Воск', 'Пон', 'Вт', 'Ср', 'Четв', 'Пят', 'Суб'],
+                dayNamesMin: ['В', 'П', 'Вт', 'С ', 'Ч', 'П ', 'Сб'],
+                weekHeader: 'Неделя',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Только время',
+                timeText: 'Время',
+                hourText: 'Час',
+                minuteText: 'Минута',
+                secondText: 'Секунда',
+                currentText: 'Сегодня',
+                ampm: false,
+                month: 'Месяц',
+                week: 'неделя',
+                day: 'День',
+                allDayText: 'Весь день'
+            };
+        </script>
+
+    </h:head>
+    <h:body>
+        <style type="text/css">
+            /* Important required because row */
+            .ui-datatable-odd {
+                background-color:lightgray !important;
+                background-position-y: -1400px; /* IE7 hack */
+            }
+            .ui-widget {
+                /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                font-size: 0.90em/*{fsDefault}*/;
+            }                
+        </style>
+
+        <ui:include src="../ui/login_menu.xhtml"/> 
+
+        <h:form>
+            <p:panel header="Проекты и задачи">
+                <p:growl id="mainMessages" life="750" binding="#{bnd.growl}" showDetail="true"/>
+
+                <p:tabView>
+                    <p:tab title="Мои задачи">
+                        <p:commandButton value="Обновить"
+                                         action="#{projectListBean.updateMyTasks()}"
+                                         >
+                        </p:commandButton>
+
+                        <h:panelGrid columns="1">
+                            <p:dataTable id="myTaskList"
+                                         value="#{projectListBean.myTaskList}"
+                                         binding="#{bnd.myTaskList}"
+                                         var="row"
+                                         paginator="true"
+                                         paginatorPosition="bottom"
+                                         filteredValue="#{projectListBean.myTaskListFiltered}"
+                                         filterDelay="250"
+                                         emptyMessage="Записей не найдено"
+                                         >
+<!--                                
+                                <p:column headerText="Учреждение"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.partner.name}"
+                                          sortBy="#{row.partner.name}"
+                                          >
+                                    <h:outputText value="#{row.partner.name}"></h:outputText>  
+                                </p:column>-->
+                                
+                                <p:column headerText="Дата по плану"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.planDate}"
+                                          sortBy="#{row.planDate}"
+                                          >
+                                    <h:outputText value="#{row.planDate}">
+                                        <f:convertDateTime timeZone="UTC"
+                                                           pattern="dd.MM.yyyy"
+                                                           />
+                                    </h:outputText>  
+                                </p:column>
+
+                                <p:column headerText="Менеджер"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.user.toString()}"
+                                          sortBy="#{row.user.toString()}"
+                                          >
+                                    <h:outputText value="#{row.user.toString()}"></h:outputText>  
+                                </p:column>
+
+                                <p:column headerText="Область"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.uaTown.state.rusName}"
+                                          sortBy="#{row.uaTown.state.rusName}"
+                                          >
+                                    <h:outputText value="#{row.uaTown.state.rusName}"></h:outputText>  
+                                </p:column>
+                                
+                                <p:column headerText="Город"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.uaTown.rusName}"
+                                          sortBy="#{row.uaTown.rusName}"
+                                          >
+                                    <h:outputText value="#{row.uaTown.rusName}"></h:outputText>  
+                                </p:column>
+                                
+                                
+                                <p:column headerText="Конт. Лицо"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.contPersonName}"
+                                          sortBy="#{row.contPersonName}"
+                                          
+                                          >
+                                    <h:outputText value="#{row.contPersonName}"></h:outputText>  
+                                </p:column>
+
+                                <p:column headerText="Телефон"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.contPersonPhone}"
+                                          sortBy="#{row.contPersonPhone}"
+                                          >
+                                    <h:outputText value="#{row.contPersonPhone}"></h:outputText>  
+                                </p:column>
+                                
+                                <p:column headerText="Тип"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.type.name}"
+                                          sortBy="#{row.type.name}"
+                                          >
+
+                                    <h:outputText value="#{row.type.name}"></h:outputText>  
+                                </p:column>
+                                
+                                
+                                <p:column headerText="Оборудование"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.storeItemListAsString}"
+                                          sortBy="#{row.storeItemListAsString}"
+                                          
+                                          >
+                                    <h:outputText value="#{row.storeItemListAsString}"></h:outputText>  
+                                </p:column>
+                                
+                                <p:column headerText="Инженер"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.engineer.toString()}"
+                                          sortBy="#{row.engineer.toString()}"
+                                          >
+                                    <h:outputText value="#{row.engineer.toString()}"></h:outputText>  
+                                </p:column>
+                                
+                                <p:column headerText="Статус"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.status.name}"
+                                          sortBy="#{row.status.name}"
+                                          >
+                                    <h:outputText value="#{row.status.name}"></h:outputText>  
+                                </p:column>
+
+                                <p:column headerText="Фактическая дата"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.factDate}"
+                                          sortBy="#{row.factDate}"
+                                          >
+                                    <h:outputText value="#{row.factDate}">
+                                        <f:convertDateTime timeZone="UTC"
+                                                           pattern="dd.MM.yyyy"
+                                                           />
+                                    </h:outputText>  
+                                </p:column>
+
+<!--
+                                <p:column headerText="Примечание"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.notes}"
+                                          sortBy="#{row.notes}"
+                                          >
+                                    <h:outputText value="#{row.notes}"
+                                                  >
+                                    </h:outputText>  
+                                </p:column>
+-->
+
+                                <p:column headerText="Действия"
+                                          >
+                                    <p:commandButton value="Править"
+                                                     action="#{projectListBean.goEditTask(row)}"
+                                                     ajax="false"
+                                                     >
+
+
+                                    </p:commandButton>   
+
+                                    <p:commandButton value="Удалить"
+                                                     action="#{projectListBean.deleteTask(row)}"
+                                                     ajax="true"
+                                                     update=":#{bnd.myTaskList.clientId} :#{bnd.growl.clientId}"
+                                                     >
+
+                                    </p:commandButton>
+
+                                </p:column>
+
+                            </p:dataTable>   
+                        </h:panelGrid>
+
+                        <p:commandButton value="Добавить задачу"
+                                         action="#{projectListBean.goCreateNewTask()}"
+                                         ajax="false"
+                                         >
+
+                        </p:commandButton>
+
+                    </p:tab>
+                    
+                    <!--========================================================================-->
+                    <p:tab title="Мои проекты">
+
+                        <p:commandButton value="Обновить"
+                                         action="#{projectListBean.updateMyProjects()}"
+                                         >
+                        </p:commandButton>
+
+                        <h:panelGrid columns="1">
+                            <p:dataTable id="myProjectList"
+                                         binding="#{bnd.myProjectList}"
+                                         value="#{projectListBean.myProjectList}"
+                                         var="row"
+                                         paginator="true"
+                                         paginatorPosition="bottom"
+                                         filteredValue="#{projectListBean.myProjectListFiltered}"
+                                         filterDelay="250"
+                                         emptyMessage="Записей не найдено"
+                                         >
+                                
+                                <p:column headerText="Название"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.name}"
+                                          sortBy="#{row.name}"
+                                          >
+                                    <h:outputText value="#{row.name}">
+                                    </h:outputText>  
+                                </p:column>           
+
+                                <p:column headerText="Менеджер"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.user.toString()}"
+                                          sortBy="#{row.user.toString()}"
+                                          >
+                                    <h:outputText value="#{row.user.toString()}">
+                                    </h:outputText>  
+                                </p:column>           
+                                
+
+                                <p:column headerText="Учреждение"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.partner.name}"
+                                          sortBy="#{row.partner.name}"
+                                          >
+                                    <h:outputText value="#{row.partner.name}">
+                                    </h:outputText>  
+                                </p:column>         
+                                
+                                <p:column headerText="Оборудование"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.storeItemListAsString}"
+                                          sortBy="#{row.storeItemListAsString}"
+                                          
+                                          >
+                                    <h:outputText value="#{row.storeItemListAsString}"></h:outputText>  
+                                </p:column>
+                                
+                                <p:column headerText="Статус"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.status.name}"
+                                          sortBy="#{row.status.name}"
+                                          >
+                                    <h:outputText value="#{row.status.name}">
+                                    </h:outputText>  
+                                </p:column>
+                                
+<!--
+                                <p:column headerText="Конт. лицо"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.contactPers.fio}"
+                                          sortBy="#{row.contactPers.fio}"
+                                          >
+                                    <h:outputText value="#{row.contactPers.fio}">
+                                    </h:outputText>  
+                                </p:column>           
+-->
+
+                                <p:column headerText="Примечание"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.notes}"
+                                          sortBy="#{row.notes}"
+                                          >
+                                    
+                                    <h:outputText value="#{row.notes}">
+                                    </h:outputText>  
+                                </p:column>     
+
+                                <p:column headerText="Действия"
+                                          >
+                                    <p:commandButton value="Править"
+                                                     action="#{projectListBean.goEditProject(row)}"
+                                                     ajax="false"
+                                                     >
+
+
+                                    </p:commandButton>   
+
+                                    <p:commandButton value="Удалить"
+                                                     action="#{projectListBean.deleteProject(row)}"
+                                                     ajax="true"
+                                                     update=":#{bnd.myProjectList.clientId} :#{bnd.growl.clientId}"
+                                                     >
+
+                                    </p:commandButton>
+
+                                </p:column>
+
+
+                            </p:dataTable>
+                        </h:panelGrid>
+
+                        <p:commandButton value="Добавить проект"
+                                         action="#{projectListBean.goCreateNewProject()}"
+                                         ajax="false"
+                                         >
+
+                        </p:commandButton>
+
+
+                    </p:tab>
+                    <!--========================================================================-->
+
+                    <p:tab title="Все задачи"> 
+                        <h:panelGrid columns="1">
+                            <p:dataTable id="taskList"
+                                         value="#{projectListBean.taskList}"
+                                         binding="#{bnd.taskList}"
+                                         var="row"
+                                         paginator="true"
+                                         paginatorPosition="bottom"
+                                         filteredValue="#{projectListBean.taskListFiltered}"
+                                         filterDelay="250"
+                                         emptyMessage="Записей не найдено"
+                                         >
+<!--                                 
+                                <p:column headerText="Учреждение"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.partner.name}"
+                                          sortBy="#{row.partner.name}"
+                                          >
+                                    <h:outputText value="#{row.partner.name}"></h:outputText>  
+                                </p:column>
+                                -->
+                                <p:column headerText="Дата по плану"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.planDate}"
+                                          sortBy="#{row.planDate}"
+                                          >
+                                    <h:outputText value="#{row.planDate}">
+                                        <f:convertDateTime timeZone="UTC"
+                                                           pattern="dd.MM.yyyy"
+                                                           />
+                                    </h:outputText>  
+                                </p:column>
+
+                                <p:column headerText="Менеджер"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.user.toString()}"
+                                          sortBy="#{row.user.toString()}"
+                                          >
+                                    <h:outputText value="#{row.user.toString()}"></h:outputText>  
+                                </p:column>
+
+                                <p:column headerText="Область"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.uaTown.state.rusName}"
+                                          sortBy="#{row.uaTown.state.rusName}"
+                                          >
+                                    <h:outputText value="#{row.uaTown.state.rusName}"></h:outputText>  
+                                </p:column>
+                                
+                                <p:column headerText="Город"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.uaTown.rusName}"
+                                          sortBy="#{row.uaTown.rusName}"
+                                          >
+                                    <h:outputText value="#{row.uaTown.rusName}"></h:outputText>  
+                                </p:column>
+                                
+                                
+                                <p:column headerText="Конт. Лицо"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.contPersonName}"
+                                          sortBy="#{row.contPersonName}"
+                                          
+                                          >
+                                    <h:outputText value="#{row.contPersonName}"></h:outputText>  
+                                </p:column>
+
+                                <p:column headerText="Телефон"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.contPersonPhone}"
+                                          sortBy="#{row.contPersonPhone}"
+                                          >
+                                    <h:outputText value="#{row.contPersonPhone}"></h:outputText>  
+                                </p:column>
+                                
+                                <p:column headerText="Тип"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.type.name}"
+                                          sortBy="#{row.type.name}"
+                                          >
+
+                                    <h:outputText value="#{row.type.name}"></h:outputText>  
+                                </p:column>
+                                
+                                
+                                <p:column headerText="Оборудование"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.storeItemListAsString}"
+                                          sortBy="#{row.storeItemListAsString}"
+                                          
+                                          >
+                                    <h:outputText value="#{row.storeItemListAsString}"></h:outputText>  
+                                </p:column>
+                                
+                                <p:column headerText="Инженер"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.engineer.toString()}"
+                                          sortBy="#{row.engineer.toString()}"
+                                          >
+                                    <h:outputText value="#{row.engineer.toString()}"></h:outputText>  
+                                </p:column>
+                                
+                                <p:column headerText="Статус"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.status.name}"
+                                          sortBy="#{row.status.name}"
+                                          >
+                                    <h:outputText value="#{row.status.name}"></h:outputText>  
+                                </p:column>
+
+                                <p:column headerText="Фактическая дата"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.factDate}"
+                                          sortBy="#{row.factDate}"
+                                          >
+                                    <h:outputText value="#{row.factDate}">
+                                        <f:convertDateTime timeZone="UTC"
+                                                           pattern="dd.MM.yyyy"
+                                                           />
+                                    </h:outputText>  
+                                </p:column>
+
+<!--
+                                <p:column headerText="Примечание"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.notes}"
+                                          sortBy="#{row.notes}"
+                                          >
+                                    <h:outputText value="#{row.notes}"
+                                                  >
+                                    </h:outputText>  
+                                </p:column>
+-->
+
+                                <p:column headerText="Действия"
+                                          >
+                                    <p:commandButton value="Править"
+                                                     action="#{projectListBean.goEditTask(row)}"
+                                                     ajax="false"
+                                                     >
+
+
+                                    </p:commandButton>   
+
+                                    <p:commandButton value="Удалить"
+                                                     action="#{projectListBean.deleteTask(row)}"
+                                                     ajax="true"
+                                                     update=":#{bnd.taskList.clientId} :#{bnd.growl.clientId}"
+                                                     >
+
+                                    </p:commandButton>
+
+                                </p:column>
+
+
+                            </p:dataTable>  
+
+                            <p:commandButton value="Добавить задачу"
+                                             action="#{projectListBean.goCreateNewTask()}"
+                                             ajax="false"
+                                             >
+
+                            </p:commandButton>
+
+                        </h:panelGrid>        
+                    </p:tab>
+                    <!--========================================================================-->
+
+                    <p:tab title="Все проекты">
+
+
+                        <p:commandButton value="Обновить"
+                                         action="#{projectListBean.updateProjects()}"
+                                         >
+                        </p:commandButton>
+
+                        <h:panelGrid columns="1">
+                            <p:dataTable id="ProjectList"
+                                         value="#{projectListBean.projectList}"
+                                         binding="#{bnd.projectList}"
+                                         var="row"
+                                         paginator="true"
+                                         paginatorPosition="bottom"
+                                         filteredValue="#{projectListBean.projectListFiltered}"
+                                         filterDelay="250"
+                                         emptyMessage="Записей не найдено"
+                                         >
+                                
+                                <p:column headerText="Название"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.name}"
+                                          sortBy="#{row.name}"
+                                          >
+                                    <h:outputText value="#{row.name}">
+                                    </h:outputText>  
+                                </p:column>           
+
+                                <p:column headerText="Менеджер"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.user.toString()}"
+                                          sortBy="#{row.user.toString()}"
+                                          >
+                                    <h:outputText value="#{row.user.toString()}">
+                                    </h:outputText>  
+                                </p:column>           
+                                
+
+                                <p:column headerText="Учреждение"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.partner.name}"
+                                          sortBy="#{row.partner.name}"
+                                          >
+                                    <h:outputText value="#{row.partner.name}">
+                                    </h:outputText>  
+                                </p:column>         
+
+                                
+                                <p:column headerText="Оборудование"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.storeItemListAsString}"
+                                          sortBy="#{row.storeItemListAsString}"
+                                          
+                                          >
+                                    <h:outputText value="#{row.storeItemListAsString}"></h:outputText>  
+                                </p:column>
+                                
+                                
+                                <p:column headerText="Статус"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.status.name}"
+                                          sortBy="#{row.status.name}"
+                                          >
+                                    <h:outputText value="#{row.status.name}">
+                                    </h:outputText>  
+                                </p:column>
+                                
+<!--
+                                <p:column headerText="Конт. лицо"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.contactPers.fio}"
+                                          sortBy="#{row.contactPers.fio}"
+                                          >
+                                    <h:outputText value="#{row.contactPers.fio}">
+                                    </h:outputText>  
+                                </p:column>           
+-->
+                                <p:column headerText="Примечание"
+                                          filterMatchMode="contains"
+                                          filterBy="#{row.notes}"
+                                          sortBy="#{row.notes}"
+                                          >
+                                    
+                                    <h:outputText value="#{row.notes}">
+                                    </h:outputText>  
+                                </p:column>     
+                                
+                                <p:column headerText="Действия"
+                                          >
+                                    <p:commandButton value="Править"
+                                                     action="#{projectListBean.goEditProject(row)}"
+                                                     ajax="false"
+                                                     >
+
+
+                                    </p:commandButton>   
+
+                                    <p:commandButton value="Удалить"
+                                                     action="#{projectListBean.deleteProject(row)}"
+                                                     ajax="true"
+                                                     update=":#{bnd.projectList.clientId} :#{bnd.growl.clientId}"
+                                                     >
+
+                                    </p:commandButton>
+
+                                </p:column>
+
+
+                            </p:dataTable>
+                        </h:panelGrid>
+
+                        <p:commandButton value="Добавить проект"
+                                         action="#{projectListBean.goCreateNewProject()}"
+                                         ajax="false"
+                                         >
+                        </p:commandButton>
+
+                    </p:tab>
+                </p:tabView>                    
+            </p:panel> 
+        </h:form>
+    </h:body>
+</html>
+

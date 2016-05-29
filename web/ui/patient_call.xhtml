@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+
+      >
+    <f:view locale="ru"/>
+    <h:head>
+        <title>Звонок пациенту #{callBean.current.patientId.toString()}</title>
+
+        <style type="text/css">
+            /* Important required because row */
+            .ui-datatable-odd {
+                background-color:lightgray !important;
+                background-position-y: -1400px; /* IE7 hack */
+            }
+            .ui-widget {
+                /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                font-size: 0.90em/*{fsDefault}*/;
+            }
+
+            .my-class1 td{
+                vertical-align: top;
+            }  
+
+            .my_err_msg{
+                color: red; 
+            }
+
+            .my_done_msg{
+                color: blue; 
+            }
+        </style>            
+
+        <script type="text/javascript">
+
+            function openNewWindow(aUrl, aWindowName) {
+                window.open(aUrl, aWindowName);
+                return false;
+            }
+        </script>
+
+     <script type="text/javascript">
+PrimeFaces.locales ['ru'] = {
+    closeText: 'Закрыть',
+    prevText: 'Назад',
+    nextText: 'Вперёд',
+    monthNames: ['Январь', 'Февраль' , 'Март' , 'Апрель' , 'Май' , 'Июнь' , 'Июль' , 'Август' , 'Сентябрь','Октябрь','Ноябрь','Декабрь' ],
+    monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек' ],
+    dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Субота'],
+    dayNamesShort: ['Воск','Пон' , 'Вт' , 'Ср' , 'Четв' , 'Пят' , 'Суб'],
+    dayNamesMin: ['В', 'П', 'Вт', 'С ', 'Ч', 'П ', 'Сб'],
+    weekHeader: 'Неделя',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix:'',
+    timeOnlyTitle: 'Только время',
+    timeText: 'Время',
+    hourText: 'Час',
+    minuteText: 'Минута',
+    secondText: 'Секунда',
+    currentText: 'Сегодня',
+    ampm: false,
+    month: 'Месяц',
+    week: 'неделя',
+    day: 'День',
+    allDayText: 'Весь день'
+};
+    </script>
+        
+    </h:head>
+    <h:body>
+        <h:panelGroup>
+            <ui:include src="login_menu.xhtml"/> 
+        </h:panelGroup>
+
+        <!--            
+        <icecore:singleSubmit/>
+        -->        
+        <p:panel header="Звонок пациенту #{callBean.current.patientId.toString()}" id="panel1">
+            <h:form id="CancelBtnForm">
+                <h:commandButton id="btnCancelCall" value="Отменить, без сохранения" action="#{callBean.goToCallList()}" type="button">
+                    <f:ajax execute="btnCancelCall" render="@none"/>
+                </h:commandButton>
+            </h:form>
+            <h:form id="callForm">
+                <h:panelGrid columns="1">
+                    <h:panelGrid columns="2" id="grid1">
+                        <h:outputLabel value="Дата/Время звонка:"/>
+                        <p:calendar value="#{callBean.current.callDate}" pattern="dd.MM.yyyy HH:mm" timeZone="GMT" locale="ru" showButtonPanel="true" navigator="true" disabled="#{callBean.viewOnly}"/>  
+                        <h:outputLabel value="Номер:"/>
+                        <p:selectOneMenu value="#{callBean.current.phoneId}" effect="fade" var="p" converter="phonesConverter" disabled="#{callBean.viewOnly}">  
+                            <f:selectItems value="#{callBean.current.patientId.patientPhoneList}" var="phone" itemLabel="#{phone.phoneRaw}" itemValue="#{phone}"/>  
+                            <p:column>
+                                #{p.phoneRaw}
+                            </p:column>
+                            <p:column>
+                                #{p.notes}
+                            </p:column>
+                        </p:selectOneMenu>                      
+                        <h:outputLabel value="Вызов принят:"/>
+                        <p:selectBooleanCheckbox id="ckCallAcc" value="#{callBean.current.isAccepted}" disabled="#{callBean.viewOnly}" >
+                           <f:ajax  execute="@this" render="@form"/>
+                        </p:selectBooleanCheckbox>
+                    </h:panelGrid>   
+                    <h:panelGrid id="grpCallDetail" columns="2" rendered="#{callBean.current.isAccepted}">
+                        <h:outputLabel value="Просили перезвонить после:"/>
+                        <p:calendar value="#{callBean.current.recallAfterReq}" pattern="dd.MM.yyyy HH:mm" timeZone="GMT" locale="ru" showButtonPanel="true" navigator="true" disabled="#{callBean.viewOnly}"/>
+                        <h:outputLabel value="Детали разговора:"/>
+                        <p:inputTextarea rows="3" cols="40" value="#{callBean.current.callDetails}" disabled="#{callBean.viewOnly}"/>
+                        <h:outputLabel value="Предпологаемая дата ПСГ:"/>
+                        <p:calendar value="#{callBean.current.newPsgDate}" pattern="dd.MM.yyyy" locale="ru" showButtonPanel="true" navigator="true" disabled="#{callBean.viewOnly}"/>
+                        <h:outputLabel value="Контроль AD:"/>
+                        <p:selectBooleanCheckbox id="ckIsAdControl" value="#{callBean.current.isAdControl}" disabled="#{callBean.viewOnly}">
+                           <f:ajax execute="@form" render="@form"/>
+                        </p:selectBooleanCheckbox>
+                        <h:outputLabel value="Давление:" rendered="#{callBean.current.isAdControl}"/>
+                        <h:panelGroup rendered="#{callBean.current.isAdControl}">
+                            <p:inputMask placeHolder=" " mask="9?99" maxlength="3" value="#{callBean.current.currPressSis}" size="3" disabled="#{callBean.viewOnly}"/> / <p:inputMask mask="9?99" maxlength="3" value="#{callBean.current.currPressDia}" size="3" placeHolder=" " disabled="#{callBean.viewOnly}"/>
+                        </h:panelGroup>
+                        <h:outputLabel value="Частота замеров(в сутки):" rendered="#{callBean.current.isAdControl}"/>
+                        <p:selectOneMenu value="#{callBean.current.msrFreq}" effect="fade" rendered="#{callBean.current.isAdControl}" disabled="#{callBean.viewOnly}"
+                                         immediate="true"
+                                         > 
+                            <f:selectItem itemValue="1" itemLabel="1"/>
+                            <f:selectItem itemValue="2" itemLabel="2"/>
+                            <f:selectItem itemValue="3" itemLabel="3"/>
+                            <f:selectItem itemValue="4" itemLabel="4"/>
+                            <f:ajax execute="@form" render="@form" event="change"/>
+                        </p:selectOneMenu>                      
+                        <h:outputLabel value="Контроль SpO2:"/>
+                        <p:selectBooleanCheckbox id="ckIsSpO2Control" value="#{callBean.current.isSpO2Control}" disabled="#{callBean.viewOnly}">
+                           <f:ajax execute="@form" render="@form"/>
+                        </p:selectBooleanCheckbox>
+                        <h:outputLabel value="SpO2(мин/сред):" rendered="#{callBean.current.isSpO2Control}"/>
+                        <h:panelGroup rendered="#{callBean.current.isSpO2Control}">
+                            <p:inputText maxlength="4" value="#{callBean.current.sp02Min}" size="3" disabled="#{callBean.viewOnly}"/> / <p:inputText maxlength="4" value="#{callBean.current.sp02Avg}" size="3" disabled="#{callBean.viewOnly}"/>
+                        </h:panelGroup>
+                        <h:outputLabel value="Вес:"/>
+                        <p:inputMask placeHolder=" " mask="9?99" maxlength="3" value="#{callBean.current.currWeight}" size="3" disabled="#{callBean.viewOnly}"/>
+                        <h:outputLabel value="Общее самочувствие:"/>
+                        <p:selectOneMenu value="#{callBean.current.cmnFeelingId}" effect="fade" disabled="#{callBean.viewOnly}">  
+                            <f:selectItems value="#{patientFeelingController.itemsAvailableSelectOne}"/>  
+                        </p:selectOneMenu>
+                        <h:outputLabel value="Режим сна соблюдается?:"/>
+                        <p:selectBooleanCheckbox value="#{callBean.current.isSleepModeOk}" disabled="#{callBean.viewOnly}"/>
+                        <h:outputLabel value="Культура сна соблюдается?:"/>
+                        <p:selectBooleanCheckbox value="#{callBean.current.isSleepCultureOk}" disabled="#{callBean.viewOnly}"/>
+                        <h:outputLabel value="Есть сонливость?:"/>
+                        <p:selectBooleanCheckbox value="#{callBean.current.isSleepyIs}" disabled="#{callBean.viewOnly}"/>
+                        <h:outputLabel value="Подобрали позицию для сна?:"/>
+                        <p:selectBooleanCheckbox value="#{callBean.current.isSleepPosOk}" disabled="#{callBean.viewOnly}"/>
+                        <h:outputLabel value="Были на консулт. у врача?:"/>
+                        <p:selectBooleanCheckbox id="ckIsDocConsult" value="#{callBean.current.isDocConsulted}" disabled="#{callBean.viewOnly}">
+                           <f:ajax execute="@form" render="@form"/>
+                        </p:selectBooleanCheckbox>
+                        <h:outputLabel value="ФИО Врача, который консульт:" rendered="#{callBean.current.isDocConsulted}"/>
+                        <p:inputText value="#{callBean.current.consultedByDoc}" rendered="#{callBean.current.isDocConsulted}" disabled="#{callBean.viewOnly}"/>
+                        <h:outputLabel value="Проходилась ли КП?:"/>
+                        <p:selectBooleanCheckbox id="ckIsKpPassed" value="#{callBean.current.isCardPrgPassed}" disabled="#{callBean.viewOnly}">
+                            <p:ajax event="click" process="@form" update="@form"/>
+                        </p:selectBooleanCheckbox>
+                        <h:outputLabel value="КП проходилась в УТМ?:" rendered="#{callBean.current.isCardPrgPassed}"/>
+                        <p:selectBooleanCheckbox value="#{callBean.current.isCardPrgInUtm}" rendered="#{callBean.current.isCardPrgPassed}" disabled="#{callBean.viewOnly}"/>
+                        <h:outputLabel value="Есть вопросы по маске?:"/>
+                        <p:selectBooleanCheckbox value="#{callBean.current.haveQAboMask}" disabled="#{callBean.viewOnly}"/>
+                        <h:outputLabel value="Есть вопросы по прибору?:" />
+                        <p:selectBooleanCheckbox value="#{callBean.current.haveQAboDev}" disabled="#{callBean.viewOnly}"/>
+                        <h:outputLabel value="Частота замены фильтра(в месяц):"/>
+                        <p:selectOneMenu value="#{callBean.current.fltrReplaceFreq}" effect="fade" disabled="#{callBean.viewOnly}"> 
+                            <f:selectItem itemValue="0" itemLabel="0"/>
+                            <f:selectItem itemValue="1" itemLabel="1"/>
+                            <f:selectItem itemValue="2" itemLabel="2"/>
+                            <f:selectItem itemValue="3" itemLabel="3"/>
+                        </p:selectOneMenu>                      
+                        <h:outputLabel value="Заметки медсестры:"/>
+                        <p:inputTextarea rows="3" cols="40" value="#{callBean.current.nurseNotes}" disabled="#{callBean.viewOnly}"/>
+                    </h:panelGrid> 
+                    <p:panel header="Опросник по результатам лечения" rendered="#{callBean.current.isAccepted}">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Нормализация полноценного сна:"/>
+                            <p:selectBooleanCheckbox value="#{callBean.current.cprIsSleepNormal}" disabled="#{callBean.viewOnly}"/>
+                            <h:outputLabel value="Повышение работоспособности и дневной активности:"/>
+                            <p:selectBooleanCheckbox value="#{callBean.current.cprIsActiveGrow}" disabled="#{callBean.viewOnly}"/>
+                            <h:outputLabel value="Улучшение показателей артериального давления и сердечного ритма:"/>
+                            <p:selectBooleanCheckbox value="#{callBean.current.cprIsCardioOk}" disabled="#{callBean.viewOnly}"/>
+                            <h:outputLabel value="Физиологическое похудение:"/>
+                            <p:selectBooleanCheckbox id="ckIsSlimming" value="#{callBean.current.cprIsSlimming}" disabled="#{callBean.viewOnly}">
+                              <f:ajax execute="@form" render="@form"/>
+                            </p:selectBooleanCheckbox>
+                            <h:outputLabel value="Похудение на:" rendered="#{callBean.current.cprIsSlimming}" />
+                            <h:panelGroup rendered="#{callBean.current.cprIsSlimming}">
+                                <p:inputText value="#{callBean.current.cprSlimmingBy}" size="5" disabled="#{callBean.viewOnly}"/><h:outputLabel value=" кг"/> 
+                            </h:panelGroup>
+                            <h:outputLabel value="Восстановление потенции и активизация половой функции:"/>
+                            <p:selectBooleanCheckbox value="#{callBean.current.cprIsSexualOk}" disabled="#{callBean.viewOnly}"/>
+                            <h:outputLabel value="Возвращение радости жизни:"/>
+                            <p:selectBooleanCheckbox value="#{callBean.current.cprIsLiveFun}" disabled="#{callBean.viewOnly}"/>
+                            <h:outputLabel value="Устранение депрессии:"/>
+                            <p:selectBooleanCheckbox value="#{callBean.current.cprIsDepressOff}" disabled="#{callBean.viewOnly}"/>
+                            <h:outputLabel value="Другие положительные результаты:"/>
+                            <p:inputTextarea value="#{callBean.current.cprOther}" cols="40" rows="3" disabled="#{callBean.viewOnly}"/>
+                        </h:panelGrid>   
+                    </p:panel>
+                </h:panelGrid>   
+                <h:commandButton value="Завершить, с сохранением" action="#{callBean.commit()}" rendered="#{callBean.current!=null}" disabled="#{callBean.viewOnly}"/>
+            </h:form>
+        </p:panel>
+    </h:body>
+</html>
+

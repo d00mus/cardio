@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      
+      >
+    <h:head>
+        <title>Вход в систему cardio</title>
+        <meta name="viewport" content="width=device-width"/>
+    </h:head>
+    <h:body>
+        <h:panelGrid columns="1">
+            <p:panel header="Вход в систему cardio">
+                <form method="POST" action="j_security_check">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Логин:"/>    
+                        <input type="text" name="j_username"/>
+                        <h:outputLabel value="Пароль:"/>    
+                        <input name="j_password" type="password"/>
+                    </h:panelGrid>  
+                    <br/>
+                    <input type="submit" value="войти"/>
+                </form>
+            </p:panel>  
+        </h:panelGrid>      
+    </h:body>
+</html>

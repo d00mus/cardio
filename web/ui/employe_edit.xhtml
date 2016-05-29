@@ -1,0 +1,617 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <h:head>
+        <style type="text/css">
+            /* Important required because row */ 
+            .ui-datatable-odd {
+                background-color:lightgray !important;
+                background-position-y: -1400px; /* IE7 hack */
+            }
+            .ui-widget {
+                /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                font-size: 0.90em/*{fsDefault}*/;
+            }                
+
+            .valign_top td{
+                vertical-align: top;
+                position: relative;
+            }
+
+        </style>            
+
+        <script type="text/javascript">
+
+            function openNewWindow(aUrl, aWindowName) {
+                window.open(aUrl, aWindowName);
+                return false;
+            }
+            ;
+
+            function start() {
+                PF('statusDialog').show();
+            }
+            ;
+
+            function stop() {
+                PF('statusDialog').hide();
+            }
+            ;
+
+            jQuery(document).ready(function() {
+                var oldLoadContents = PrimeFaces.widget.Dialog.loadContents;
+                PrimeFaces.widget.Dialog.loadContents = function() {
+                    statusDialog.show();
+                    oldLoadContents();
+                };
+            });
+        </script>
+
+     <script type="text/javascript">
+PrimeFaces.locales ['ru'] = {
+    closeText: 'Закрыть',
+    prevText: 'Назад',
+    nextText: 'Вперёд',
+    monthNames: ['Январь', 'Февраль' , 'Март' , 'Апрель' , 'Май' , 'Июнь' , 'Июль' , 'Август' , 'Сентябрь','Октябрь','Ноябрь','Декабрь' ],
+    monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек' ],
+    dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Субота'],
+    dayNamesShort: ['Воск','Пон' , 'Вт' , 'Ср' , 'Четв' , 'Пят' , 'Суб'],
+    dayNamesMin: ['В', 'П', 'Вт', 'С ', 'Ч', 'П ', 'Сб'],
+    weekHeader: 'Неделя',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix:'',
+    timeOnlyTitle: 'Только время',
+    timeText: 'Время',
+    hourText: 'Час',
+    minuteText: 'Минута',
+    secondText: 'Секунда',
+    currentText: 'Сегодня',
+    ampm: false,
+    month: 'Месяц',
+    week: 'неделя',
+    day: 'День',
+    allDayText: 'Весь день'
+};
+    </script>
+        
+
+    </h:head>
+    <h:body>
+        <ui:include src="../ui/login_menu.xhtml"/> 
+
+        <h:form>    
+
+            <p:panel id="mainPanel" header="#{partnerEmployeVM.viewCaption}" binding="#{bnd.mainPanel}">
+
+                <p:growl id="mainMessages" life="750" binding="#{bnd.growl}" showDetail="true"/>
+
+                <h:outputLink value="employe_list.xhtml">
+                    <h:outputText value="К списку всех сотрудников"/> 
+                </h:outputLink>
+                <br/>
+                <h:commandButton value="Обновить" actionListener="#{employeEditBean.refresh}" rendered="#{not partnerEmployeVM.currIsNew}" type="button">
+                    <f:ajax execute="@this" render="@all" event="click"/>
+                </h:commandButton>    
+
+                <p:messages autoUpdate="true"/>
+            </p:panel>
+
+            <p:panel>
+                <h:panelGrid columns="1"> 
+                   
+                    <p:panel header="#{partnerEmployeVM.viewCaption}" id="emplInfoPanel" binding="#{bnd.emplInfoPanel}">
+
+                        <p:tabView> 
+                            <p:tab title="Основное" >
+                                <h:panelGrid id="contPersEditGrp1" columns="2" binding="#{bnd.contPersEditGrp1}">
+
+                                <h:outputLabel value="Учреждение" for="partner" />
+                                <p:autoComplete id="partner"
+                                                binding="#{bnd.partner}"
+                                                value="#{partnerEmployeVM.current.partner}"
+                                                completeMethod="#{employeEditBean.partnerAutoComplete}"
+                                                var="partner"
+                                                itemLabel="#{partner.name}"
+                                                itemValue="#{partner}"
+                                                maxResults="50"
+                                                queryDelay="200"
+                                                minQueryLength="2"
+                                                forceSelection="true"
+                                                dropdown="true"
+                                                style="width:300px"
+                                                required="true"
+                                                requiredMessage="Учреждение - обязательно"
+                                                maxlength="150"
+                                                size="90"
+                                                >
+                                    <p:ajax event="itemSelect" partialSubmit="true" update="@this :#{bnd.growl.clientId} :#{bnd.emplInfoPanel.clientId}"/>
+                                </p:autoComplete>
+                               
+                                    
+                                    <h:outputLabel for="contlastName" value="Фамилия:"/>   
+                                    <p:inputText id="contlastName"
+                                                 value="#{partnerEmployeVM.current.lastName}"
+                                                 required="true"
+                                                 requiredMessage="Фамилия - обязательно"
+                                                 />
+                                    
+                                    <h:outputLabel for="contName" value="Имя:"/>   
+                                    <p:inputText id="contName"
+                                                 value="#{partnerEmployeVM.current.firstName}"
+                                                 required="true"
+                                                 requiredMessage="Имя - обязательно"
+                                                 />
+
+                                    <h:outputLabel for="contMiddleName" value="Отчество:"/>   
+                                    <p:inputText id="contMiddleName" value="#{partnerEmployeVM.current.middleName}"/>
+
+                                    <h:outputLabel for="sex" value="Пол:"/>   
+                                    <p:selectOneMenu id="sex" value="#{partnerEmployeVM.current.sex}">
+                                        <f:selectItem itemLabel="Муж" itemValue="M"/>
+                                        <f:selectItem itemLabel="Жен" itemValue="F"/>
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel value="Дата рождения:" for="birthDate" />
+                                    <p:calendar id="birthDate" value="#{partnerEmployeVM.current.birthDate}"
+                                                pattern="dd.MM.yyyy"
+                                                showButtonPanel="true"
+                                                navigator="true"
+                                                locale="ru"
+                                                lang="ru"
+                                                maxlength="8"
+                                                yearRange="-75:-18"
+                                                >
+                                        <p:ajax partialSubmit="true" process="birthDate" update="birthDate" event="dateSelect"/> 
+                                    </p:calendar>
+
+                                    <h:outputLabel for="emplState" value="Область:"/>
+                                    <p:selectOneMenu id="emplState" value="#{partnerEmployeVM.current.uaState}">
+                                        <f:selectItems value="#{uaStateController.itemsAvailableSelectOne}"/>  
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel for="manager1" value="Менеджер по оборудованию:"/>
+                                    <p:selectOneMenu id="manager1" value="#{partnerEmployeVM.current.manager}">
+                                        <f:selectItems value="#{cardioUserController.getItemsAvailableSelectOneHavingRole('MANAGER')}"/>  
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel for="manager2" value="Менеджер по пациентам:"/>
+                                    <p:selectOneMenu id="manager2" value="#{partnerEmployeVM.current.manager2}">
+                                        <f:selectItems value="#{cardioUserController.getItemsAvailableSelectOneHavingRole('MANAGER')}"/>  
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel for="priority" value="Приоритет:"/>
+                                    <p:selectOneMenu id="priority" value="#{partnerEmployeVM.current.doctorPriority}">
+                                        <f:selectItems value="#{doctorPriorityController.itemsAvailableSelectOne}"/>  
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel for="contDescr" value="Описание:"/>   
+                                    <p:inputText id="contDescr" value="#{partnerEmployeVM.current.notes}"/>
+                                </h:panelGrid>
+
+                            </p:tab>  
+
+                            <p:tab title="Врач" rendered="#{partnerEmployeVM.current.partner.type.code == 'MEDICAL' }">
+                                <h:panelGrid id="contPersEditGrp2" columns="2" binding="#{bnd.contPersEditGrp2}">
+
+                                    <h:outputLabel for="docType" value="Специальность:"/>
+                                    <p:selectOneMenu id="docType" value="#{partnerEmployeVM.current.doctorType}">
+                                        <f:selectItems value="#{doctorTypeController.itemsAvailableSelectOne}"/>  
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel for="docRank" value="Ранг:"/>
+                                    <p:selectOneMenu id="docRank" value="#{partnerEmployeVM.current.doctorRank}">
+                                        <f:selectItems value="#{doctorRankController.itemsAvailableSelectOne}"/>  
+                                    </p:selectOneMenu>
+
+
+                                    <h:outputLabel for="docDiv" value="Отделение:"/>
+                                    <p:selectOneMenu id="docDiv" value="#{partnerEmployeVM.current.doctorDivision}">
+                                        <f:selectItems value="#{doctorDivisionController.itemsAvailableSelectOne}"/>  
+                                    </p:selectOneMenu>
+
+
+                                    <h:outputLabel for="docPosition" value="Должность:"/>
+                                    <p:selectOneMenu id="docPosition" value="#{partnerEmployeVM.current.doctorPosition}">
+                                        <f:selectItems value="#{doctorPositionController.itemsAvailableSelectOne}"/>  
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel for="docAssoc" value="Ассоциация:"/>
+                                    <p:selectOneMenu id="docAssoc" value="#{partnerEmployeVM.current.doctorAssoc}">
+                                        <f:selectItems value="#{doctorAssocController.itemsAvailableSelectOne}"/>  
+                                    </p:selectOneMenu>
+                                    
+                                </h:panelGrid>
+                            </p:tab>
+
+                            <p:tab title="Партнёр" rendered="#{partnerEmployeVM.current.partner.type.code != 'MEDICAL'}">
+                                <h:panelGrid id="contPersEditGrp3" columns="2" binding="#{bnd.contPersEditGrp3}">
+                                    <h:outputLabel for="position" value="Должность:"/>
+                                    <p:selectOneMenu id="position" value="#{partnerEmployeVM.current.position}">
+                                        <f:selectItems value="#{positionController.itemsAvailableSelectOne}"/>  
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </p:tab>
+
+
+                            <p:tab title="Контакты">
+
+                                <h:panelGrid columns="2" id="emplContactGrp" binding="#{bnd.emplContactGrp}">
+                                    <h:outputLabel for="contEmail" value="email:"/>   
+                                    <p:inputText id="contEmail" value="#{partnerEmployeVM.current.email1}"/>
+
+                                    <h:outputLabel for="contEmail2" value="email:"/>   
+                                    <p:inputText id="contEmail2" value="#{partnerEmployeVM.current.email2}"/>
+
+                                    <h:outputLabel for="contWww" value="Сайт:"/>   
+                                    <p:inputText id="contWww" value="#{partnerEmployeVM.current.www}"/>
+                                </h:panelGrid> 
+
+
+                                <h:panelGrid columns="1" id="EmplPhonesGrp" binding="#{bnd.EmplPhonesGrp}">
+
+                                    <p:dataTable id="EmplPhoneTable"
+                                                 value="#{partnerEmployeVM.current.partnerEmployePhoneList}" 
+                                                 var="phone"
+                                                 rows="5"
+                                                 paginator="true"
+                                                 paginatorPosition="bottom"
+                                                 paginatorAlwaysVisible="false"
+                                                 >
+
+                                        <p:column headerText="Телефон">
+                                            <h:outputText value="#{phone.phone}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Описание">
+                                            <h:outputText value="#{phone.notes}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Править">
+                                            <p:commandButton value="Удалить/Править"
+                                                             action="#{partnerEmployeVM.delPhone(phone)}"
+                                                             ajax="true"
+                                                             process="@this :#{bnd.EmplPhonesGrp.clientId}"
+                                                             update=":#{bnd.growl.clientId} :#{bnd.EmplPhonesGrp.clientId}"
+                                                             />
+
+                                        </p:column>
+
+                                    </p:dataTable>   
+
+
+                                    <p:panel header="Добавить телефон">
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel for="emplTel" value="Номер:"/>
+                                            <p:inputText id="emplTel"
+                                                         value="#{partnerEmployeVM.newPhone.phone}"
+                                                         >
+
+                                            </p:inputText>
+
+                                            <h:outputLabel for="emplTelDescr" value="Описание:"/>
+                                            <p:inputText id="emplTelDescr"
+                                                         value="#{partnerEmployeVM.newPhone.notes}"
+                                                         >
+                                            </p:inputText>
+
+                                        </h:panelGrid> 
+
+                                        <p:commandButton value="Добавить"
+                                                         action="#{partnerEmployeVM.addPhone()}"
+                                                         ajax="true"
+                                                         process="@this :#{bnd.EmplPhonesGrp.clientId}"
+                                                         update=":#{bnd.growl.clientId} :#{bnd.EmplPhonesGrp.clientId}"
+                                                         />
+
+
+                                    </p:panel>
+
+
+                                </h:panelGrid>
+
+                            </p:tab>
+                            
+                            
+                            <p:tab title="События" rendered="#{not partnerEmployeVM.newEmploye}">
+                                    <p:commandButton value="Сбросить фильтр"
+                                                     ajax="true"
+                                                     update=":#{bnd.eventTable.clientId}"
+                                                     process="@this"
+                                                     action="#{partnerEmployeVM.clearFilter()}"
+                                                     />  
+
+                                    <h:panelGrid columns="1"> 
+
+                                        <p:dataTable value="#{partnerEmployeVM.eventDataModel}"
+                                                     var="row"
+                                                     id="eventTable"
+                                                     paginator="true"
+                                                     paginatorPosition="bottom" 
+                                                     paginatorAlwaysVisible="false"
+                                                     binding="#{bnd.eventTable}"
+                                                     rows="7"
+                                                     filterDelay="250"
+                                                     emptyMessage="Записей не найдено"
+                                                     selection="#{partnerEmployeVM.selectedEventRow}"
+                                                     selectionMode="single"
+                                                     filteredValue="#{partnerEmployeVM.filteredEvents}"
+
+                                                     >
+
+                                            <p:ajax event="rowSelect"
+                                                    update=":#{bnd.eventViewGrp.clientId}"/>
+
+                                            <p:ajax event="rowUnselect"
+                                                    update=":#{bnd.eventViewGrp.clientId}"/>                                      
+
+                                            <p:column headerText="Дата"
+                                                      sortBy="#{row.eventDate}"
+                                                      filterMatchMode="contains"
+                                                      filterBy="#{row.eventDateStr}"
+                                                      >
+
+                                                <h:outputText value="#{row.eventDate}">
+                                                    <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT"/> 
+                                                </h:outputText>
+                                            </p:column>   
+
+                                            <p:column headerText="Тип"
+                                                      sortBy="#{row.type.name}"
+                                                      filterBy="#{row.type.name}"
+                                                      filterMatchMode="contains"
+                                                      filterValue="#{partnerEmployeVM.fltEventType}"
+                                                      >
+                                                <h:outputText value="#{row.type.name}"/>
+                                            </p:column>   
+
+                                            <p:column headerText="Предмет"
+                                                      sortBy="#{row.subj.name}"
+                                                      filterBy="#{row.subj.name}"
+                                                      filterMatchMode="contains"
+                                                      filterValue="#{partnerEmployeVM.fltEventSubj}"
+                                                      >
+                                                <h:outputText value="#{row.subj.name}"/>
+                                            </p:column>   
+
+                                            <p:column headerText="Метка"
+                                                      sortBy="#{row.label}"
+                                                      filterBy="#{row.label}"
+                                                      filterMatchMode="contains"
+                                                      filterValue="#{partnerEmployeVM.fltEventLabel}"
+                                                      >
+                                                <h:outputText value="#{row.label}"/>
+                                            </p:column>   
+
+                                            <p:column headerText="Сотрудник"
+                                                      sortBy="#{row.employe.fio}"
+                                                      filterBy="#{row.employe.fio}"
+                                                      filterMatchMode="contains"
+                                                      filterValue="#{partnerEmployeVM.fltEventLabel}"
+                                                      >
+                                                <h:outputText value="#{row.employe.fio}"/>
+                                            </p:column>   
+
+                                            <p:column headerText="Кто создал"
+                                                      sortBy="#{row.user.toString()}"
+                                                      filterBy="#{row.user.toString()}"
+                                                      filterMatchMode="contains"
+                                                      filterValue="#{partnerEmployeVM.fltEventUser}"
+                                                      >
+                                                <h:outputText value="#{row.user.toString()}"/>
+                                            </p:column>   
+
+                                            <p:column headerText="Когда"
+                                                      sortBy="#{row.createDate}"
+                                                      >
+                                                <h:outputText value="#{row.createDate}">
+                                                    <f:convertDateTime pattern="dd.MM.yyyy HH:mm" timeZone="GMT"/> 
+                                                </h:outputText>
+                                            </p:column>   
+
+                                            <p:column headerText="Действия">
+                                                <p:commandButton value="Удалить"
+                                                                 action="#{partnerEmployeVM.delEvent(row)}"
+                                                                 ajax="true"
+                                                                 process="@this"
+                                                                 update=":#{bnd.growl.clientId} :#{bnd.eventTable.clientId} :#{bnd.eventViewGrp.clientId}"
+                                                                 disabled="#{not loginBean.admin}"
+                                                                 />
+                                            </p:column>   
+
+                                        </p:dataTable>  
+
+                                        <h:panelGrid columns="2" styleClass="valign_top"> 
+
+                                            <p:panel id="eventViewGrp" binding="#{bnd.eventViewGrp}" header="#{partnerEmployeVM.eventViewCaption}">
+
+                                                <h:panelGrid  columns="2" rendered="#{partnerEmployeVM.selectedEventRow!=null}">
+
+                                                    <h:outputLabel for="viewEventDate" value="Дата:"/>
+                                                    <p:calendar id="viewEventDate"
+                                                                value="#{partnerEmployeVM.selectedEventRow.eventDate}"
+                                                                required="true"
+                                                                requiredMessage="Дата события - обязательна"
+                                                                pattern="dd.MM.yyyy"
+                                                                timeZone="GMT"
+                                                                locale="ru"
+                                                                disabled="#{not loginBean.manager}"
+                                                                >
+
+                                                    </p:calendar>
+
+                                                    <h:outputLabel for="viewEventType" value="Тип:"/>
+                                                    <p:selectOneMenu id="viewEventType"
+                                                                     value="#{partnerEmployeVM.selectedEventRow.type}"
+                                                                     disabled="#{not loginBean.manager}"
+                                                                     >
+                                                        <f:selectItems value="#{partnerEventTypeController.itemsAvailableSelectOne}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+                                                    </p:selectOneMenu>
+
+                                                    <h:outputLabel for="viewEventSubj" value="Предмет:"/>
+                                                    <p:selectOneMenu id="viewEventSubj"
+                                                                     value="#{partnerEmployeVM.selectedEventRow.subj}"
+                                                                     disabled="#{not loginBean.manager}"
+                                                                     >
+                                                        <f:selectItems value="#{partnerEventSubjController.itemsAvailableSelectOne}" var="item" itemLabel="#{item.label}" itemValue="#{item}"/>
+                                                        <p:ajax event="change" process="eventViewGrp" update="eventViewGrp"/>
+
+                                                    </p:selectOneMenu>
+
+                                                    <h:outputLabel for="viewEventAttrDate" value="Дата:" rendered="#{partnerEmployeVM.selectedEventRow.subj.isDateVisible}"/>   
+                                                    <p:calendar
+                                                        value="#{partnerEmployeVM.selectedEventRow.attrs.dateField}"
+                                                        pattern="dd.MM.yyyy"
+                                                        timeZone="GMT"
+                                                        locale="ru"
+                                                        id="viewEventAttrDate"
+                                                        rendered="#{partnerEmployeVM.selectedEventRow.subj.isDateVisible}"
+                                                        disabled="#{not loginBean.manager}"
+                                                        >
+                                                    </p:calendar>
+
+                                                    <h:outputLabel for="viewEventLabel" value="Метка:"/>   
+                                                    <p:inputText id="viewEventLabel"
+                                                                 value="#{partnerEmployeVM.selectedEventRow.label}"
+                                                                 disabled="#{not loginBean.manager}"
+                                                                 />
+
+
+                                                    <h:outputLabel for="viewEventAttrNum" value="Номер:"
+                                                                   rendered="#{partnerEmployeVM.selectedEventRow.subj.isNumVisible}"/>   
+                                                    <p:inputText id="viewEventAttrNum"
+                                                                 value="#{partnerEmployeVM.selectedEventRow.attrs.itemNo}"
+                                                                 rendered="#{partnerEmployeVM.selectedEventRow.subj.isNumVisible}"
+                                                                 disabled="#{not loginBean.manager}"
+
+                                                                 />
+
+                                                    <h:outputLabel for="viewEventAttrText" value="Текст:"
+                                                                   rendered="#{partnerEmployeVM.selectedEventRow.subj.isTextVisible}"/>   
+                                                    <p:inputTextarea id="viewEventAttrText"
+                                                                     value="#{partnerEmployeVM.selectedEventRow.attrs.textField}"
+                                                                     rendered="#{partnerEmployeVM.selectedEventRow.subj.isTextVisible}"
+                                                                     cols="80"
+                                                                     rows="4"
+                                                                     disabled="#{not loginBean.manager}"
+
+                                                                     />
+
+                                                    <h:outputLabel for="viewEventAttrCPSubj"
+                                                                   value="Тематика:"
+                                                                   rendered="#{partnerEmployeVM.selectedEventRow.subj.isCpSubjVisible}"/>   
+                                                    <p:selectOneMenu id="viewEventAttrCPSubj"
+                                                                     value="#{partnerEmployeVM.selectedEventRow.attrs.cpSubjectId}"
+                                                                     rendered="#{partnerEmployeVM.selectedEventRow.subj.isCpSubjVisible}"
+                                                                     disabled="#{not loginBean.manager}"
+                                                                     >
+                                                        <f:selectItems value="#{partnerEvntCpSubjController.itemsAvailableSelectOne}" />  
+                                                    </p:selectOneMenu>
+
+
+                                                    <h:outputLabel for="viewEventAttrCompany"
+                                                                   value="Компания:"
+                                                                   rendered="#{partnerEmployeVM.selectedEventRow.subj.isCompVisible}"/>   
+                                                    <p:selectOneMenu id="viewEventAttrCompany"
+                                                                     value="#{partnerEmployeVM.selectedEventRow.attrs.company}"
+                                                                     rendered="#{partnerEmployeVM.selectedEventRow.subj.isCompVisible}"
+                                                                     disabled="#{not loginBean.manager}"
+                                                                     >
+                                                        <f:selectItems value="#{cardioCompanyController.itemsAvailableSelectOne}" />  
+                                                    </p:selectOneMenu>
+
+
+                                                    <h:outputLabel for="viewEventAttrProxyExists"
+                                                                   value="Доверенность:"
+                                                                   rendered="#{partnerEmployeVM.selectedEventRow.subj.isProxyVisible}"/>
+                                                    <p:selectBooleanCheckbox id="viewEventAttrProxyExists"
+                                                                             value="#{partnerEmployeVM.selectedEventRow.attrs.isProxyExist}"
+                                                                             rendered="#{partnerEmployeVM.selectedEventRow.subj.isProxyVisible}"
+                                                                             disabled="#{not loginBean.manager}"
+                                                                             />
+
+                                                    <h:outputLabel for="viewEventAttrUser"
+                                                                   value="Инженер:"
+                                                                   rendered="#{partnerEmployeVM.selectedEventRow.subj.isUserVisible}"/>   
+                                                    <p:selectOneMenu id="viewEventAttrUser"
+                                                                     value="#{partnerEmployeVM.selectedEventRow.attrs.user}"
+                                                                     rendered="#{partnerEmployeVM.selectedEventRow.subj.isUserVisible}"
+                                                                     disabled="#{not loginBean.manager}"
+                                                                     >
+                                                        <f:selectItems value="#{cardioUserController.itemsAvailableSelectOne}" />  
+                                                    </p:selectOneMenu>
+
+                                                    <h:outputLabel for="viewEventAttrPayStatus"
+                                                                   value="Статус платежа:"
+                                                                   rendered="#{partnerEmployeVM.selectedEventRow.subj.isPayStatusVisible}"/>   
+                                                    <p:selectOneMenu id="viewEventAttrPayStatus"
+                                                                     value="#{partnerEmployeVM.selectedEventRow.attrs.payStatus}"
+                                                                     rendered="#{partnerEmployeVM.selectedEventRow.subj.isPayStatusVisible}"
+                                                                     disabled="#{not loginBean.manager}"
+                                                                     >
+                                                        <f:selectItems value="#{partnerEvntAttrPayStatController.itemsAvailableSelectOne}" />  
+                                                    </p:selectOneMenu>
+
+
+                                                    <h:outputLabel for="viewEventAttrConfList"
+                                                                   value="Конференция:"
+                                                                   rendered="#{partnerEmployeVM.selectedEventRow.subj.isConfereceVisible}"/>   
+                                                    <p:selectOneMenu id="viewEventAttrConfList"
+                                                                     value="#{partnerEmployeVM.selectedEventRow.attrs.conferenceId}"
+                                                                     rendered="#{partnerEmployeVM.selectedEventRow.subj.isConfereceVisible}"
+                                                                     disabled="#{not loginBean.manager}"
+                                                                     >
+                                                        <f:selectItem itemValue="#{null}" itemLabel="---"/>   
+                                                        <f:selectItem itemValue="1" itemLabel="Конференции будут позже"/>   
+                                                    </p:selectOneMenu>
+
+                                                </h:panelGrid>
+
+
+                                                <p:commandButton value="Сохранить"
+                                                                 action="#{partnerEmployeVM.saveEvent()}"
+                                                                 ajax="true"
+                                                                 process="@this :#{bnd.eventViewGrp.clientId}"
+                                                                 update=":#{bnd.growl.clientId} :#{bnd.eventViewGrp.clientId} :#{bnd.eventTable.clientId}"
+                                                                 disabled="#{not loginBean.manager}"
+                                                                 />
+                                                
+                                                
+                                                <p:commandButton value="Добавить новое"
+                                                                 rendered="#{not partnerEmployeVM.newEventMode}"
+                                                                 action="#{partnerEmployeVM.startCreateNewEvent()}"
+                                                                 ajax="true"
+                                                                 process="@this :#{bnd.eventViewGrp.clientId}"
+                                                                 update=":#{bnd.growl.clientId} :#{bnd.eventViewGrp.clientId} :#{bnd.eventTable.clientId}"
+                                                                 disabled="#{not loginBean.manager}"
+                                                                 />
+
+                                            </p:panel>    
+
+                                        </h:panelGrid>    
+
+                                    </h:panelGrid>    
+
+                            </p:tab>      
+<!-- конец - события-->
+
+
+                        </p:tabView>  
+
+                    </p:panel>   
+
+                        <p:commandButton value="Сохранить в базе"
+                                         action="#{employeEditBean.save()}"
+                                         ajax="true"
+                                         process="@this :#{bnd.emplInfoPanel.clientId}"
+                                         update=":#{bnd.growl.clientId} :#{bnd.emplInfoPanel.clientId}"
+                                         />
+                </h:panelGrid>    
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>

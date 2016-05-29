@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!-- =========== FULL CONFIGURATION FILE ================================== -->
+
+<faces-config version="2.1"
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+    <application>
+        <locale-config>            
+            <default-locale>ru</default-locale>
+            <supported-locale>en</supported-locale>
+            <supported-locale>ua</supported-locale>
+        </locale-config>
+        
+        <resource-bundle>
+            <base-name>/Bundle</base-name>
+            <var>bundle</var>
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>/Bundle2</base-name>
+            <var>bundle</var>
+        </resource-bundle>
+        
+        <!--        <message-bundle>resources.messages</message-bundle> -->
+        <resource-bundle>
+            <base-name>/Bundle3</base-name>
+            <var>bundle3</var>
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>/Bundle4</base-name>
+            <var>bundle4</var>
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>/Bundle5</base-name>
+            <var>bundle5</var>
+        </resource-bundle>
+        
+        <managed-bean>
+            <description>Holder of all component bindings.</description>
+            <managed-bean-name>components</managed-bean-name>
+            <managed-bean-class>java.util.HashMap</managed-bean-class>
+            <managed-bean-scope>request</managed-bean-scope>
+        </managed-bean>        
+        
+        <managed-bean>
+            <description>Holder of all component bindings.</description>
+            <managed-bean-name>bnd</managed-bean-name>
+            <managed-bean-class>java.util.HashMap</managed-bean-class>
+            <managed-bean-scope>request</managed-bean-scope>
+        </managed-bean>        
+
+        <managed-bean>
+            <description>call Bean</description>
+            <managed-bean-name>callBean</managed-bean-name>
+            <managed-bean-class>view_beans.CallBean</managed-bean-class>
+            <managed-bean-scope>session</managed-bean-scope>
+        </managed-bean>
+
+        <resource-bundle>
+            <base-name>/Bundle</base-name>
+            <var>bundle</var>
+        </resource-bundle>
+        <resource-bundle>
+            <base-name>/Bundle9</base-name>
+            <var>bundle9</var>
+        </resource-bundle>
+    </application>
+    
+<!--обход глюка с форм рендеред-->
+
+<render-kit>
+    <renderer>
+        <component-family>org.primefaces.component</component-family>
+        <renderer-type>org.primefaces.component.FileUploadRenderer</renderer-type>
+        <renderer-class>helpers.FileUploadRenderer</renderer-class>
+    </renderer>
+</render-kit>
+    
+</faces-config>

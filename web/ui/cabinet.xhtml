@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <h:head>
+        <title>Кабинет</title>
+    </h:head>
+    <h:body>
+
+        <style type="text/css">
+            /* Important required because row */
+            .ui-datatable-odd {
+                background-color:lightgray !important;
+                background-position-y: -1400px; /* IE7 hack */
+            }
+            .ui-widget {
+                /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                font-size: 0.90em/*{fsDefault}*/;
+            }                
+        </style>
+
+        <ui:include src="../ui/login_menu.xhtml"/> 
+        <h:form>
+            <p:panel header="Тема оформления">
+                <p:outputLabel value="Выбрать тему"/>
+                <p:themeSwitcher value="#{loginBean.themeName}"
+                                 >
+                    <f:selectItems value="#{pfThemeController.itemsAvailableSelectOne}"/>
+                </p:themeSwitcher>
+            </p:panel>
+            <p:commandButton value="Сохранить"
+                             action="/index.xhtml"
+                             >
+                
+                
+            </p:commandButton>
+        </h:form>
+    </h:body>
+</html>
+

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Список пациентов</title>
+    </h:head>
+    <h:body>
+        <ui:include src="login_menu.xhtml"/> 
+        <h:form>
+
+            <style type="text/css">
+                /* Important required because row */
+                .ui-datatable-odd {
+                    background-color:lightgray !important;
+                    background-position-y: -1400px; /* IE7 hack */
+                }
+                .ui-widget {
+                    /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                    font-size: 0.90em/*{fsDefault}*/;
+                }                
+            </style>
+
+            <script type="text/javascript">
+
+                function openNewWindow(aUrl, aWindowName) {
+                    window.open(aUrl, aWindowName);
+                    return false;
+                }
+                ;
+            </script>            
+
+            <p:panel header="Список пациентов">
+                <h:panelGrid columns="1">
+                    <br/>
+                    <h:commandButton action="#{patientTableBean.goCreateNew()}" value="Добавить нового пациента"/>
+                    <br/>
+                    <h:commandButton value="Показать всех"
+                                     type="button"
+                                     actionListener="#{patientTableBean.clearFilter}"
+                                     >
+                        <f:ajax execute="@this" render="patTable"/>
+
+                    </h:commandButton>
+
+                    <p:dataTable id="patTable"
+                                 value="#{patientTableBean.items}"
+                                 var="row"
+                                 paginator="true"
+                                 paginatorPosition="bottom" 
+                                 rows="20"
+                                 filteredValue="#{patientTableBean.filteredPatients}"
+                                 filterDelay="250"
+                                 emptyMessage="Записей не найдено"
+                                 widgetVar="patientTable"
+                                 >
+
+
+                        <p:column id="PatName" headerText="Фамилия" sortBy="#{row.name}"
+                                  filterBy="#{row.name}" filterMatchMode="contains"
+                                  filterValue="#{patientTableBean.fltName}"
+                                  >
+                            <h:outputLink value="patient_profile.xhtml" >
+                                <f:param name="id" value="#{row.id}" />
+                                <f:param name="tabId" value="0" />
+                                <h:outputText value="#{row.name}"/>
+                            </h:outputLink>
+
+                        </p:column>
+
+                        <p:column id="PatFirstName" headerText="Имя" sortBy="#{row.firstName}"
+                                  filterBy="#{row.firstName}" filterMatchMode="contains"
+                                  filterValue="#{patientTableBean.fltFirstsName}"
+
+                                  >
+                            <h:outputLink value="patient_profile.xhtml" >
+                                <f:param name="id" value="#{row.id}" />
+                                <f:param name="tabId" value="0" />
+                                <h:outputText value="#{row.firstName}"/>
+                            </h:outputLink>
+
+                        </p:column>
+
+                        <p:column id="PatSecondName" headerText="Отчество" sortBy="#{row.secondName}"
+                                  filterBy="#{row.secondName}" filterMatchMode="contains"
+                                  filterValue="#{patientTableBean.fltSecName}"
+                                  >
+                            <h:outputLink value="patient_profile.xhtml" >
+                                <f:param name="id" value="#{row.id}" />
+                                <f:param name="tabId" value="0" />
+                                <h:outputText value="#{row.secondName}"/>
+                            </h:outputLink>
+
+                        </p:column>
+
+                        <p:column id="PatPseudoName" headerText="Псевдоним" sortBy="#{row.pseudoName}"
+                                  filterBy="#{row.pseudoName}" filterMatchMode="contains"
+                                  filterValue="#{patientTableBean.fltPseudoName}"
+
+                                  >
+                            <h:outputText id="PatPseudoNameCell" value="#{row.pseudoName}"/>
+                        </p:column>
+
+                        <p:column id="ManagedByNurse" headerText="Кто ведёт" sortBy="#{row.trackedByUserId.realName}"
+                                  filterBy="#{row.trackedByUserId.toString()}" filterMatchMode="contains"
+                                  filterValue="#{patientTableBean.fltTrackedBy}"
+
+                                  >
+                            <h:outputText id="ManagedByNurseCell" value="#{row.trackedByUserId.toString()}"/>
+                        </p:column>
+
+                        <p:column id="PatPsgDate" headerText="Дата посл ПСГ" sortBy="#{row.lastPsgDate}"
+                                  >
+                            <h:outputText id="PatPsgDateCell" value="#{row.lastPsgDate}" converter="RusDateConverter"/>
+                        </p:column>
+
+                        <p:column id="PatDateBird" headerText="Дата рождения"
+                                  sortBy="#{row.birthDate}"
+                                  filterBy="#{row.birthDate.month}"
+                                  filterMatchMode="exact"
+                                  >
+                            <f:facet name="filter">
+                                <p:selectOneMenu onchange="PF('patientTable').filter()" >
+                                    <f:selectItem itemLabel="Месяц рождения" itemValue="#{null}" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="(01)Январь" itemValue="0"/>
+                                    <f:selectItem itemLabel="(02)Февраль" itemValue="1"/>
+                                    <f:selectItem itemLabel="(03)Март" itemValue="2"/>
+                                    <f:selectItem itemLabel="(04)Апрель" itemValue="3"/>
+                                    <f:selectItem itemLabel="(05)Май" itemValue="4"/>
+                                    <f:selectItem itemLabel="(06)Июнь" itemValue="5"/>
+                                    <f:selectItem itemLabel="(07)Июль" itemValue="6"/>
+                                    <f:selectItem itemLabel="(08)Август" itemValue="7"/>
+                                    <f:selectItem itemLabel="(09)Сентябрь" itemValue="8"/>
+                                    <f:selectItem itemLabel="(10)Октябрь" itemValue="9"/>
+                                    <f:selectItem itemLabel="(11)Ноябрь" itemValue="10"/>
+                                    <f:selectItem itemLabel="(12)Декабрь" itemValue="11"/>
+                                </p:selectOneMenu>
+                            </f:facet>                            
+                            <h:outputText id="PatDateBirdCell" value="#{row.birthDate}"
+                                          converter="RusDateConverter"
+                                          />
+                        </p:column>
+
+
+                        <p:column id="PatAddrTown" headerText="Адрес/Город" sortBy="#{row.adrCity}"
+                                  filterBy="#{row.adrCity}" filterMatchMode="contains"
+                                  filterValue="#{patientTableBean.fltTown}"
+
+                                  >
+                            <h:outputText id="PatAddressCityCell" value="#{row.adrCity}"/>
+                        </p:column>
+
+                        <p:column id="PatAddrDistr" headerText="Адрес/Область" sortBy="#{row.adrDistrict}"
+                                  filterBy="#{row.adrDistrict}" filterMatchMode="contains"
+                                  filterValue="#{patientTableBean.fltDistr}"
+
+                                  >
+                            <h:outputText id="PatAddressDistrCell" value="#{row.adrDistrict}"/>
+                        </p:column>
+
+                        <p:column id="PatFileLink" headerText="Действия" >
+                            <h:button id = "BtnPrint"
+                                      onclick="openNewWindow('../../webresources/report/patient/#{row.id}', 'Печать анкеты')"
+                                      value="Печать анкеты"
+                                      >
+                            </h:button>
+
+                            <!-- Эта кнопка доступна только админам или менеджерам -->
+                            <h:commandButton value="Править" action="#{patientTableBean.goEdit(row)}"
+                                             rendered="#{loginBean.admin or loginBean.manager}"/>
+                        </p:column>
+
+                    </p:dataTable>
+                </h:panelGrid>
+            </p:panel>
+
+            <br/>
+            <h:commandButton value="Обновить" action="#{patientTableBean.refresh()}"/>
+
+        </h:form>
+    </h:body>
+</html>

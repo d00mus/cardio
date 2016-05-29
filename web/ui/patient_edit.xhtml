@@ -1,0 +1,554 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <h:head>
+        <style type="text/css">
+            /* Important required because row */ 
+            .ui-datatable-odd {
+                background-color:lightgray !important;
+                background-position-y: -1400px; /* IE7 hack */
+            }
+            .ui-widget {
+                /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                font-size: 0.90em/*{fsDefault}*/;
+            }                
+
+            .valign_top td{
+                vertical-align: top;
+                position: relative;
+            }
+
+            .TestClass #PatientSelfStory{
+                width:95%;
+                margin-left: 2px;
+                margin-right: 2px;
+                padding: 0px;
+            }
+
+        </style>            
+
+        <script type="text/javascript">
+            PrimeFaces.locales ['ru'] = {
+                closeText: 'Закрыть',
+                prevText: 'Назад',
+                nextText: 'Вперёд',
+                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Субота'],
+                dayNamesShort: ['Воск', 'Пон', 'Вт', 'Ср', 'Четв', 'Пят', 'Суб'],
+                dayNamesMin: ['В', 'П', 'Вт', 'С ', 'Ч', 'П ', 'Сб'],
+                weekHeader: 'Неделя',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Только время',
+                timeText: 'Время',
+                hourText: 'Час',
+                minuteText: 'Минута',
+                secondText: 'Секунда',
+                currentText: 'Сегодня',
+                ampm: false,
+                month: 'Месяц',
+                week: 'неделя',
+                day: 'День',
+                allDayText: 'Весь день'
+            };
+        </script>
+
+    </h:head>
+    <h:body>
+        <ui:include src="login_menu.xhtml"/> 
+        <p:panel id="mainPanel" header="#{patientEditBean.pageCaption()}" binding="#{bnd.mainPanel}">
+            <p:growl id="messages" life="700" binding="#{bnd.growl}"/>   
+            <h:form>     
+
+                <p:commandButton action="#{patientEditBean.clean()}"
+                                 value ="Очистить"
+                                 ajax="true"
+                                 update=":FormInput1 :FormInput2"
+                                 />
+
+                <h:commandButton value="Обновить" actionListener="#{patientEditBean.refresh}" rendered="#{not patientEditBean.doCreateNew}" type="button">
+                    <f:ajax execute="@this" render=":FormInput1 :FormInput2" event="click"/>
+                </h:commandButton>  
+                <br/>
+                <h:link outcome="/ui/patient_list" value="К списку пациентов"/>
+
+            </h:form>
+            <h:panelGrid columns="2" styleClass="valign_top">
+                <p:panel>   
+                    <h:form id="FormInput1">
+                        <p:accordionPanel cache="true">
+                            <p:tab title="Основное">
+                                <f:ajax>
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel value="Фамилия:" for="name" />
+                                        <p:inputText id="name" value="#{patientEditBean.current.name}" title="Фамилия">
+                                        </p:inputText>
+                                        <h:outputLabel value="Имя:" for="firstName" />
+                                        <p:inputText id="firstName" value="#{patientEditBean.current.firstName}" title="Имя" >
+                                        </p:inputText>
+                                        <h:outputLabel value="Отчество:" for="secondName" />
+                                        <h:inputText id="secondName" value="#{patientEditBean.current.secondName}" title="Отчество" >
+                                        </h:inputText>
+                                        <h:outputLabel value="Псевдоним:" for="pseudoName" />
+                                        <h:inputText id="pseudoName" value="#{patientEditBean.current.pseudoName}" title="Псевдоним" >
+                                        </h:inputText>
+                                        <h:outputLabel value="Пол:" for="sex" />
+                                        <h:selectOneMenu id="sex" value="#{patientEditBean.current.sex}">
+                                            <f:selectItem itemValue="M" itemLabel="Мужской"/>
+                                            <f:selectItem itemValue="F" itemLabel="Женский"/>
+                                        </h:selectOneMenu>
+                                        <h:outputLabel value="Дата рождения:" for="birthDate" />
+                                        <p:calendar id="birthDate" value="#{patientEditBean.current.birthDate}"
+                                                    required="true"
+                                                    requiredMessage="Дата рождения - обязательна"
+                                                    pattern="dd.MM.yyyy"
+                                                    showButtonPanel="true"
+                                                    navigator="true"
+                                                    locale="ru"
+                                                    lang="ru"
+                                                    yearRange="-80:-2"
+                                                    >
+                                            <p:ajax partialSubmit="true" process="birthDate" update="birthDate" event="dateSelect"/> 
+                                        </p:calendar>
+
+                                        <h:outputLabel value="Дата рождения не точная!"/>
+                                        <p:selectBooleanCheckbox value="#{patientEditBean.current.isBirtDayNotValid}"/>
+
+                                        <h:outputLabel value="Текущий рост(см):" for="curHeight" />
+                                        <h:inputText id="curHeight" value="#{patientEditBean.current.curHeight}" title="Текущий рост" >
+                                        </h:inputText>
+                                        <h:outputLabel value="Текущий вес(кг):" for="curWeight" />
+                                        <h:inputText id="curWeight" value="#{patientEditBean.current.curWeight}" title="Текущий вес" >
+                                        </h:inputText>
+                                        <h:outputLabel value="Кто ведёт:" />
+                                        <h:selectOneMenu value="#{patientEditBean.current.trackedByUserId}">
+                                            <f:selectItem itemValue="null" itemLabel="Без сопровождения"/>   
+                                            <f:selectItems value="#{cardioUserController.itemsAvailableSelectMany}"/>
+                                        </h:selectOneMenu>
+                                        <h:outputLabel value="Статус CPAP:"/>
+                                        <h:selectOneMenu value="#{patientEditBean.current.cpapStatus}">
+                                            <f:selectItem itemValue="#{null}" itemLabel="---"/>
+                                            <f:selectItem itemValue="купил" itemLabel="купил"/>
+                                            <f:selectItem itemValue="не купил" itemLabel="не купил"/>
+                                            <f:selectItem itemValue="вернул" itemLabel="вернул"/>
+                                        </h:selectOneMenu>
+                                    </h:panelGrid>
+                                </f:ajax>      
+                            </p:tab> 
+
+                            <p:tab title="Адрес домашний, рабочий">
+                                <f:ajax>
+                                    <h:panelGroup id="addressGrp" binding="#{components.addressGrp}">
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Страна:"/>
+                                            <h:selectOneMenu value="#{patientEditBean.adrType}">
+                                                <f:selectItem itemLabel="Украина" itemValue="UKR"/>  
+                                                <f:selectItem itemLabel="Другая" itemValue="OTHER"/> 
+                                                <f:ajax render=":#{components.addressGrp.clientId}"/> 
+                                            </h:selectOneMenu>
+                                            <h:outputLabel value="Указать:" rendered="#{not patientEditBean.ukrAddress}"/>
+                                            <h:inputText value="#{patientEditBean.current.adrCountry}" title="Страна" rendered="#{not patientEditBean.ukrAddress}"/>
+                                        </h:panelGrid>
+                                        <p:panel header="Город в Украине:выбрать" rendered="#{patientEditBean.ukrAddress}">
+                                            <h:panelGrid columns="2">
+                                                <h:outputLabel value="Область:"/>
+                                                <p:autoComplete id="acState"
+                                                                value="#{patientEditBean.current.adrUaStateId}"
+                                                                completeMethod="#{patientEditBean.stateAutoComplete}"
+                                                                var="state"
+                                                                itemLabel="#{state.ukrName}"
+                                                                itemValue="#{state}"
+                                                                maxResults="30"
+                                                                queryDelay="200"
+                                                                minQueryLength="0"
+                                                                forceSelection="true"
+                                                                dropdown="true"
+                                                                style="width:300px"
+                                                                >
+                                                    <p:ajax event="itemSelect" partialSubmit="true"/>
+                                                </p:autoComplete>
+
+                                                <h:outputLabel value="Город:" />
+                                                <p:autoComplete id="acTowns"
+                                                                value="#{patientEditBean.current.adrUaTownId}"
+                                                                completeMethod="#{patientEditBean.townAutoComplete}"
+                                                                var="town"
+                                                                itemLabel="#{town.ukrName}"
+                                                                itemValue="#{town}"
+                                                                maxResults="50"
+                                                                queryDelay="200"
+                                                                minQueryLength="0"
+                                                                forceSelection="true"
+                                                                dropdown="true"
+                                                                style="width:300px"
+                                                                >
+                                                    <p:ajax event="itemSelect"/>
+                                                </p:autoComplete>
+
+                                            </h:panelGrid>
+                                        </p:panel> 
+                                        <p:panel header="Город в др. стране:указать" rendered="#{not patientEditBean.ukrAddress}">
+                                            <h:panelGrid columns="2">
+                                                <h:outputLabel value="Область:" for="adrState" />
+                                                <h:inputText id="adrState" value="#{patientEditBean.current.adrDistrict}" title="Область" /> 
+                                                <h:outputLabel value="Город:" for="adrCity" />
+                                                <h:inputText id="adrCity" value="#{patientEditBean.current.adrCity}" title="Город" />
+                                            </h:panelGrid>
+                                        </p:panel>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Улица:" for="adrStreet" />
+                                            <h:inputText id="adrStreet" value="#{patientEditBean.current.adrStreet}" title="Улица" />
+                                            <h:outputLabel value="Дом:" for="adrHouse" />
+                                            <h:inputText id="adrHouse" value="#{patientEditBean.current.adrHouse}" title="Дом" />
+                                            <h:outputLabel value="Квартира:" for="adrFlat" />
+                                            <h:inputText id="adrFlat" value="#{patientEditBean.current.adrFlat}" title="Квартира" />
+                                            <h:outputLabel value="Работа/Город:" for="workTown" />
+                                            <h:inputText id="workTown" value="#{patientEditBean.current.workTown}" title="Работа/Город"  rendered="#{not patientEditBean.ukrAddress}"/>
+
+                                            <p:autoComplete id="acWorkTowns"
+                                                            value="#{patientEditBean.current.workUaTownId}"
+                                                            completeMethod="#{patientEditBean.wkTownAutoComplete}"
+                                                            var="town"
+                                                            itemLabel="#{town.ukrName}"
+                                                            itemValue="#{town}"
+                                                            maxResults="50"
+                                                            queryDelay="200"
+                                                            minQueryLength="0"
+                                                            forceSelection="true"
+                                                            dropdown="true"
+                                                            style="width:300px"
+                                                            rendered="#{patientEditBean.ukrAddress}"
+                                                            >
+                                                <p:ajax event="itemSelect"/>
+                                            </p:autoComplete>
+                                            <h:outputLabel value="Работа/Место(где?):" for="workPlace" />
+                                            <h:inputText id="workPlace" value="#{patientEditBean.current.workPlace}" title="Работа/Место(где?)" />
+                                        </h:panelGrid>  
+                                    </h:panelGroup>             
+                                </f:ajax>
+                            </p:tab> 
+
+                            <p:tab title="Паспорт">
+                                <f:ajax>
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel value="Паспорт/Серия:" for="passSer" />
+                                        <h:inputText id="passSer" value="#{patientEditBean.current.passSer}" title="Паспорт/Серия" />
+                                        <h:outputLabel value="Паспорт/Номер:" for="passNo" />
+                                        <h:inputText id="passNo" value="#{patientEditBean.current.passNo}" title="Паспорт/Номер" />
+                                        <h:outputLabel value="Паспорт/Дата выдачи:" for="passDate" />
+                                        <p:calendar id="passDate"
+                                                    value="#{patientEditBean.current.passDate}"
+                                                    pattern="dd.MM.yyyy"
+                                                    lang="ru"
+                                                    locale="ru"
+                                                    label="Дата выдачи документа"
+                                                    title="Дата выдачи"
+                                                    navigator="true"
+                                                    showButtonPanel="true"
+                                                    >
+                                            <p:ajax partialSubmit="true" process="passDate" update="passDate" event="dateSelect"/> 
+
+                                        </p:calendar>   
+                                        <h:outputLabel value="Паспорт/Кем выдан:" for="passGivedBy" />
+                                        <h:inputText id="passGivedBy" value="#{patientEditBean.current.passGivedBy}" title="Паспорт/Кем выдан:" />
+                                    </h:panelGrid>
+                                </f:ajax>
+                            </p:tab> 
+
+                            <p:tab title="Рассказ пациента" id="PatientSelfStory" >
+                                <f:ajax>
+                                    <p:inputTextarea value="#{patientEditBean.current.selfStory}" rows="15" cols="50" />
+                                </f:ajax>
+                            </p:tab> 
+
+                            <p:tab title="Согласие на рекламу">
+                                <f:ajax>
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel value="Согласен на фото рекламу?" for="isFotoAdsAllowed" />
+                                        <p:selectBooleanCheckbox id="isFotoAdsAllowed" value="#{patientEditBean.current.isFotoAdsAllowed}" />   
+                                        <h:outputLabel value="Согласен на ТВ рекламу?" for="isTvAdsAllowed" />
+                                        <p:selectBooleanCheckbox id ="isTvAdsAllowed" value="#{patientEditBean.current.isTvAdsAllowed}" />
+                                        <h:outputLabel value="Согласен на прочую рекламу?" for="isOtherAdsAllowed" />
+                                        <p:selectBooleanCheckbox id ="isOtherAdsAllowed" value="#{patientEditBean.current.isOtherAdsAllowed}" />   
+                                    </h:panelGrid>
+                                </f:ajax>
+                            </p:tab> 
+
+                            <p:tab title="Источник информации">
+                                <f:ajax>
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel value="Откуда узнал:" for="srcInfo"/>
+                                        <h:selectOneMenu id="srcInfo" value="#{patientEditBean.current.refInfoSrcTypeId}">
+                                            <f:selectItems value="#{refInfoSourceTypeController.itemsAvailableSelectOne}"/>
+                                            <p:ajax update="srcInfoSelDetatil" process="srcInfo" partialSubmit="true"/> 
+                                            <!--                                             <f:ajax render="srcInfoSelDetatil" execute="srcInfo"/> -->
+                                        </h:selectOneMenu>
+                                        <h:outputLabel value="Подробности об источнике:"/>
+                                        <h:inputText value="#{patientEditBean.current.refInfoSrcDetail}"/>
+                                    </h:panelGrid>
+                                    <h:panelGroup id="srcInfoSelDetatil">
+                                        <p:panel header="Кто из докторов?" rendered="#{patientEditBean.refSourceIsDoc}" id="refDocGrp">
+                                            <h:selectOneMenu id="sendedByDocId" value="#{patientEditBean.current.refInfoDocId}" title="Прислан доктором" >
+                                                <f:selectItems value="#{doctorsExternalController.itemsAvailableSelectOne}"/>
+                                            </h:selectOneMenu>
+                                        </p:panel>
+                                        <p:panel  header="Кто из пациентов?" rendered="#{patientEditBean.refSourceIsPat}" id="refPatGrp">
+                                            <h:selectOneMenu id="sendedByPatientId" value="#{patientEditBean.current.refInfoPatientId}" title="Прислан пациентом" >
+                                                <f:selectItems value="#{patientController.itemsAvailableSelectOne}"/>
+                                            </h:selectOneMenu>
+                                        </p:panel>
+                                    </h:panelGroup>    
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel value="Степень VIP:" for="vipRankId" />
+                                        <h:selectOneMenu id="vipRankId" value="#{patientEditBean.current.vipRankId}" title="Степень VIP" >
+                                            <f:selectItems value="#{vipRankController.itemsAvailableSelectOne}"/>
+                                        </h:selectOneMenu>
+                                        <h:outputLabel value="Ссылочный ранг:" for="sendRankId" />
+                                        <h:selectOneMenu id="sendRankId" value="#{patientEditBean.current.refRankId}" title="Ссылочный ранг" >
+                                            <f:selectItems value="#{sendRankController.itemsAvailableSelectOne}"/>
+                                        </h:selectOneMenu>
+                                    </h:panelGrid>
+                                </f:ajax>
+                            </p:tab> 
+
+                        </p:accordionPanel>
+                    </h:form>  
+                </p:panel>
+                <p:panel>   
+
+
+                    <!-- ================== FORM 2 ============================================================= -->
+
+                    <h:form id="FormInput2" binding="#{bnd.FormInput2}">
+<!--                     <f:ajax execute=":#{bnd.FormInput2.clientId}" event="valueChange"> -->
+
+                        <p:accordionPanel id="accordPanel2">
+                            <!--                            
+                                                        <f:ajax execute=":#{bnd.FormInput2.clientId}" event="tabChange"/>
+                                                   <p:ajax process=":#{bnd.FormInput2.clientId} :#{bnd.contEmail.clientId}" event="tabChange"/>
+                            -->
+
+                            <p:tab title="Фото">
+                                <h:panelGroup id="patientPhoto">
+                                    <p:graphicImage alt="Фото пациента"
+                                                    value="#{patientEditBean.current.avatarId.fileDataAsStream}"
+                                                    height="320px"
+                                                    rendered="#{patientEditBean.current.avatarId.fileData!=null}"
+                                                    />
+                                    <h:panelGroup rendered="#{patientEditBean.current.avatarId.fileData==null}">
+                                        <img width="300px" height="320px" alt="Нет фото"/>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+
+                                <p:fileUpload id="avaUpload"
+                                              fileUploadListener="#{patientEditBean.avatarListener}"
+                                              mode="advanced"  
+                                              update=":#{bnd.growl.clientId} patientPhoto avaUpload"
+                                              process="avaUpload"
+                                              auto="false"
+                                              sizeLimit="1048576"
+                                              fileLimit="1"
+                                              invalidSizeMessage="Файл слишком велик, можно максимум 1 мегабайт"
+                                              uploadLabel="Загрузить"
+                                              label="Выбрать файл"
+                                              cancelLabel="Отменить"
+                                              fileLimitMessage="Нельзя выбрать больше одного файла за раз"
+                                              value="#{patientEditBean.current.avatarId.fileData}"
+                                              /> 
+
+                                <h:panelGrid columns="2">
+                                    <f:ajax>
+
+                                        <h:outputLabel value="Дата сьёмки:" for="photoDate" />
+                                        <p:calendar id="photoDate" value="#{patientEditBean.current.avatarId.photoDate}" pattern="dd.MM.yyyy" locale="ru">
+                                            <p:ajax partialSubmit="true" process="photoDate" update="photoDate" event="dateSelect"/> 
+                                        </p:calendar>
+                                        <h:outputLabel value="Описание:" for="photoDescr" />
+                                        <h:inputText id="photoDescr" value="#{patientEditBean.current.avatarId.description}"/>
+                                    </f:ajax>
+                                </h:panelGrid>
+                            </p:tab> 
+
+                            <p:tab title="Телефоны (личные и родственников), e-mail" id="phoneEditTab">
+                                <h:panelGroup  id="phoneEditGrp" binding="#{components.phoneEditGrp}">
+                                    <p:dataTable id="phoneTable" value="#{patientEditBean.current.patientPhoneList}" var="phone"
+                                                 emptyMessage="Нет телефонов"
+                                                 >
+                                        <p:column headerText="№ Телефона">
+                                            <h:outputText value="#{phone.phoneRaw}"/>
+                                        </p:column>    
+                                        <p:column headerText="Тип">   
+                                            <h:outputText value="#{phone.telTypeId.typeName}"/>
+                                        </p:column>    
+                                        <p:column headerText="Комментарий">   
+                                            <h:outputText value="#{phone.notes}"/>
+                                        </p:column>    
+                                        <p:column headerText="X">
+
+                                            <p:commandLink ajax="true"
+                                                           actionListener="#{patientEditBean.delPhone(phone)}"
+                                                           title="Удалить" value="X"
+                                                           update=":#{components.phoneEditGrp.clientId} :#{components.selPartnerPhone.clientId} :#{components.selFamMamberPhone.clientId} :#{bnd.growl.clientId}"
+                                                           process=":#{components.phoneEditGrp.clientId}"
+                                                           partialSubmit="true"
+                                                           />
+
+                                            <!--                                                                                        
+                                                                                                                                    <h:commandLink value="X" action="#{patientEditBean.delPhone(phone)}" title="Удалить">
+                                                                                                                                        <f:ajax render=":#{components.phoneEditGrp.clientId}"/>
+                                                                                                                                    </h:commandLink>    
+                                            -->
+
+
+
+                                        </p:column>    
+                                    </p:dataTable>
+                                    <p:panel id="addPhonePanel" header="Добавить телефон">
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="№ Телефона:" />
+                                            <h:inputText value="#{patientEditBean.newPhone.phoneRaw}" title="№ Телефона"/>
+                                            <h:outputLabel value="Тип телефона:" />
+                                            <h:selectOneMenu value="#{patientEditBean.newPhone.telTypeId}">
+                                                <f:selectItems value="#{telTypeController.items}"/>  
+                                            </h:selectOneMenu>
+                                            <h:outputLabel value="Комментарий:" />
+                                            <h:inputText value="#{patientEditBean.newPhone.notes}" title="Комментарий"/>
+                                        </h:panelGrid>    
+
+
+                                        <h:commandButton value="Добавить телефон" action="#{patientEditBean.addPhone()}" type="button">
+                                            <!--                                            
+                                                                                        <f:ajax execute="addPhonePanel" render="phoneTable :#{components.selPartnerPhone.clientId} :#{components.selFamMamberPhone.clientId}"/>
+                                            -->
+                                            <p:ajax process="addPhonePanel" update="phoneTable :#{bnd.growl.clientId} :#{components.selPartnerPhone.clientId} :#{components.selFamMamberPhone.clientId}" partialSubmit="true"/>
+                                        </h:commandButton>    
+
+                                    </p:panel>
+                                </h:panelGroup>     
+                                <h:panelGrid columns="2">
+                                    <f:ajax>  
+                                        <h:outputLabel value="e-mail:" for="contEmail" />
+                                        <h:inputText id="contEmail" value="#{patientEditBean.current.emailAddrList}" binding="#{bnd.contEmail}" title="Эл. адрес"/>
+                                    </f:ajax>
+                                </h:panelGrid>
+
+                            </p:tab> 
+
+
+                            <p:tab title="Родственники" id="famMembersTab" binding="#{components.famMembersTab}">
+                                <f:ajax>
+
+                                    <p:panel id="parnterPhone" header="Супруг(а)" binding="#{components.parnterPhone}">
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="ФИО:"/>
+                                            <h:inputText  value="#{patientEditBean.current.partnerName}" />
+                                            <h:outputLabel value="Выбрать телефон:"/>
+                                            <h:selectOneMenu value="#{patientEditBean.current.partnerPhoneId}" id="selPartnerPhone" binding="#{components.selPartnerPhone}" converter="patientPhoneConverter">
+                                                <f:selectItems value="#{patientEditBean.current.patientPhoneList}" var="tel" itemLabel="#{tel.phoneRaw}" itemValue="#{tel}"/>   
+                                                <f:ajax event="click" execute=":#{components.selPartnerPhone.clientId}"/>  
+                                            </h:selectOneMenu>
+                                        </h:panelGrid>
+                                    </p:panel>     
+
+                                    <p:panel header="Другой родственник" id="famMemberPhone" binding="#{components.famMemberPhone}">
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="ФИО:"/>
+                                            <h:inputText  value="#{patientEditBean.current.famMemberName}" />   
+                                            <h:outputLabel value="Выбрать телефон:"/>
+                                            <h:selectOneMenu id="selFamMamberPhone" binding="#{components.selFamMamberPhone}" value="#{patientEditBean.current.famMemberPhoneId}" converter="patientPhoneConverter">
+                                                <f:selectItems value="#{patientEditBean.current.patientPhoneList}" var="tel" itemLabel="#{tel.phoneRaw}" itemValue="#{tel}"/>
+                                                <f:ajax event="valueChange" execute=":#{components.selFamMamberPhone.clientId}"/>  
+                                            </h:selectOneMenu>
+                                        </h:panelGrid>
+                                    </p:panel>     
+                                </f:ajax>
+
+                            </p:tab> 
+
+
+                            <p:tab title="Мед. примечания">
+                                <f:ajax>
+
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel value="Интересный пациент?" for="isInterest" />
+                                        <p:selectBooleanCheckbox id="isInterest" value="#{patientEditBean.current.isInterest}" />   
+
+                                        <h:outputLabel value="Кардиопрограмма:"/>
+                                        <p:selectBooleanCheckbox id="isCardPrg" value="#{patientEditBean.current.isCardioProgPassed}" />   
+                                    </h:panelGrid>
+                                    <p:panel header="Особые примечания">
+                                        <p:inputTextarea value="#{patientEditBean.current.specialNotes}" rows="4" cols="40"/>
+                                    </p:panel>
+
+                                    <p:panel header="Заключение врача">
+                                        <p:inputTextarea value="#{patientEditBean.current.docConlusion}" rows="4" cols="40"/>
+                                    </p:panel>
+
+                                    <p:panel header="Сопутствующие патологии">
+                                        <p:inputTextarea value="#{patientEditBean.current.patalogyDetail}" rows="4" cols="40"/> 
+                                    </p:panel>
+
+                                    <p:panel header="Заметки врача">
+                                        <p:inputTextarea value="#{patientEditBean.current.nurseNotes}" rows="4" cols="40"/>
+                                    </p:panel>
+                                </f:ajax>
+
+                            </p:tab> 
+
+                            <p:tab title="Перенесённые болезни, лечение">
+                                <f:ajax>
+
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel value="Синдром Боткина?"/>
+                                        <p:selectBooleanCheckbox value="#{patientEditBean.current.isBotkin}"/>
+                                        <h:outputLabel value="Перенёс гепатит?"/>
+                                        <p:selectBooleanCheckbox value="#{patientEditBean.current.isGepatit}"/>
+                                        <h:outputLabel value="Есть аллергия?"/>
+                                        <p:selectBooleanCheckbox value="#{patientEditBean.current.isAllergic}"/>
+                                        <h:outputLabel value="Аллергия: подробности"/>
+                                        <h:inputText value="#{patientEditBean.current.allergicDetail}"/>
+                                        <h:outputLabel value="Лор-вмешательства?"/>
+                                        <p:selectBooleanCheckbox value="#{patientEditBean.current.isLorInvasion}"/>
+                                        <h:outputLabel value="Лор: подробности"/>
+                                        <h:inputText value="#{patientEditBean.current.lorInvasionDetails}"/>
+                                        <h:outputLabel value="Лечащий врач (тип, имя):"/>
+                                        <h:inputText value="#{patientEditBean.current.curedByDoc}"/>
+                                    </h:panelGrid>
+                                </f:ajax>
+                            </p:tab> 
+                            <!--
+                                                        <p:tab title="Прочее">
+                                                            Системная инфа, сертификат, кто создал, когда, активен ли
+                                                        </p:tab> 
+                            -->
+                        </p:accordionPanel>
+                    </h:form>  
+
+                </p:panel>
+            </h:panelGrid>    
+            <h:form>
+                <!--                
+                                <p:commandButton value="Сохранить"
+                                                 action="#{patientEditBean.save()}"
+                                                 ajax="true" process=":FormInput1 :FormInput2"
+                                                 update=":FormInput1 :FormInput2"
+                                                 partialSubmit="true"
+                                                 />
+                -->
+
+                <h:commandButton value="Сохранить" actionListener="#{patientEditBean.save()}" type="button">
+                    <f:ajax execute=":FormInput1 :FormInput2" render=":FormInput1 :FormInput2 :#{bnd.growl.clientId} :#{bnd.mainPanel.clientId}" event="click"/>
+                </h:commandButton>
+            </h:form>               
+        </p:panel>
+    </h:body>
+</html>
+

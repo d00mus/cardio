@@ -1,0 +1,1591 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="psg_view" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f40a6078-bc65-4966-a727-a165fa804f5f">
+	<property name="ireport.zoom" value="1.815000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="solid_cell" hAlign="Center" vAlign="Middle" fontName="DejaVu Serif" fontSize="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1251">
+		<box>
+			<pen lineWidth="0.5"/>
+			<topPen lineWidth="0.5"/>
+			<leftPen lineWidth="0.5"/>
+			<bottomPen lineWidth="0.5"/>
+			<rightPen lineWidth="0.5"/>
+		</box>
+	</style>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 3_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 5_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 6_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 7_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 8_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="apnoe_dataset" uuid="7689bb8a-44e0-4223-8082-9a57660e9b27">
+		<parameter name="psg_id" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select
+    t.begin_time
+   ,t.duration_sec
+   ,apt.short_name
+ from psg_attr_apnoe t
+     ,psg_attr_apnoe_type apt
+  where t.apnoe_type_id = apt.id(+)   
+   and t.psg_id = $P{psg_id}
+  order by t.begin_time]]>
+		</queryString>
+		<field name="BEGIN_TIME" class="java.sql.Timestamp"/>
+		<field name="DURATION_SEC" class="java.math.BigDecimal"/>
+		<field name="SHORT_NAME" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="ad_dataset" uuid="98d31cf1-607e-40da-85cd-e70d8fa73f92">
+		<parameter name="psg_id" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select 
+        r.mt
+       ,decode(r.hand,'R',press,null) as r_press
+       ,decode(r.hand,'L',press,null) as l_press
+       ,r.hand
+   from
+   (
+    select
+          t.measuring_time mt
+         ,t.systol_pressue||'/'||t.diastol_pressue as press
+         ,t.hand
+    from psg_attr_ad t
+where t.psg_id = $P{psg_id}
+   )r
+order by r.mt]]>
+		</queryString>
+		<field name="MT" class="java.sql.Timestamp"/>
+		<field name="R_PRESS" class="java.lang.String"/>
+		<field name="L_PRESS" class="java.lang.String"/>
+		<field name="HAND" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="pulls_dataset" uuid="307649bb-b619-499b-9eef-046d93f52ae2">
+		<parameter name="psg_id" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select 
+        r.mt
+       ,decode(r.hand,'R',hits_per_min,null) as r_pulls
+       ,decode(r.hand,'L',hits_per_min,null) as l_pulls
+       ,r.hand
+   from
+   (
+    select
+          t.measuring_time mt
+         ,t.hits_per_min
+         ,t.hand
+    from psg_attr_pulls t
+ where t.psg_id = $P{psg_id}
+   )r
+order by r.mt]]>
+		</queryString>
+		<field name="MT" class="java.sql.Timestamp"/>
+		<field name="R_PULLS" class="java.math.BigDecimal"/>
+		<field name="L_PULLS" class="java.math.BigDecimal"/>
+		<field name="HAND" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="ecg_dataset" uuid="0eea8a5f-746e-41fa-8a5c-6b68440244c6">
+		<parameter name="psg_id" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select
+     t.measuring_time
+    ,t.notes
+from psg_attr_ecg t
+where t.psg_id = $P{psg_id}
+order by t.measuring_time]]>
+		</queryString>
+		<field name="MEASURING_TIME" class="java.sql.Timestamp"/>
+		<field name="NOTES" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="spO2_dataset" uuid="0e97bd51-9e76-46f6-9470-977f9a4fb9aa">
+		<parameter name="psg_id" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select
+  t.measuring_time
+ ,t.sp_o2_min
+from psg_attr_sp_o2 t
+where t.psg_id = $P{psg_id}
+order by t.measuring_time]]>
+		</queryString>
+		<field name="MEASURING_TIME" class="java.sql.Timestamp"/>
+		<field name="SP_O2_MIN" class="java.math.BigDecimal"/>
+	</subDataset>
+	<subDataset name="snorning_dataset" uuid="bd161195-0e62-4c0d-a50b-559c720a5a97">
+		<parameter name="psg_id" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select
+  t.begin_time as b_time
+ ,t.end_time  as e_time
+from psg_attr_snoring t
+where t.psg_id = $P{psg_id}
+order by t.begin_time]]>
+		</queryString>
+		<field name="B_TIME" class="java.sql.Timestamp"/>
+		<field name="E_TIME" class="java.sql.Timestamp"/>
+	</subDataset>
+	<subDataset name="dettune_dataset" uuid="f427042c-b8ad-40c3-90b0-de5305d6b342">
+		<parameter name="psg_id" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select
+    t.measuring_time
+   ,det.name as detector_name
+from psg_attr_detector_tune t  
+    ,psg_attr_detector det
+ where t.detector_id=det.id(+)   
+  and t.psg_id = $P{psg_id}
+ order by t.measuring_time]]>
+		</queryString>
+		<field name="MEASURING_TIME" class="java.sql.Timestamp"/>
+		<field name="DETECTOR_NAME" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="toiletwake_dataset" uuid="60a41170-187f-4f7d-9cc9-69e90172ddb8">
+		<parameter name="psg_id" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select
+  t.measuring_time
+from psg_attr_toilet_wake t
+where t.psg_id = $P{psg_id}
+order by t.measuring_time]]>
+		</queryString>
+		<field name="MEASURING_TIME" class="java.sql.Timestamp"/>
+	</subDataset>
+	<subDataset name="cur_pressue_dataset" uuid="4bcd89ae-6f29-4f40-8a4a-d668d84bf2f4">
+		<parameter name="psg_id" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select
+ p.measuring_time
+,p.psg_id
+,p.val1
+,p.val2
+,p.val3
+,p.val4
+from psg_attr_cpap_curr_press p
+where p.psg_id =$P{psg_id}
+order by p.measuring_time]]>
+		</queryString>
+		<field name="MEASURING_TIME" class="java.sql.Timestamp"/>
+		<field name="PSG_ID" class="java.math.BigDecimal"/>
+		<field name="VAL1" class="java.math.BigDecimal"/>
+		<field name="VAL2" class="java.math.BigDecimal"/>
+		<field name="VAL3" class="java.math.BigDecimal"/>
+		<field name="VAL4" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="psg_id" class="java.lang.Long"/>
+	<queryString>
+		<![CDATA[select
+        pat.id as pat_id
+       ,psg.id as psg_id
+       ,rep_utl.get_fio(pat.id) as fio
+       ,pat.name as pat_name
+       ,pat.first_name
+       ,pat.second_name
+       ,pat.pseudo_name
+       ,pat.sex
+       ,pat.birth_date
+       ,psg.current_weigth
+       ,psg.current_height
+       ,cab.code as cab_no
+       ,usr.user_name as nurse_code
+       ,usr.short_name as nurse_name
+       ,usr.short_name as nurse_short_name
+       ,psg.psg_date
+       ,psg.psg_no
+       ,psg.notes
+       ,psg.detector_on_time
+       ,psg.light_off_time
+       ,psg.go_to_sleep_time
+       ,psg.wake_up_time
+       ,psg.total_sleep_time_hour
+       ,psg.cpap_begin_time
+       ,psg.cpap_serial
+       ,cp.name as cpap_type_name
+       ,cp_msk.name as cpap_mask_name
+       ,cp_msk_sz.name as cpap_mask_size
+       ,cuh.name as cush_name
+       ,psg.oxymat_begin_time
+       ,oxy.name as oxymat_type_name
+       ,oxy_msk.name as oxy_mask_name
+       ,oxy_msk_sz.name as oxy_mask_size
+from
+         psg psg
+        ,patient pat
+        ,cardio_user usr
+        ,cabinet cab
+        ,cpap_type cp
+        ,cushion_type cuh
+        ,mask_type cp_msk
+        ,mask_size cp_msk_sz
+        ,mask_type oxy_msk
+        ,mask_size oxy_msk_sz
+        ,oxymat_type oxy
+where
+      psg.patient_id = pat.id
+  and psg.nurse_id = usr.id(+)   
+  and psg.cabinet_id = cab.id(+)
+  and psg.cpap_type_id = cp.id (+)
+  and psg.cushion_type_id = cuh.id(+)
+  and psg.oxymat_type_id = oxy.id(+)
+  and psg.cpap_mask_type_id = cp_msk.id(+)
+  and psg.cpap_mask_size_id = cp_msk_sz.id(+)
+  and psg.oxymat_mask_type_id = oxy_msk.id(+)
+  and psg.oxymat_mask_size_id = oxy_msk_sz.id(+)
+  and psg.id = $P{psg_id}]]>
+	</queryString>
+	<field name="PAT_ID" class="java.math.BigDecimal"/>
+	<field name="PSG_ID" class="java.math.BigDecimal"/>
+	<field name="FIO" class="java.lang.String"/>
+	<field name="PAT_NAME" class="java.lang.String"/>
+	<field name="FIRST_NAME" class="java.lang.String"/>
+	<field name="SECOND_NAME" class="java.lang.String"/>
+	<field name="PSEUDO_NAME" class="java.lang.String"/>
+	<field name="SEX" class="java.lang.String"/>
+	<field name="BIRTH_DATE" class="java.sql.Timestamp"/>
+	<field name="CURRENT_WEIGTH" class="java.math.BigDecimal"/>
+	<field name="CURRENT_HEIGHT" class="java.math.BigDecimal"/>
+	<field name="CAB_NO" class="java.lang.String"/>
+	<field name="NURSE_CODE" class="java.lang.String"/>
+	<field name="NURSE_NAME" class="java.lang.String"/>
+	<field name="NURSE_SHORT_NAME" class="java.lang.String"/>
+	<field name="PSG_DATE" class="java.sql.Timestamp"/>
+	<field name="PSG_NO" class="java.math.BigDecimal"/>
+	<field name="NOTES" class="java.lang.String"/>
+	<field name="DETECTOR_ON_TIME" class="java.sql.Timestamp"/>
+	<field name="LIGHT_OFF_TIME" class="java.sql.Timestamp"/>
+	<field name="GO_TO_SLEEP_TIME" class="java.sql.Timestamp"/>
+	<field name="WAKE_UP_TIME" class="java.sql.Timestamp"/>
+	<field name="TOTAL_SLEEP_TIME_HOUR" class="java.math.BigDecimal"/>
+	<field name="CPAP_BEGIN_TIME" class="java.sql.Timestamp"/>
+	<field name="CPAP_SERIAL" class="java.lang.String"/>
+	<field name="CPAP_TYPE_NAME" class="java.lang.String"/>
+	<field name="CPAP_MASK_NAME" class="java.lang.String"/>
+	<field name="CPAP_MASK_SIZE" class="java.lang.String"/>
+	<field name="CUSH_NAME" class="java.lang.String"/>
+	<field name="OXYMAT_BEGIN_TIME" class="java.sql.Timestamp"/>
+	<field name="OXYMAT_TYPE_NAME" class="java.lang.String"/>
+	<field name="OXY_MASK_NAME" class="java.lang.String"/>
+	<field name="OXY_MASK_SIZE" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="87" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="4f9a7f7a-64ff-465e-ad40-dc4c4f62baa1" x="48" y="7" width="446" height="25"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Дневник наблюдения пациента]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8b8981a0-644f-40dc-a479-764b7a0021a2" x="184" y="58" width="63" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="11"/>
+				</textElement>
+				<text><![CDATA[Палата №:]]></text>
+			</staticText>
+			<textField pattern="dd.MM.yyyy HH:mm">
+				<reportElement uuid="07c95dc7-4d85-4292-9b4d-c609c0deae24" isPrintRepeatedValues="false" x="75" y="58" width="109" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PSG_DATE}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="07c95dc7-4d85-4292-9b4d-c609c0deae24" isPrintRepeatedValues="false" x="246" y="58" width="25" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CAB_NO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="43ed29cb-3b77-437f-a14a-28a6a1ee0d06" isPrintRepeatedValues="false" x="51" y="34" width="387" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="12" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8b8981a0-644f-40dc-a479-764b7a0021a2" x="271" y="58" width="74" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="11"/>
+				</textElement>
+				<text><![CDATA[Медсестра:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="07c95dc7-4d85-4292-9b4d-c609c0deae24" isPrintRepeatedValues="false" x="345" y="58" width="196" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NURSE_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="07c95dc7-4d85-4292-9b4d-c609c0deae24" isPrintRepeatedValues="false" x="1" y="58" width="74" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ПСГ-№"+$F{PSG_NO}+":"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="3e5553d3-d24a-4fab-8ed0-9deeca61d1c0" x="10" y="82" width="531" height="1"/>
+			</line>
+		</band>
+	</title>
+	<detail>
+		<band height="164" splitType="Immediate">
+			<frame>
+				<reportElement uuid="8ab350c5-95b3-4dc6-8cd1-46bd63ca7414" stretchType="RelativeToTallestObject" x="1" y="23" width="555" height="52"/>
+				<componentElement>
+					<reportElement uuid="b533ba26-dec0-4a8a-b3bd-a1520f9e4718" key="ad_table" style="table 1" x="1" y="0" width="67" height="50" isPrintWhenDetailOverflows="true"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+						<datasetRun subDataset="ad_dataset" uuid="335d3ddd-a195-4548-bf66-f21fd05ada25">
+							<datasetParameter name="psg_id">
+								<datasetParameterExpression><![CDATA[$P{psg_id}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:columnGroup width="124" uuid="afc4addb-a3c9-40bc-8790-d3d8ffab9353">
+							<jr:tableHeader height="16" rowSpan="1">
+								<staticText>
+									<reportElement uuid="c73b84a5-ee5d-4ce7-8985-261072f1b33f" x="0" y="0" width="124" height="16"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[AD]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:column width="34" uuid="58fdbcd5-6c1e-4898-84f3-e3e53fb8c853">
+								<jr:columnHeader style="table 1_CH" height="27" rowSpan="1">
+									<staticText>
+										<reportElement uuid="4bef0268-33c4-4505-a8f4-a38863bc8c86" x="0" y="0" width="34" height="27"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Время]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 1_TD" height="15" rowSpan="1">
+									<textField pattern="HH:mm">
+										<reportElement uuid="7d598eb8-f637-4697-b71d-3a1a469f3b40" x="0" y="0" width="34" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{MT}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:columnGroup width="90" uuid="2446fcdc-b021-478e-af19-d7e8c4f2d3ce">
+								<jr:column width="46" uuid="fd3fbfdc-e176-42db-9025-47775a0db8e3">
+									<jr:columnHeader style="table 1_CH" height="27" rowSpan="1">
+										<staticText>
+											<reportElement uuid="518e9912-9781-4da1-85cf-b3127b846752" x="0" y="0" width="46" height="27"/>
+											<textElement textAlignment="Center" verticalAlignment="Middle">
+												<font fontName="DejaVu Sans" size="8"/>
+											</textElement>
+											<text><![CDATA[На правой руке]]></text>
+										</staticText>
+									</jr:columnHeader>
+									<jr:detailCell style="table 1_TD" height="15" rowSpan="1">
+										<textField isBlankWhenNull="true">
+											<reportElement uuid="dc56e9cb-c418-41a6-89c3-7e58b61e6ab3" x="0" y="0" width="46" height="15"/>
+											<textElement textAlignment="Center" verticalAlignment="Middle">
+												<font fontName="DejaVu Sans" size="8"/>
+											</textElement>
+											<textFieldExpression><![CDATA[$F{R_PRESS}]]></textFieldExpression>
+										</textField>
+									</jr:detailCell>
+								</jr:column>
+								<jr:column width="44" uuid="31fe6542-5114-4904-8020-0ec45161d09f">
+									<jr:columnHeader style="table 1_CH" height="27" rowSpan="1">
+										<staticText>
+											<reportElement uuid="53be7228-5387-4086-8ab4-aef9b3667003" x="0" y="0" width="44" height="27"/>
+											<textElement textAlignment="Center" verticalAlignment="Middle">
+												<font fontName="DejaVu Sans" size="8"/>
+											</textElement>
+											<text><![CDATA[На левой руке]]></text>
+										</staticText>
+									</jr:columnHeader>
+									<jr:detailCell style="table 1_TD" height="15" rowSpan="1">
+										<textField isBlankWhenNull="true">
+											<reportElement uuid="589d53ba-bd0f-458f-b509-cb3cee53e5ec" x="0" y="0" width="44" height="15"/>
+											<textElement textAlignment="Center" verticalAlignment="Middle">
+												<font fontName="DejaVu Sans" size="8"/>
+											</textElement>
+											<textFieldExpression><![CDATA[$F{L_PRESS}]]></textFieldExpression>
+										</textField>
+									</jr:detailCell>
+								</jr:column>
+							</jr:columnGroup>
+						</jr:columnGroup>
+					</jr:table>
+				</componentElement>
+				<componentElement>
+					<reportElement uuid="91ed38e3-696c-416d-b775-b75355d23438" key="table 3" style="table 3" x="251" y="0" width="53" height="48"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+						<datasetRun subDataset="ecg_dataset" uuid="4c0039c0-4e3b-4915-bc0b-5fa68be4b09a">
+							<datasetParameter name="psg_id">
+								<datasetParameterExpression><![CDATA[$P{psg_id}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:columnGroup width="147" uuid="abbc3e05-ace5-454e-b264-011798faa8f8">
+							<jr:tableHeader height="16" rowSpan="1">
+								<staticText>
+									<reportElement uuid="c9ec6a92-6e4a-4215-982a-eb3565b77196" x="0" y="0" width="147" height="16"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="DejaVu Sans" isBold="true"/>
+									</textElement>
+									<text><![CDATA[ЭКГ]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:column width="43" uuid="cd152862-6477-475f-b0a6-2f69dfc66039">
+								<jr:columnHeader style="table 3_CH" height="14" rowSpan="1">
+									<staticText>
+										<reportElement uuid="d8c497a8-61fa-4643-b214-b6e0adf9f59e" x="0" y="0" width="43" height="14"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Время]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 3_TD" height="15" rowSpan="1">
+									<textField pattern="HH:mm:ss">
+										<reportElement uuid="9cd7f3ab-e97a-4c6c-9450-88c0050437e6" x="0" y="0" width="43" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{MEASURING_TIME}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="104" uuid="d8b39faa-72f0-4d72-b8f0-9f3f5e0561f6">
+								<jr:columnHeader style="table 3_CH" height="14" rowSpan="1">
+									<staticText>
+										<reportElement uuid="6b3b8285-a86b-4808-999b-e3133994169d" x="0" y="0" width="104" height="14"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Примечание]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell height="15" rowSpan="1">
+									<textField isBlankWhenNull="true">
+										<reportElement uuid="d3f2b0a3-13ff-4435-a5c8-8111b10a6cee" style="table_TD" x="0" y="0" width="104" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{NOTES}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:columnGroup>
+					</jr:table>
+				</componentElement>
+				<componentElement>
+					<reportElement uuid="6161023f-3838-4925-b62b-46f8d7e2ddda" key="table 2" style="table 2" x="125" y="0" width="69" height="50" isPrintWhenDetailOverflows="true"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+						<datasetRun subDataset="pulls_dataset" uuid="4eced25c-6c86-4347-a06a-96929d632f07">
+							<datasetParameter name="psg_id">
+								<datasetParameterExpression><![CDATA[$P{psg_id}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:columnGroup width="126" uuid="5d7b9338-c043-4854-8bde-9ede1ae39322">
+							<jr:tableHeader height="16" rowSpan="1">
+								<staticText>
+									<reportElement uuid="72986b3f-88cc-4449-b96d-44545bd85499" x="0" y="0" width="126" height="16"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="DejaVu Sans" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Пульс]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:column width="36" uuid="6f30e23d-6fef-4eaa-a95b-e486c6262229">
+								<jr:columnHeader style="table 2_CH" height="26" rowSpan="1">
+									<staticText>
+										<reportElement uuid="5747dbf9-339b-4691-bdae-dc6fb0a36646" x="0" y="0" width="36" height="26"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Время]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 2_TD" height="15" rowSpan="1">
+									<textField pattern="HH:mm">
+										<reportElement uuid="dbc3af10-6d1d-402a-a37d-8099fec5b0af" x="0" y="0" width="36" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{MT}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="46" uuid="b9bbb8c8-65c6-4cfd-a828-9320d89ed8eb">
+								<jr:columnHeader style="table 2_CH" height="26" rowSpan="1">
+									<staticText>
+										<reportElement uuid="170011a4-f344-4d51-b036-e0f87015482f" x="0" y="0" width="46" height="26"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[На правой руке]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 2_TD" height="15" rowSpan="1">
+									<textField isBlankWhenNull="true">
+										<reportElement uuid="8684642c-a3fb-47e8-8b9c-785ab8af43ee" x="0" y="0" width="46" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{R_PULLS}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="44" uuid="3345aa2d-bba5-4d94-b10c-dec3cce9c994">
+								<jr:columnHeader style="table 2_CH" height="26" rowSpan="1">
+									<staticText>
+										<reportElement uuid="bc8bcd41-cae0-46d0-a8c1-f4d5736ea4a6" x="0" y="0" width="44" height="26"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[На левой руке]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 2_TD" height="15" rowSpan="1">
+									<textField isBlankWhenNull="true">
+										<reportElement uuid="2716c97f-3356-4e9b-9e27-5bca4f8741b6" x="0" y="0" width="44" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{L_PULLS}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:columnGroup>
+					</jr:table>
+				</componentElement>
+				<componentElement>
+					<reportElement uuid="9dd88bf3-cc91-43af-ab60-d10b02ce6068" key="table 7" style="table 7" x="397" y="0" width="39" height="48" isPrintWhenDetailOverflows="true"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+						<datasetRun subDataset="toiletwake_dataset" uuid="5712f8fb-8d2d-440f-82bf-68c19b26e076">
+							<datasetParameter name="psg_id">
+								<datasetParameterExpression><![CDATA[$P{psg_id}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="44" uuid="08838671-a85f-41bb-a2df-a40f7d418dcc">
+							<jr:tableHeader style="table 7_TH" height="16" rowSpan="1">
+								<staticText>
+									<reportElement uuid="5f5aa9ce-055e-4183-b9f0-e5d2bb1119a5" x="0" y="0" width="44" height="16"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="DejaVu Sans" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Туалет]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:columnHeader style="table 7_CH" height="15" rowSpan="1">
+								<staticText>
+									<reportElement uuid="d152ee42-48fe-4c39-8395-adc7dcf057ee" x="0" y="0" width="44" height="15"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="DejaVu Sans" size="8"/>
+									</textElement>
+									<text><![CDATA[Время]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 7_TD" height="15" rowSpan="1">
+								<textField pattern="HH:mm">
+									<reportElement uuid="fc9269c7-9f99-4bfe-903e-06471737fbc7" x="0" y="0" width="44" height="15"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="DejaVu Sans" size="8"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{MEASURING_TIME}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+				<componentElement>
+					<reportElement uuid="938c2889-76c7-4e93-9e3f-c8d9cfdbda5f" key="table 6" style="table 6" x="441" y="0" width="56" height="48"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+						<datasetRun subDataset="dettune_dataset" uuid="46478b94-00be-4d48-9f79-48e7aaca18b8">
+							<datasetParameter name="psg_id">
+								<datasetParameterExpression><![CDATA[$P{psg_id}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:columnGroup width="112" uuid="8297e8f5-3de0-458f-924b-60a17632afce">
+							<jr:tableHeader height="16" rowSpan="1">
+								<staticText>
+									<reportElement uuid="950831ba-8ca6-4245-8362-ea343e8ddbb1" x="0" y="0" width="112" height="16"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="DejaVu Sans" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Правка датчиков]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:column width="29" uuid="511b25fb-2fec-4ceb-9737-0bae1fa3ac57">
+								<jr:columnHeader style="table 6_CH" height="15" rowSpan="1">
+									<staticText>
+										<reportElement uuid="805eb21d-bec9-473e-8ace-c60bfb1f2b96" x="0" y="0" width="29" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Время]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 6_TD" height="15" rowSpan="1">
+									<textField pattern="HH:mm">
+										<reportElement uuid="a090f896-bd3f-4422-97df-24c4fdca1421" x="0" y="0" width="29" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{MEASURING_TIME}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="83" uuid="e1c14015-5524-48e3-8d79-96b45d926496">
+								<jr:columnHeader style="table 6_CH" height="15" rowSpan="1">
+									<staticText>
+										<reportElement uuid="ac783415-ecf4-4d10-98ba-d676862a3d89" x="0" y="0" width="83" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Датчик]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 6_TD" height="15" rowSpan="1">
+									<textField pattern="">
+										<reportElement uuid="b3142be4-cf6d-4a36-ba3f-b8442a1c0bae" x="0" y="0" width="83" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{DETECTOR_NAME}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:columnGroup>
+					</jr:table>
+				</componentElement>
+			</frame>
+			<frame>
+				<reportElement uuid="2f38dfe8-1c54-4b64-a0ba-dad1bb2c3ea9" positionType="Float" x="0" y="75" width="532" height="81"/>
+				<staticText>
+					<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="26" y="3" width="243" height="15"/>
+					<textElement textAlignment="Left">
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[Время подключения датчиков]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="26" y="18" width="243" height="15"/>
+					<textElement textAlignment="Left">
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[Время выключения света в палате (ночь)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="26" y="33" width="243" height="15"/>
+					<textElement textAlignment="Left">
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[Время засыпания после выключения света]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="26" y="48" width="243" height="15"/>
+					<textElement textAlignment="Left">
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[Время включения света в палате( утро)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="26" y="63" width="243" height="15"/>
+					<textElement textAlignment="Left">
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[Общее время сна, часов]]></text>
+				</staticText>
+				<textField pattern="HH:mm" isBlankWhenNull="true">
+					<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="269" y="3" width="63" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DETECTOR_ON_TIME}]]></textFieldExpression>
+				</textField>
+				<textField pattern="HH:mm" isBlankWhenNull="true">
+					<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="269" y="18" width="63" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{LIGHT_OFF_TIME}]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="true">
+					<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="269" y="63" width="63" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TOTAL_SLEEP_TIME_HOUR}]]></textFieldExpression>
+				</textField>
+				<textField pattern="HH:mm" isBlankWhenNull="true">
+					<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="269" y="33" width="63" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{GO_TO_SLEEP_TIME}]]></textFieldExpression>
+				</textField>
+				<textField pattern="HH:mm" isBlankWhenNull="true">
+					<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="269" y="48" width="63" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{WAKE_UP_TIME}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="3" y="3" width="23" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[1]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="3" y="18" width="23" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[2]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="3" y="33" width="23" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[3]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="3" y="48" width="23" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[4]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="3" y="63" width="23" height="15"/>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<text><![CDATA[5]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="345" y="3" width="55" height="16"/>
+					<box>
+						<pen lineWidth="0.0"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[Рост, см:]]></text>
+				</staticText>
+				<textField pattern="">
+					<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="410" y="3" width="65" height="16"/>
+					<box>
+						<pen lineWidth="0.0"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left"/>
+					<textFieldExpression><![CDATA[$F{CURRENT_HEIGHT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="351" y="47" width="48" height="16"/>
+					<box>
+						<pen lineWidth="0.0"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[Вес, кг:]]></text>
+				</staticText>
+				<textField pattern="">
+					<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="410" y="47" width="65" height="16"/>
+					<box>
+						<pen lineWidth="0.0"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left"/>
+					<textFieldExpression><![CDATA[$F{CURRENT_WEIGTH}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<staticText>
+				<reportElement uuid="672b2901-2341-46ee-98f6-8749aa86a56f" style="solid_cell" x="113" y="0" width="274" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="DejaVu Serif" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Протокол ведения пациента]]></text>
+			</staticText>
+		</band>
+		<band height="144" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="672b2901-2341-46ee-98f6-8749aa86a56f" style="solid_cell" x="100" y="4" width="274" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="DejaVu Serif" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CPAP терапия]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="26" y="29" width="164" height="15"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Время подключения CPAP]]></text>
+			</staticText>
+			<textField pattern="HH:mm" isBlankWhenNull="true">
+				<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="190" y="29" width="219" height="15"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CPAP_BEGIN_TIME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="26" y="44" width="164" height="15"/>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Тип CPAP/серийный номер]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="26" y="59" width="164" height="15"/>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Тип/размер маски]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="26" y="74" width="164" height="15"/>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Тип подушки]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="26" y="96" width="216" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{OXYMAT_BEGIN_TIME}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Время подк. кислородн. концентратора]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="26" y="111" width="216" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{OXYMAT_BEGIN_TIME}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Тип кислородн. концентратора]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="26" y="126" width="216" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[($F{OXYMAT_BEGIN_TIME}!=null) && ($F{OXY_MASK_NAME}!=null)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Тип/размер маски кисл. концентратора]]></text>
+			</staticText>
+			<textField pattern="HH:mm:ss" isBlankWhenNull="true">
+				<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="190" y="59" width="219" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CPAP_MASK_NAME}+" / "+$F{CPAP_MASK_SIZE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="190" y="44" width="219" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CPAP_TYPE_NAME}+" / "+$F{CPAP_SERIAL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm:ss" isBlankWhenNull="true">
+				<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="190" y="74" width="219" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CUSH_NAME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm" isBlankWhenNull="true">
+				<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="242" y="96" width="206" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{OXYMAT_BEGIN_TIME}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OXYMAT_BEGIN_TIME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm:ss" isBlankWhenNull="true">
+				<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="242" y="111" width="206" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{OXYMAT_BEGIN_TIME}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OXYMAT_TYPE_NAME}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm:ss" isBlankWhenNull="true">
+				<reportElement uuid="c2c0a018-fe3a-4b85-b78a-c532ed590502" style="solid_cell" x="242" y="126" width="206" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[($F{OXYMAT_BEGIN_TIME}!=null) && ($F{OXY_MASK_NAME}!=null)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OXY_MASK_NAME}+" / "+$F{OXY_MASK_SIZE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="3" y="29" width="23" height="15"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[7]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="3" y="44" width="23" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[8]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="3" y="59" width="23" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[9]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="3" y="74" width="23" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[10]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="3" y="96" width="23" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{OXYMAT_BEGIN_TIME}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[11]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="3" y="111" width="23" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{OXYMAT_BEGIN_TIME}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[12]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5dcec31-3611-4800-8d54-1024a5e7748b" style="solid_cell" x="3" y="126" width="23" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[($F{OXYMAT_BEGIN_TIME}!=null) && ($F{OXY_MASK_NAME}!=null)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[13]]></text>
+			</staticText>
+		</band>
+		<band height="63">
+			<frame>
+				<reportElement uuid="6e6007aa-5846-4f9f-a983-d26e540bd4bf" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="5" width="555" height="54" isPrintWhenDetailOverflows="true"/>
+				<componentElement>
+					<reportElement uuid="da27ec20-fe8b-488d-8bc2-b1d6b3636f2b" key="apnoe_table" style="table" x="0" y="0" width="77" height="50" isPrintWhenDetailOverflows="true"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+						<datasetRun subDataset="apnoe_dataset" uuid="31adc588-1f50-4685-ba8b-53e2e0738979">
+							<datasetParameter name="psg_id">
+								<datasetParameterExpression><![CDATA[$P{psg_id}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:columnGroup width="126" uuid="9b7c6fa8-e42b-4bfd-8578-e83a1418082c">
+							<jr:tableHeader height="16" rowSpan="1">
+								<staticText>
+									<reportElement uuid="41b06775-868b-4d1e-8f00-f330630ae62d" x="0" y="0" width="126" height="16" isPrintInFirstWholeBand="true"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="DejaVu Sans" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Апное]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:column width="34" uuid="5ecb5c94-c843-429d-b7a0-a3105b203147">
+								<jr:columnHeader style="table_CH" height="20" rowSpan="1">
+									<staticText>
+										<reportElement uuid="3b6ce1dc-3e36-462c-b427-18800f6a7740" x="0" y="0" width="34" height="20"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Время]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table_TD" height="15" rowSpan="1">
+									<textField pattern="HH:mm">
+										<reportElement uuid="8f970c97-f8a4-4bc0-a76e-7624564fcab6" x="0" y="0" width="34" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{BEGIN_TIME}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="39" uuid="a6aa5afc-3340-4a0a-85b9-0489fe79f0b6">
+								<jr:columnHeader style="table_CH" height="20" rowSpan="1">
+									<staticText>
+										<reportElement uuid="4698b7b2-9776-44af-8df0-b37acf573fc5" x="0" y="0" width="39" height="20"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Длитель-ность]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table_TD" height="15" rowSpan="1">
+									<textField>
+										<reportElement uuid="61819b20-a356-471b-a780-6b263318e8c5" x="0" y="0" width="39" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{DURATION_SEC}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="53" uuid="1d7d4dbf-27f5-4ed1-b008-dcc7cf41c8f4">
+								<jr:columnHeader style="table_CH" height="20" rowSpan="1">
+									<staticText>
+										<reportElement uuid="1b52b888-1b9f-4b4b-93c8-111b5551e75d" x="0" y="0" width="53" height="20"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Тип]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table_TD" height="15" rowSpan="1">
+									<textField>
+										<reportElement uuid="4198b952-5ccf-4552-8c0c-c0e242080c7c" x="0" y="0" width="53" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{SHORT_NAME}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:columnGroup>
+					</jr:table>
+				</componentElement>
+				<componentElement>
+					<reportElement uuid="1d5db8a5-27d3-4672-9df4-6a213d9aa5b0" key="EKG" style="table 4" x="134" y="0" width="67" height="46"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+						<datasetRun subDataset="spO2_dataset" uuid="b8928eb8-78f8-47c3-b1a0-f4d9c1d45a37">
+							<datasetParameter name="psg_id">
+								<datasetParameterExpression><![CDATA[$P{psg_id}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:columnGroup width="65" uuid="3099df0e-66ea-4e99-8dea-49143ba5a754">
+							<jr:tableHeader height="16" rowSpan="1">
+								<staticText>
+									<reportElement uuid="7cc513df-c07d-47c5-99e1-d41588ef4124" x="0" y="0" width="65" height="16"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="DejaVu Sans" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[SpO2]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:column width="33" uuid="11da1b5d-51bf-491f-a84a-978f24224072">
+								<jr:columnHeader style="table 4_CH" height="14" rowSpan="1">
+									<staticText>
+										<reportElement uuid="ae77261a-f4e6-4f99-8314-12dc4c9364f1" x="0" y="0" width="33" height="14"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Время]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 4_TD" height="15" rowSpan="1">
+									<textField pattern="HH:mm">
+										<reportElement uuid="0c02509b-391b-47a7-8e08-94f3e00d357d" x="0" y="0" width="33" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{MEASURING_TIME}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="32" uuid="d3f72deb-cbfe-43be-afce-e224b536718d">
+								<jr:columnHeader style="table 4_CH" height="14" rowSpan="1">
+									<staticText>
+										<reportElement uuid="60c6da01-dc23-4d14-af8e-193bc803e516" x="0" y="0" width="32" height="14"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Знач.]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 4_TD" height="15" rowSpan="1">
+									<textField>
+										<reportElement uuid="978ef1e8-c523-481a-8a34-4dbb84f1cdb1" x="0" y="0" width="32" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{SP_O2_MIN}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:columnGroup>
+					</jr:table>
+				</componentElement>
+				<componentElement>
+					<reportElement uuid="d840a9b4-0615-4fe2-b5b8-add69a0c8cc8" key="table 5" style="table 5" x="208" y="0" width="57" height="48"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+						<datasetRun subDataset="snorning_dataset" uuid="5bff0afd-e63b-4d57-975c-6fe9f011e8ec">
+							<datasetParameter name="psg_id">
+								<datasetParameterExpression><![CDATA[$P{psg_id}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:columnGroup width="80" uuid="8d0ab688-eaee-46f2-8b51-8aaee960538e">
+							<jr:tableHeader height="16" rowSpan="1">
+								<staticText>
+									<reportElement uuid="6de7f942-e96f-48e9-b84a-cbe61cc7a370" x="0" y="0" width="80" height="16"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="DejaVu Sans" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Храп]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:column width="40" uuid="91894b20-ee3d-45ff-82bf-a0eb164f5c6c">
+								<jr:columnHeader style="table 5_CH" height="15" rowSpan="1">
+									<staticText>
+										<reportElement uuid="964a726a-0f1c-4bc8-9510-4119b85bdee5" x="0" y="0" width="40" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Начало]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 5_TD" height="15" rowSpan="1">
+									<textField pattern="HH:mm:ss">
+										<reportElement uuid="35be74bf-cc3c-476a-89f2-7e5248685556" x="0" y="0" width="40" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{B_TIME}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="40" uuid="b4add19c-921f-42b5-a440-0a619b52b6b0">
+								<jr:columnHeader style="table 5_CH" height="15" rowSpan="1">
+									<staticText>
+										<reportElement uuid="efe6ebff-5977-4a0e-a674-4382edcd81be" x="0" y="0" width="40" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Конец]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 5_TD" height="15" rowSpan="1">
+									<textField pattern="HH:mm:ss">
+										<reportElement uuid="f599ad37-484d-479f-909f-8f0311f3043c" x="0" y="0" width="40" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{E_TIME}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:columnGroup>
+					</jr:table>
+				</componentElement>
+				<componentElement>
+					<reportElement uuid="807e4ebc-ed86-4286-98ed-cc8a9fcf0831" key="table 8" style="table 8" x="296" y="0" width="80" height="50"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="cur_pressue_dataset" uuid="64d93d9d-920d-4dba-87d4-3338bdda9ed9">
+							<datasetParameter name="psg_id">
+								<datasetParameterExpression><![CDATA[$P{psg_id}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:columnGroup width="146" uuid="b7b051d9-aaa1-4935-8247-a99058b0343b">
+							<jr:tableHeader height="17" rowSpan="1">
+								<staticText>
+									<reportElement uuid="1ba7d04f-b5e5-4d9e-856a-2514dcc93dad" x="0" y="0" width="146" height="17"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="DejaVu Sans" size="10" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Текущее давление]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:column width="34" uuid="b1102429-b678-425a-8c00-6e4759260add">
+								<jr:columnHeader style="table 8_CH" height="16" rowSpan="1">
+									<staticText>
+										<reportElement uuid="259f0348-f1bb-4687-8e05-915d9b31b639" x="0" y="0" width="34" height="16"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[Время]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 8_TD" height="15" rowSpan="1">
+									<textField pattern="HH:mm">
+										<reportElement uuid="996d2307-736a-4d2e-984c-9b86accbbfb3" x="0" y="0" width="34" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{MEASURING_TIME}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="28" uuid="cb84edf4-ff35-4f81-a4be-7ba1d463c7eb">
+								<jr:columnHeader style="table 8_CH" height="16" rowSpan="1">
+									<staticText>
+										<reportElement uuid="cb616d97-d845-44a1-80ac-733a63e066e2" x="0" y="0" width="28" height="16"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[1]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 8_TD" height="15" rowSpan="1">
+									<textField>
+										<reportElement uuid="79910dc6-4f96-435e-a21b-0705c81bbb13" x="0" y="0" width="28" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{VAL1}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="28" uuid="8b11a2f8-91e2-47c6-903c-7435d8c2065a">
+								<jr:columnHeader style="table 8_CH" height="16" rowSpan="1">
+									<staticText>
+										<reportElement uuid="365d2932-61b7-4ea2-852e-8c46a66e084a" x="0" y="0" width="28" height="16"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[2]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 8_TD" height="15" rowSpan="1">
+									<textField>
+										<reportElement uuid="992315c3-1842-48e8-966e-422c87c2cf0d" x="0" y="0" width="28" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{VAL2}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="28" uuid="8af996a4-4b58-4e56-ae73-ee47c7471a0a">
+								<jr:columnHeader style="table 8_CH" height="16" rowSpan="1">
+									<staticText>
+										<reportElement uuid="3b1cdc55-338b-4ef5-82a4-1005c109eff5" x="0" y="0" width="28" height="16"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[3]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 8_TD" height="15" rowSpan="1">
+									<textField>
+										<reportElement uuid="6318c32e-31dd-430f-90a0-f8c8216d8d73" x="0" y="0" width="28" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{VAL3}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+							<jr:column width="28" uuid="78da56a6-db23-406f-a2a0-49f3c4a20c72">
+								<jr:columnHeader style="table 8_CH" height="16" rowSpan="1">
+									<staticText>
+										<reportElement uuid="8e93f0bd-15e6-4850-a4ed-74069da2c2c5" x="0" y="0" width="28" height="16"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<text><![CDATA[4]]></text>
+									</staticText>
+								</jr:columnHeader>
+								<jr:detailCell style="table 8_TD" height="15" rowSpan="1">
+									<textField>
+										<reportElement uuid="c40fc258-e6f4-4be2-8699-db36b7bc8d16" x="0" y="0" width="28" height="15"/>
+										<textElement textAlignment="Center" verticalAlignment="Middle">
+											<font fontName="DejaVu Sans" size="8"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$F{VAL4}]]></textFieldExpression>
+									</textField>
+								</jr:detailCell>
+							</jr:column>
+						</jr:columnGroup>
+					</jr:table>
+				</componentElement>
+			</frame>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="33" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="8b8981a0-644f-40dc-a479-764b7a0021a2" x="38" y="13" width="65" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Serif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Медсестра]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="64615a8d-b127-4fb9-a4a4-bd5cdd640415" x="113" y="25" width="112" height="1"/>
+			</line>
+			<textField>
+				<reportElement uuid="07c95dc7-4d85-4292-9b4d-c609c0deae24" isPrintRepeatedValues="false" x="225" y="6" width="198" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans"/>
+				</textElement>
+				<textFieldExpression><![CDATA["/"+$F{NURSE_NAME}+"/"]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band height="64" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="672b2901-2341-46ee-98f6-8749aa86a56f" style="solid_cell" x="178" y="6" width="201" height="20"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="DejaVu Serif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Примечания]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="43da63f9-659e-4426-9ad4-46e5ac547003" stretchType="RelativeToTallestObject" x="10" y="33" width="531" height="25"/>
+				<textElement>
+					<font fontName="DejaVu Serif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOTES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

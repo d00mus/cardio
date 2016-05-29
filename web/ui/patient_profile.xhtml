@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      lang="ru"
+
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <h:head>
+        <style type="text/css">
+            /* Important required because row */
+            .ui-datatable-odd {
+                background-color:lightgray !important;
+                background-position-y: -1400px; /* IE7 hack */
+            }
+            .ui-widget {
+                /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                font-size: 0.90em/*{fsDefault}*/;
+            } 
+
+            .valign_top td{
+                vertical-align: top;
+                position: relative;
+            }
+
+        </style>            
+
+        <script type="text/javascript">
+
+            function openNewWindow(aUrl, aWindowName) {
+                window.open(aUrl, aWindowName);
+                return false;
+            }
+            ;
+
+            function start() {
+                PF('statusDialog').show();
+            }
+            ;
+
+            function stop() {
+                PF('statusDialog').hide();
+            }
+            ;
+
+            jQuery(document).ready(function() {
+                var oldLoadContents = PrimeFaces.widget.Dialog.loadContents;
+                PrimeFaces.widget.Dialog.loadContents = function() {
+                    statusDialog.show();
+                    oldLoadContents();
+                };
+            });
+        </script>
+
+        <script type="text/javascript">
+            PrimeFaces.locales ['ru'] = {
+                closeText: 'Закрыть',
+                prevText: 'Назад',
+                nextText: 'Вперёд',
+                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Субота'],
+                dayNamesShort: ['Воск', 'Пон', 'Вт', 'Ср', 'Четв', 'Пят', 'Суб'],
+                dayNamesMin: ['В', 'П', 'Вт', 'С ', 'Ч', 'П ', 'Сб'],
+                weekHeader: 'Неделя',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Только время',
+                timeText: 'Время',
+                hourText: 'Час',
+                minuteText: 'Минута',
+                secondText: 'Секунда',
+                currentText: 'Сегодня',
+                ampm: false,
+                month: 'Месяц',
+                week: 'неделя',
+                day: 'День',
+                allDayText: 'Весь день'
+            };
+        </script>
+
+
+        <title>Дело пациента #{patientProfileBean.current.toString()} #{paramsBean.tabId}</title>
+    </h:head>
+    <h:body>
+        <h:panelGroup>
+            <ui:include src="login_menu.xhtml"/> 
+        </h:panelGroup> 
+
+        <!--        <h:form enctype="multipart/form-data" accept="multipart/form-data application/x-www-form-urlencoded"> -->
+        <p:panel header="Дело пациента #{patientProfileBean.current.toString()}">
+            <h:form>
+                <h:link outcome = "patient_list.xhtml" value="К списку пациентов"/>
+                <br/>
+                <br/>
+            </h:form>  
+            <p:growl id="messages" binding="#{bnd.messages}" showDetail="true"/>
+
+            <p:tabView id="mainTab" activeIndex="#{patientProfileBean.tabId}" >
+
+
+                <p:tab id="patProfile" title="Анкета">
+                    <h:form>
+                        <h:button id = "BtnPrint"
+                                  onclick="openNewWindow('../../webresources/report/patient/#{patientProfileBean.current.id}', 'Печать анкеты')"
+                                  value="Печать анкеты"
+                                  >
+                        </h:button>
+                    </h:form>  
+
+                    <h:panelGrid columns="2" styleClass="valign_top">
+                        <p:panel>   
+                            <p:accordionPanel>
+                                <p:tab title="Основное">
+                                    <h:form>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Фамилия:" for="name" />
+                                            <h:outputLabel id="name" value="#{patientProfileBean.current.name}" title="Фамилия" />
+                                            <h:outputLabel value="Имя:" for="firstName" />
+                                            <h:outputLabel id="firstName" value="#{patientProfileBean.current.firstName}" title="Имя" />
+                                            <h:outputLabel value="Отчество:" for="secondName" />
+                                            <h:outputLabel id="secondName" value="#{patientProfileBean.current.secondName}" title="Отчество" />
+                                            <h:outputLabel value="Псевдоним:" for="pseudoName" />
+                                            <h:outputLabel id="pseudoName" value="#{patientProfileBean.current.pseudoName}" title="Псевдоним" />
+                                            <h:outputLabel value="Пол:" for="sex" />
+                                            <h:selectOneMenu id="sex" value="#{patientProfileBean.current.sex}" disabled="true">
+                                                <f:selectItem itemValue="M" itemLabel="Мужской"/>
+                                                <f:selectItem itemValue="F" itemLabel="Женский"/>
+                                            </h:selectOneMenu>
+                                            <h:outputLabel value="Дата рождения:" for="birthDate" />
+                                            <p:calendar id="birthDate" value="#{patientProfileBean.current.birthDate}" required="true" requiredMessage="Дата рождения - обязательна" pattern="dd.MM.yyyy" locale="ru" />
+                                            <h:outputLabel value="Возраст:" for="age" />
+                                            <h:outputText id="age" value="#{patientProfileBean.current.age}" title="Возраст"/>
+                                            <h:outputLabel value="Текущий рост(см):" for="curHeight" />
+                                            <h:outputLabel id="curHeight" value="#{patientProfileBean.current.curHeight}" title="Текущий рост" />
+                                            <h:outputLabel value="Текущий вес(кг):" for="curWeight" />
+                                            <h:outputLabel id="curWeight" value="#{patientProfileBean.current.curWeight}" title="Текущий вес" />
+                                            <h:outputLabel value="Кто ведёт:" />
+                                            <h:outputLabel value="#{patientProfileBean.current.trackedByUserId.realName}"/>
+                                            <h:outputLabel value="Статус CPAP:"/>
+                                            <h:outputLabel value="#{patientProfileBean.current.cpapStatus}"/>
+                                        </h:panelGrid>     
+                                    </h:form>
+
+                                </p:tab> 
+
+                                <p:tab title="Адрес домашний, рабочий">
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel value="Страна:" for="adrCountry" />
+                                        <h:outputLabel id="adrCountry" value="#{patientProfileBean.current.adrCountry}" title="Страна" />
+                                    </h:panelGrid>   
+                                    <h:panelGrid columns="2" rendered="#{patientProfileBean.current.adrUaStateId!=null}">
+                                        <h:outputLabel value="Область:" for="adrUaState" />
+                                        <h:outputLabel id="adrUaState" value="#{patientProfileBean.current.adrUaStateId.ukrName}" title="Область" />
+                                        <h:outputLabel value="Город:" for="adrUaTown" />
+                                        <h:outputLabel id="adrUaTown" value="#{patientProfileBean.current.adrUaTownId.ukrName}" title="Город" />
+                                    </h:panelGrid>   
+                                    <h:panelGrid columns="2" rendered="#{patientProfileBean.current.adrUaStateId==null}">
+                                        <h:outputLabel value="Область:" for="adrState" />
+                                        <h:outputLabel id="adrState" value="#{patientProfileBean.current.adrDistrict}" title="Область" />
+                                        <h:outputLabel value="Город:" for="adrTown" />
+                                        <h:outputLabel id="adrTown" value="#{patientProfileBean.current.adrCity}" title="Город" />
+                                    </h:panelGrid>   
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel value="Улица:" for="adrStreet" />
+                                        <h:outputLabel id="adrStreet" value="#{patientProfileBean.current.adrStreet}" title="Улица" />
+                                        <h:outputLabel value="Дом:" for="adrHouse" />
+                                        <h:outputLabel id="adrHouse" value="#{patientProfileBean.current.adrHouse}" title="Дом" />
+                                        <h:outputLabel value="Квартира:" for="adrFlat" />
+                                        <h:outputLabel id="adrFlat" value="#{patientProfileBean.current.adrFlat}" title="Квартира" />
+                                        <h:outputLabel value="Работа/Город:" for="workTown" />
+                                        <h:panelGroup>
+                                            <h:outputLabel id="workTownUa" value="#{patientProfileBean.current.workUaTownId.ukrName}" title="Работа/Город" rendered="#{patientProfileBean.current.adrUaStateId!=null}"/>
+                                            <h:outputLabel id="workTown" value="#{patientProfileBean.current.workTown}" title="Работа/Город" rendered="#{patientProfileBean.current.adrUaStateId!=null}"/>
+                                        </h:panelGroup>
+                                        <h:outputLabel value="Работа/Место(где?):" for="workPlace" />
+                                        <h:outputLabel id="workPlace" value="#{patientProfileBean.current.workPlace}" title="Работа/Место(где?)"/>
+                                    </h:panelGrid>   
+                                </p:tab> 
+
+                                <p:tab title="Паспорт">
+                                    <h:form>
+
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Паспорт/Серия:" for="passSer" />
+                                            <h:outputLabel id="passSer" value="#{patientProfileBean.current.passSer}" title="Паспорт/Серия" />
+                                            <h:outputLabel value="Паспорт/Номер:" for="passNo" />
+                                            <h:outputLabel id="passNo" value="#{patientProfileBean.current.passNo}" title="Паспорт/Номер" />
+                                            <h:outputLabel value="Паспорт/Дата выдачи:" for="passDate" />
+                                            <p:calendar id="passDate" value="#{patientProfileBean.current.passDate}" pattern="dd.MM.yyyy" disabled="true" locale="ru"/>
+                                            <h:outputLabel value="Паспорт/Кем выдан:" for="passGivedBy" />
+                                            <h:outputLabel id="passGivedBy" value="#{patientProfileBean.current.passGivedBy}" title="Паспорт/Кем выдан:" />
+                                        </h:panelGrid>
+                                    </h:form>
+                                </p:tab> 
+
+                                <p:tab title="Рассказ пациента" id="PatientSelfStory">
+                                    <h:form>
+
+                                        <p:inputTextarea value="#{patientProfileBean.current.selfStory}" rows="15" style="width:250px;" disabled="true"/>
+                                    </h:form>
+                                </p:tab> 
+
+                                <p:tab title="Согласие на рекламу">
+                                    <h:form>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Согласен на фото рекламу?" for="isFotoAdsAllowed" />
+                                            <p:selectBooleanCheckbox id="isFotoAdsAllowed" value="#{patientProfileBean.current.isFotoAdsAllowed}" disabled="true"/>   
+                                            <h:outputLabel value="Согласен на ТВ рекламу?" for="isTvAdsAllowed" />
+                                            <p:selectBooleanCheckbox id ="isTvAdsAllowed" value="#{patientProfileBean.current.isTvAdsAllowed}" disabled="true"/>
+                                            <h:outputLabel value="Согласен на прочую рекламу?" for="isOtherAdsAllowed" />
+                                            <p:selectBooleanCheckbox id ="isOtherAdsAllowed" value="#{patientProfileBean.current.isOtherAdsAllowed}" disabled="true"/>   
+                                        </h:panelGrid>
+                                    </h:form>
+                                </p:tab> 
+
+                                <p:tab title="Источник информации, ссылки">
+                                    <h:form>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Откуда узнал:" for="srcInfo"/>
+                                            <h:outputLabel id="srcInfo" value="#{patientProfileBean.current.refInfoSrcTypeId.name}"/>
+                                            <h:outputLabel value="Подробности об источнике:"/>
+                                            <h:outputLabel value="#{patientProfileBean.current.refInfoSrcDetail}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Степень VIP:" for="vipRankId" />
+                                            <h:outputLabel id="vipRankId" value="#{patientProfileBean.current.vipRankId.name}" />
+                                            <h:outputLabel value="Ссылочный ранг:" for="sendRankId" />
+                                            <h:outputLabel id="sendRankId" value="#{patientProfileBean.current.refRankId.name}"/>
+                                        </h:panelGrid>
+                                    </h:form>
+                                </p:tab> 
+
+                            </p:accordionPanel>
+                        </p:panel>
+                        <p:panel>   
+
+                            <p:accordionPanel>
+                                <p:tab title="Фото">
+                                    <h:form>
+                                        <h:panelGroup id="patientPhoto">
+                                            <p:graphicImage alt="Фото пациента"
+                                                            value="#{patientProfileBean.current.avatarId.fileDataAsStream}"
+                                                            height="320px"
+                                                            rendered="#{patientProfileBean.current.avatarId.fileData!=null}"/>
+                                            <h:panelGroup rendered="#{patientProfileBean.current.avatarId.fileData==null}">
+                                                <img width="300px" height="320px" alt="Нет фото"/>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Дата сьёмки:" for="photoDate" rendered="#{patientProfileBean.current.avatarId!=null}"/>
+                                            <p:calendar id="photoDate" value="#{patientProfileBean.current.avatarId.photoDate}" pattern="dd.MM.yyyy" rendered="#{patientProfileBean.current.avatarId!=null}" disabled="true" locale="ru"/>
+                                            <h:outputLabel value="Описание:" for="photoDescr" rendered="#{patientProfileBean.current.avatarId!=null}"/>
+                                            <h:outputLabel id="photoDescr" value="#{patientProfileBean.current.avatarId.description}" rendered="#{patientProfileBean.current.avatarId!=null}"/>
+                                        </h:panelGrid>
+                                    </h:form>
+                                </p:tab> 
+
+                                <p:tab title="Телефоны(личные и родственников), e-mail">
+                                    <h:form>
+                                        <h:panelGroup  id="phoneEditGrp">
+                                            <p:dataTable id="phoneTable" value="#{patientProfileBean.current.patientPhoneList}" var="phone">
+                                                <p:column headerText="№ Телефона">
+                                                    <h:outputText value="#{phone.phoneRaw}"/>
+                                                </p:column>    
+                                                <p:column headerText="Тип">   
+                                                    <h:outputText value="#{phone.telTypeId.typeName}"/>
+                                                </p:column>    
+                                                <p:column headerText="Комментарий">   
+                                                    <h:outputText value="#{phone.notes}"/>
+                                                </p:column>    
+                                            </p:dataTable>
+                                        </h:panelGroup>     
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="e-mail:" for="contEmail" />
+                                            <h:outputLabel id="contEmail" value="#{patientProfileBean.current.emailAddrList}" title="Эл. адрес"/>
+                                        </h:panelGrid>
+                                    </h:form>
+                                </p:tab> 
+
+
+                                <p:tab title="Родственники">
+                                    <h:form>
+                                        <p:panel header="Супруг(а)">
+                                            <h:panelGrid columns="2">
+                                                <h:outputLabel value="ФИО:"/>
+                                                <h:outputLabel  value="#{patientProfileBean.current.partnerName}" />
+                                                <h:outputLabel value="Телефон:"/>
+                                                <h:outputLabel value="#{patientProfileBean.current.partnerPhoneId.phoneRaw}"/>
+                                            </h:panelGrid>
+                                        </p:panel>     
+
+                                        <p:panel header="Другой родственник">
+                                            <h:panelGrid columns="2">
+                                                <h:outputLabel value="ФИО:"/>
+                                                <h:outputLabel  value="#{patientProfileBean.current.famMemberName}" />   
+                                                <h:outputLabel value="Телефон:"/>
+                                                <h:outputLabel value="#{patientProfileBean.current.famMemberPhoneId.phoneRaw}"/>
+                                            </h:panelGrid>
+                                        </p:panel>     
+                                    </h:form>
+                                </p:tab> 
+
+
+                                <p:tab title="Мед. примечания">
+                                    <h:form>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Интересный пациент?"/>
+                                            <p:selectBooleanCheckbox id="isInterest2" value="#{patientProfileBean.current.isInterest}" disabled="true"/>   
+                                            <h:outputLabel value="Кардиопрограмма:"/>
+                                            <p:selectBooleanCheckbox id="isCardPrg" value="#{patientEditBean.current.isCardioProgPassed}" disabled="true"/>   
+
+                                        </h:panelGrid>
+
+                                        <p:panel header="Особые примечания">
+                                            <p:inputTextarea value="#{patientEditBean.current.specialNotes}" rows="4" cols="40"
+                                                             style="width:320px" disabled="true"
+                                                             />
+                                        </p:panel>
+
+                                        <p:panel header="Заключение врача">
+                                            <p:inputTextarea value="#{patientEditBean.current.docConlusion}" rows="4" cols="40"
+                                                             style="width:320px" disabled="true"
+                                                             />
+                                        </p:panel>
+
+                                        <p:panel header="Сопутствующие патологии">
+                                            <p:inputTextarea value="#{patientEditBean.current.patalogyDetail}" rows="4" cols="40"
+                                                             style="width:320px" disabled="true"
+                                                             /> 
+                                        </p:panel>
+
+                                        <p:panel header="Заметки врача">
+                                            <p:inputTextarea value="#{patientEditBean.current.nurseNotes}" rows="4" cols="40"
+                                                             style="width:320px" disabled="true"
+                                                             />
+                                        </p:panel>
+                                    </h:form>
+                                </p:tab> 
+
+                                <p:tab title="Перенесённые болезни, лечение">
+                                    <h:form>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Синдром Боткина?"/>
+                                            <p:selectBooleanCheckbox value="#{patientProfileBean.current.isBotkin}" disabled="true"/>
+                                            <h:outputLabel value="Перенёс гепатит?"/>
+                                            <p:selectBooleanCheckbox value="#{patientProfileBean.current.isGepatit}" disabled="true"/>
+                                            <h:outputLabel value="Есть аллергия?"/>
+                                            <p:selectBooleanCheckbox value="#{patientProfileBean.current.isAllergic}" disabled="true"/>
+                                            <h:outputLabel value="Аллергия: подробности" rendered="#{patientProfileBean.current.allergicDetail!=null}"/>
+                                            <h:outputLabel value="#{patientProfileBean.current.allergicDetail}" rendered="#{patientProfileBean.current.allergicDetail!=null}"/>
+                                            <h:outputLabel value="Лор-вмешательства?"/>
+                                            <p:selectBooleanCheckbox value="#{patientProfileBean.current.isLorInvasion}" disabled="true"/>
+                                            <h:outputLabel value="Лор: подробности" rendered="#{patientProfileBean.current.lorInvasionDetails!=null}"/>
+                                            <h:outputLabel value="#{patientProfileBean.current.lorInvasionDetails}" rendered="#{patientProfileBean.current.lorInvasionDetails!=null}"/>
+                                            <h:outputLabel value="Лечащий врач(тип, имя):" rendered="#{patientProfileBean.current.curedByDoc!=null}"/>
+                                            <h:outputLabel value="#{patientProfileBean.current.curedByDoc}" rendered="#{patientProfileBean.current.curedByDoc!=null}"/>
+                                        </h:panelGrid>
+                                    </h:form>
+                                </p:tab> 
+
+                            </p:accordionPanel>
+
+                        </p:panel>
+                    </h:panelGrid>    
+                </p:tab>
+
+
+                <p:tab id="patPsg" title="ПСГ">
+                    <h:form>
+                        <p:panel header="Список всех ПСГ пациента" id="allPsgPanel" binding="#{bnd.allPsgPanel}">
+
+                            <h:commandButton value="Работать с текущим ПСГ" action="#{patientProfileBean.goToPsg(patientProfileBean.currentPsg.id)}" rendered="#{patientProfileBean.currPsgExist}">
+                                <!--   <ace:ajax/>  
+                                -->
+                            </h:commandButton> 
+                            <p:panel header ="Начать новое ПСГ" visible="#{not patientProfileBean.currPsgExist}">
+                                <h:outputLabel value="В кабинете:"/>
+                                <h:selectOneMenu value="#{patientProfileBean.newPsgCab}">
+                                    <f:selectItems value="#{cabinetController.itemsAvailableSelectOne}"/>
+                                </h:selectOneMenu>
+                                <h:commandButton value="Начать" action="#{patientProfileBean.createPsg()}"/>   
+                            </p:panel>
+
+                            <h:panelGrid columns="1">
+                                <p:dataTable id="PsgList" value="#{patientProfileBean.current.psgList}" var="psg"
+                                             paginator="true" paginatorPosition="bottom" rows="10"
+                                             sortBy="#{psg.psgDate}"
+                                             binding="#{bnd.PsgList}"
+                                             >
+
+                                    <p:column headerText="№ ПСГ" sortBy="#{psg.psgNo}" >
+                                        <h:outputText value="#{psg.psgNo}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Дата" sortBy="#{psg.psgDate}" >
+                                        <h:outputText value="#{psg.psgDate}">
+                                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm" timeZone="UTC"/>
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column headerText="Палата №" sortBy="#{psg.cabinetId.name}" >
+                                        <h:outputText value="#{psg.cabinetId.code}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Медсестра" sortBy="#{psg.nurseId.realName}" >
+                                        <h:outputText value="#{psg.nurseId.realName}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Закончено" sortBy="#{psg.isDone}" >
+                                        <p:selectBooleanCheckbox value="#{psg.isDone}" disabled="true"/>
+                                    </p:column>
+
+                                    <p:column headerText="Результат">
+                                        <h:outputLink value="psg_result.xhtml?psgId=#{psg.id}">
+                                            <h:panelGroup rendered="#{psg.psgResult!=null}">
+                                                <b>
+                                                    <h:outputText value="Есть" />   
+                                                </b>
+                                            </h:panelGroup>
+                                            <h:outputText value="Нет" rendered="#{psg.psgResult==null}"/>   
+                                        </h:outputLink>
+                                    </p:column>
+
+                                    <p:column headerText="Действия">
+                                        <ul style="display: inline;margin-left: 2px;padding-left: 2px;">
+                                            <li style="display: inline;margin-right: 5px">
+                                                <h:link outcome="psg_view.xhtml?psgId=#{psg.id}" value="Смотреть" rendered="#{(not loginBean.admin)and psg.isDone}"/> 
+                                                <h:link outcome="psg_view.xhtml?psgId=#{psg.id}" value="Править" rendered="#{loginBean.admin or not psg.isDone}"/> 
+                                            </li>                                     
+                                            <li style="display: inline">
+                                                <h:outputLink value="../../webresources/report/psg/#{psg.id}">
+                                                    <h:outputText value="Печатать"/>   
+                                                </h:outputLink>
+                                            </li> 
+
+                                            <li style="display: inline" hidden="#{not loginBean.admin}">
+                                                <p:commandButton value="Удалить"
+                                                                 action="#{patientProfileBean.delPsg(psg)}"
+                                                                 rendered="#{loginBean.admin}"
+                                                                 update=":#{bnd.PsgList.clientId} :#{bnd.messages.clientId} :#{bnd.allPsgPanel.clientId}"
+                                                                 ajax="true"
+
+                                                                 >
+                                                    <p:confirm header="Подтверждение" message="Удалить ПСГ?" icon="ui-icon-alert" /> 
+                                                    <!--                                                     
+                                                                                                         <f:ajax execute="@this" render=":#{bnd.PsgList.clientId} :#{bnd.messages.clientId} :#{bnd.allPsgPanel.clientId}"/>
+                                                    -->
+                                                </p:commandButton>
+
+                                                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">  
+                                                    <p:commandButton value="Да" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+                                                    <p:commandButton value="Нет" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+                                                </p:confirmDialog>                                  
+
+
+                                            </li>                                     
+                                        </ul>
+                                    </p:column>
+
+
+                                </p:dataTable>
+
+                                <p:commandButton value="Перенумеровать ПСГ по датам" actionListener="#{patientProfileBean.fixPsgOrder}"
+                                                 update=":#{bnd.PsgList.clientId} :#{bnd.messages.clientId} :#{bnd.allPsgPanel.clientId}"
+                                                 ajax="true"
+                                                 rendered="#{patientProfileBean.current.psgList!=null and patientProfileBean.current.psgList.size()>0}"
+                                                 />
+
+                            </h:panelGrid>
+                        </p:panel> 
+                    </h:form>
+                </p:tab>
+
+
+                <p:tab id="patCalls" title="Звонки">
+                    <h:form>
+                        <h:panelGrid columns="1">
+
+                            <p:panel header="Все звонки данному пациенту">
+                                <p:dataTable
+                                    value="#{patientProfileBean.current.patientCallList}"
+                                    var="call"
+                                    paginator="true"
+                                    paginatorPosition="bottom"
+                                    rows="20"
+
+                                    >
+                                    <p:column headerText="Дата" sortBy="#{call.callDate}">
+                                        <h:outputText value="#{call.callDate}">
+                                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm" timeZone="GMT"/>
+                                        </h:outputText>
+                                    </p:column>
+
+                                    <p:column headerText="Телефон" sortBy="#{call.phoneId.phoneRaw}"
+                                              filterBy="#{call.phoneId.phoneRaw}" filterMatchMode="contains"
+                                              >
+                                        <h:outputText value="#{call.phoneId.phoneRaw}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Сотрудник" sortBy="#{call.nurseId.toString()}"
+                                              filterBy="#{call.nurseId.toString()}" filterMatchMode="contains"
+                                              >
+                                        <h:outputText value="#{call.nurseId.toString()}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Вызов принят" sortBy="#{call.isAccepted}"
+                                              filterBy="#{call.isAccepted}" filterMatchMode="contains"
+                                              >
+                                        <p:selectBooleanCheckbox value="#{call.isAccepted}"
+                                                                 disabled="true"
+                                                                 />
+                                    </p:column>
+
+                                    <p:column headerText="Подробности">
+                                        <p:commandButton value="Смотреть" action="#{patientProfileBean.viewCall(call)}" ajax="true"/>
+                                    </p:column>
+
+                                </p:dataTable>   
+                            </p:panel>
+                            <p:panel header="Все телефоны данного пациента">
+                                <p:dataTable id="phoneTable2" value="#{patientProfileBean.current.patientPhoneList}" var="phone"
+                                             paginator="true"
+                                             rows="10"
+                                             paginatorPosition="bottom"
+                                             paginatorAlwaysVisible="false"
+                                             >
+                                    <p:column headerText="№ Телефона">
+                                        <h:outputText value="#{phone.phoneRaw}"/>
+                                    </p:column>    
+                                    <p:column headerText="Тип">   
+                                        <h:outputText value="#{phone.telTypeId.typeName}"/>
+                                    </p:column>    
+                                    <p:column headerText="Комментарий">   
+                                        <h:outputText value="#{phone.notes}"/>
+                                    </p:column>    
+                                    <p:column headerText="Действие">   
+                                        <h:commandButton value="Звонить" action="#{patientProfileBean.createNewCall(phone)}"/>
+                                    </p:column>    
+                                </p:dataTable>
+                            </p:panel>
+                        </h:panelGrid> 
+                    </h:form>
+
+                </p:tab>
+
+
+                <p:tab title="Документы" id="DocTab">
+                    <h:panelGrid columns="1">
+                        <h:form enctype="multipart/form-data">
+                            <p:dataTable id="docTable" value="#{patientProfileBean.current.documentList}"
+                                         var="doc"
+                                         paginator="true"
+                                         rows="8"
+                                         paginatorPosition="bottom"
+                                         paginatorAlwaysVisible="false"
+                                         binding="#{bnd.docTable}"
+                                         emptyMessage="Записей не найдено"
+                                         filteredValue="#{documentBean.filteredDocs}"
+                                         >
+                                <p:column headerText="Дата" sortBy="#{doc.fileDate}">
+                                    <h:outputText value="#{doc.fileDate}">
+                                        <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT"/>
+                                    </h:outputText>
+                                </p:column> 
+
+                                <p:column headerText="Имя файла" sortBy="#{doc.fileName}"
+                                          filterBy="#{doc.fileName}"
+                                          filterMatchMode="contains"
+                                          >
+                                    <h:outputText value="#{doc.fileName}"/>
+                                </p:column> 
+
+                                <p:column headerText="Размер, кб" sortBy="#{doc.fileSize}">
+                                    <h:outputText value="#{doc.fileSize/1024}">
+                                        <f:convertNumber maxFractionDigits="2"/>
+                                    </h:outputText>
+                                </p:column> 
+
+                                <p:column headerText="Описание" sortBy="#{doc.description}"
+                                          filterBy="#{doc.description}"
+                                          filterMatchMode="contains"
+                                          >
+                                    <h:outputText value="#{doc.description}"/>
+                                </p:column> 
+
+                                <p:column headerText="Загружен" sortBy="#{doc.uploadDate}">
+                                    <h:outputText value="#{doc.uploadDate}">
+                                        <f:convertDateTime pattern="dd.MM.yyyy HH:mm" timeZone="GMT"/>
+                                    </h:outputText>
+                                </p:column> 
+
+                                <p:column headerText="Скачать">
+                                    <p:commandButton id="downloadLink"
+                                                     value="Скачать"
+                                                     ajax="false"
+                                                     onclick="PrimeFaces.monitorDownload(start, stop)"
+                                                     icon="ui-icon-arrowthichk-s"
+                                                     >  
+                                        <p:fileDownload value="#{documentBean.getFile(doc)}" />  
+                                    </p:commandButton>
+                                </p:column> 
+                            </p:dataTable>
+                        </h:form>  
+                    </h:panelGrid>
+                    <h:form>
+                        <h:panelGrid columns="1">
+                            <p:panel header="Добавление документа">
+
+                                <p:fileUpload id="DocUpload" fileUploadListener="#{documentBean.handleFileUpload}"
+                                              mode="advanced"  
+                                              update=":#{bnd.messages.clientId} DocUpload grpCurFileInfo"
+                                              auto="true"
+                                              sizeLimit="4194304"
+                                              fileLimit="1"
+                                              invalidSizeMessage="Файл слишком велик, максимум 4 мегабайта"
+                                              uploadLabel="Загрузить"
+                                              label="Выбрать файл"
+                                              fileLimitMessage="Не более одного файла за раз!"
+                                              /> 
+                                <h:panelGrid columns="4" id="grpCurFileInfo">
+                                    <h:outputLabel value="Имя файла:"/>  
+                                    <h:outputText id="newFileName" value="#{documentBean.curDoc.fileName}"/>  
+                                    <h:outputText value=""/>
+                                    <h:outputText value=""/>
+
+                                    <h:outputLabel value="Размер, кб:"/>  
+                                    <h:outputText id="newFileSize" value="#{documentBean.curDoc.fileSize/1024}">
+                                        <f:convertNumber maxFractionDigits="2" />
+                                    </h:outputText>  
+                                    <h:outputText value=""/>
+                                    <h:outputText value=""/>
+
+                                    <h:outputLabel value="Дата ДОКУМЕНТА:" for="DocDate"/>  
+                                    <p:calendar id="DocDate"
+                                                value="#{documentBean.curDoc.fileDate}"
+                                                pattern="dd.MM.yyyy"
+                                                timeZone="GMT"
+                                                required="true"
+                                                locale="ru"
+                                                requiredMessage="Дата документа обязательна"
+                                                />
+                                    <p:message for="DocDate"/>
+                                    <h:outputText value=""/>
+
+                                    <h:outputLabel value="Описание документа:" for="DocDescr"/>  
+                                    <p:inputText id="DocDescr"
+                                                 value="#{documentBean.curDoc.description}"
+                                                 size="50"
+                                                 required="true"
+                                                 requiredMessage="Описание документа обязательно!"
+                                                 />
+                                    <p:message for="DocDescr"/>
+                                    <h:outputText value=""/>
+
+                                    <h:commandButton id="btnAddDoc" value="Сохранить документ на сервере" actionListener="#{documentBean.addFile()}" type="button" rendered="#{documentBean.curDoc.fileData!=null}">
+                                        <f:ajax execute="DocDate DocDescr"
+                                                render="grpCurFileInfo :#{bnd.docTable.clientId} :#{bnd.messages.clientId}"/> 
+                                    </h:commandButton>
+                                    <p:messages autoUpdate="true"/>
+                                </h:panelGrid>
+                                <!--
+                                                                <p:growl id="messages" showDetail="true"/>                                  
+                                -->
+
+                            </p:panel>
+                        </h:panelGrid>
+                    </h:form>                        
+
+                </p:tab>
+                <!-- не прокатывает, потомучто таб-вью не на форме (((
+                                <f:ajax event="tabChange" execute="mainTab"/>
+                -->
+            </p:tabView>
+            <h:form>
+
+                <h:commandButton value="Обновить из базы" action = "#{patientProfileBean.refreshFromDb()}"/>   
+            </h:form>
+        </p:panel>
+    </h:body>
+</html>

@@ -1,0 +1,377 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <h:head>
+
+        <title>Facelet Title</title>
+        
+     <script type="text/javascript">
+PrimeFaces.locales ['ru'] = {
+    closeText: 'Закрыть',
+    prevText: 'Назад',
+    nextText: 'Вперёд',
+    monthNames: ['Январь', 'Февраль' , 'Март' , 'Апрель' , 'Май' , 'Июнь' , 'Июль' , 'Август' , 'Сентябрь','Октябрь','Ноябрь','Декабрь' ],
+    monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек' ],
+    dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Субота'],
+    dayNamesShort: ['Воск','Пон' , 'Вт' , 'Ср' , 'Четв' , 'Пят' , 'Суб'],
+    dayNamesMin: ['В', 'П', 'Вт', 'С ', 'Ч', 'П ', 'Сб'],
+    weekHeader: 'Неделя',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix:'',
+    timeOnlyTitle: 'Только время',
+    timeText: 'Время',
+    hourText: 'Час',
+    minuteText: 'Минута',
+    secondText: 'Секунда',
+    currentText: 'Сегодня',
+    ampm: false,
+    month: 'Месяц',
+    week: 'неделя',
+    day: 'День',
+    allDayText: 'Весь день'
+};
+    </script>
+        
+    </h:head>
+    <h:body>
+        <style type="text/css">
+            /* Important required because row */
+            .ui-datatable-odd {
+                background-color:lightgray !important;
+                background-position-y: -1400px; /* IE7 hack */
+            }
+            .ui-widget {
+                /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                font-size: 0.90em/*{fsDefault}*/;
+            }                
+        </style>
+        <ui:include src="../ui/login_menu.xhtml"/>
+        <h:form>
+            <h:outputLink value="project_task.xhtml">
+                <h:outputLabel value="Назад"></h:outputLabel>
+            </h:outputLink>
+
+            <p:panel header="#{taskEditBean.editCaption}"
+                     binding="#{bnd.taskEditFormHeader}"
+                     >
+               <p:growl id="mainMessages" life="750" binding="#{bnd.growl}" showDetail="true"/>
+
+                <h:panelGrid>
+                    <p:tabView binding="#{bnd.taskEditTabView}">
+
+                        <p:tab title="Основное">
+                            <h:panelGrid columns="2">
+                                
+                                <h:outputLabel value="Менеджер" for="user"/>
+                                <p:selectOneMenu id="user" value="#{taskEditBean.current.user}"
+                                                 required="true"
+                                                 requiredMessage="Менеджер - обязательно"
+                                                 >
+                                    <f:selectItems value="#{cardioUserController.getItemsAvailableSelectOneHavingRole('MANAGER')}"/>
+                                    
+                                    <p:ajax event="change"></p:ajax>  
+                                    
+                                </p:selectOneMenu>
+
+                                <h:outputLabel value="Дата по плану" for="planDate"/>
+                                <p:calendar id="planDate"
+                                            value="#{taskEditBean.current.planDate}"
+                                            pattern="dd.MM.yyyy"
+                                            timeZone="UTC"
+                                            locale="ru"
+                                            >
+                                    <p:ajax event="change"></p:ajax>  
+                                </p:calendar>
+                               
+                                <h:outputLabel value="Область" for="state"/>
+                                <p:autoComplete id="state"
+                                                binding="#{bnd.taskEditStateSel}"
+                                                value="#{taskEditBean.selectedState}"
+                                                completeMethod="#{taskEditBean.stateAutoComplete}"
+                                                var="distr"
+                                                itemLabel="#{distr.ukrName}"
+                                                itemValue="#{distr}"
+                                                maxResults="50"
+                                                queryDelay="200"
+                                                minQueryLength="0"
+                                                forceSelection="true"
+                                                dropdown="true"
+                                                style="width:300px"
+                                                >
+                                    <p:ajax event="itemSelect" partialSubmit="true" update="@this :#{bnd.growl.clientId} :#{bnd.taskEditTownSel.clientId}"/>
+                                </p:autoComplete>
+                                
+                                <h:outputLabel value="Город" for="town"/>
+                                <p:autoComplete id="town"
+                                                binding="#{bnd.taskEditTownSel}"
+                                                value="#{taskEditBean.current.uaTown}"
+                                                completeMethod="#{taskEditBean.townAutoComplete}"
+                                                var="town"
+                                                itemLabel="#{town.ukrName}"
+                                                itemValue="#{town}"
+                                                maxResults="50"
+                                                queryDelay="200"
+                                                minQueryLength="0"
+                                                forceSelection="true"
+                                                dropdown="true"
+                                                style="width:300px"
+                                                >
+                                    <p:ajax event="itemSelect" partialSubmit="true" update="@this :#{bnd.growl.clientId}"/>
+                                </p:autoComplete>
+                                
+                                
+                                <h:outputLabel value="Учреждение" for="partnerSelCompl"/>
+                                <p:autoComplete id="partnerSelCompl"
+                                                binding="#{bnd.partnerSelCompl}"
+                                                value="#{taskEditBean.current.partner}"
+                                                completeMethod="#{taskEditBean.partnerAutoComplete}"
+                                                var="partner"
+                                                itemLabel="#{partner.name}"
+                                                itemValue="#{partner}"
+                                                maxResults="30"
+                                                queryDelay="200"
+                                                minQueryLength="0"
+                                                forceSelection="true"
+                                                dropdown="true"
+                                                style="width:300px"
+                                                >
+                                    <p:ajax event="itemSelect" update="@this :#{bnd.contPersSel.clientId} :#{bnd.contPersSelPhone.clientId}"
+                                            listener="#{taskEditBean.partnerSelectionChanged}"
+                                            />
+                                </p:autoComplete>       
+                                
+
+                                <h:outputLabel value="Конт. Персона" for="contPersSel"/>
+                                <p:autoComplete id="contPersSel"
+                                                binding="#{bnd.contPersSel}"
+                                                value="#{taskEditBean.selectedPerson}"
+                                                completeMethod="#{taskEditBean.contPersAutoComplete}"
+                                                maxResults="30"
+                                                queryDelay="200"
+                                                minQueryLength="0"
+                                                forceSelection="false"
+                                                dropdown="true"
+                                                style="width:300px"
+                                                >
+                                    <p:ajax event="itemSelect" update="@this :#{bnd.contPersSelPhone.clientId}"
+                                            listener="#{taskEditBean.contPersSelectionChanged}"
+                                            />
+                                </p:autoComplete>       
+                                
+                                
+                                <h:outputLabel value="Конт. телефон" for="contPersSelPhone"/>
+                                <p:autoComplete id="contPersSelPhone"
+                                                binding="#{bnd.contPersSelPhone}"
+                                                value="#{taskEditBean.selectedPersPhone}"
+                                                completeMethod="#{taskEditBean.contPersPhoneAutoComplete}"
+                                                maxResults="30"
+                                                queryDelay="200"
+                                                minQueryLength="0"
+                                                forceSelection="false"
+                                                dropdown="true"
+                                                style="width:300px"
+                                                >
+                                    <p:ajax event="itemSelect" update="@this"
+                                            />
+                                </p:autoComplete>       
+
+                                
+                                <h:outputLabel value="Тип" for="type"/>
+                                <p:selectOneMenu id="type" value="#{taskEditBean.current.type}"
+                                                 required="true"
+                                                 requiredMessage="Тип - обязательно"
+                                                 >
+                                    <f:selectItems value="#{taskTypeController.itemsAvailableSelectOne}"/>
+                                    <p:ajax event="change"></p:ajax>  
+                                </p:selectOneMenu>
+                                
+                                <h:outputLabel value="Инженер" for="engineer"/>
+                                <p:selectOneMenu id="engineer" value="#{taskEditBean.current.engineer}"
+                                                 required="true"
+                                                 requiredMessage="Инженер - обязательно"
+                                                 >
+                                    <f:selectItems value="#{cardioUserController.getItemsAvailableSelectOneHavingRole('ENGENEER')}"/>
+                                    <p:ajax event="change"></p:ajax>  
+                                </p:selectOneMenu>
+                                
+                                <h:outputLabel value="Статус" for="status"/>
+                                <p:selectOneMenu id="status" value="#{taskEditBean.current.status}"
+                                                 required="true"
+                                                 requiredMessage="Статус - обязательно"
+                                                 >
+                                    <f:selectItems value="#{taskStatusController.itemsAvailableSelectOne}"/>
+                                    <p:ajax event="change"></p:ajax>  
+                                </p:selectOneMenu>
+                                
+                                <h:outputLabel value="Фактическая дата" for="factDate"/>
+                                <p:calendar id="factDate"
+                                            value="#{taskEditBean.current.factDate}"
+                                            pattern="dd.MM.yyyy"
+                                            timeZone="UTC"
+                                            locale="ru"
+                                            >
+                                    <p:ajax event="change"></p:ajax>  
+                                </p:calendar>
+                                
+                                <h:outputLabel value="Примечание" for="notes"/>
+                                <p:inputTextarea id="notes"
+                                                 value="#{taskEditBean.current.notes}"
+                                                 cols="40"
+                                                 rows="3"
+                                                 >
+                                    <p:ajax event="change"></p:ajax>  
+                                </p:inputTextarea>
+                                
+                            </h:panelGrid>  
+
+                        </p:tab> 
+
+<!-- =============================================================== -->
+
+                        <p:tab title="Оборудование"
+                               binding="#{bnd.taskEditItemList}"
+                               >
+                            <p:panelGrid columns="1"
+                                         rendered="#{taskEditBean.current.partner!=null}"
+                                         >
+                                <p:dataTable id="taskItems"
+                                             value="#{taskEditBean.current.taskEquipmentList}"
+                                             binding="#{bnd.taskItems}"
+                                             var="row"
+
+                                             >
+                                    <p:column headerText="Тип">
+                                        <h:outputText value="#{row.model.type.name}"/>  
+                                    </p:column>
+
+                                    <p:column headerText="Производитель">
+                                        <h:outputText value="#{row.model.vendor.name}"/>  
+                                    </p:column>
+
+                                    <p:column headerText="Модель">
+                                        <h:outputText value="#{row.model.name}"/>  
+                                    </p:column>
+
+                                    <p:column headerText="Кол-во">
+                                        <h:outputText value="#{row.amount}"/>  
+                                    </p:column>
+
+                                    <p:column headerText="Примечание">
+                                        <h:outputText value="#{row.notes}"/>  
+                                    </p:column>
+
+                                    <p:column headerText="Действия">
+                                        <p:commandButton value="Удалить"
+                                                         action="#{taskEditBean.delEquipment(row)}"
+                                                         update=":#{bnd.growl.clientId} :#{bnd.taskItems.clientId} :#{bnd.newEqipmentInput.clientId}"
+                                                         ajax="true"
+                                                         >
+
+
+                                        </p:commandButton>
+                                    </p:column>
+
+                                </p:dataTable>
+
+                            </p:panelGrid>
+
+                            
+                            <p:panel header="Добавить оборудование"
+                                     rendered="#{taskEditBean.current.partner!=null}"
+
+                                     >
+
+                                <p:panelGrid columns="2" binding="#{bnd.newEqipmentInput}">
+
+                                    <h:outputLabel value="Тип"/>
+                                    <p:selectOneMenu value="#{taskEditBean.newStoreItemType}"
+                                                     id="selStoreItemType"
+                                                     binding="#{bnd.selStoreItemType}"
+                                                     >
+                                        <p:ajax process="@this"
+                                                update="@this :#{bnd.selStoreItemVendor.clientId} :#{bnd.selStoreItemModel.clientId}"
+                                                event="change"
+                                                />
+                                        <f:selectItems value="#{storeItemTypeController.itemsAvailableSelectOne}"
+                                                       >
+                                        </f:selectItems>
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel value="Производитель"/>
+                                    <p:selectOneMenu value="#{taskEditBean.newStoreItemVendor}"
+                                                     id="selStoreItemVendor"
+                                                     binding="#{bnd.selStoreItemVendor}"
+                                                     >
+
+                                        <p:ajax process="@this"
+                                                update="@this :#{bnd.selStoreItemModel.clientId}"
+                                                event="change"
+                                                />
+
+                                        <f:selectItems value="#{storeItemVendorController.getItemsAvailableSelectOneFilterByType(taskEditBean.newStoreItemType)}"
+                                                       >
+                                        </f:selectItems>
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel value="Модель"/>
+                                    <p:selectOneMenu value="#{taskEditBean.newEquipment.model}"
+                                                     id="selStoreItemModel"
+                                                     binding="#{bnd.selStoreItemModel}"
+                                                     >
+                                        <f:selectItems value="#{storeItemModelController.getItemsAvailableSelectOneByVendorAndType(taskEditBean.newStoreItemVendor, taskEditBean.newStoreItemType)}"
+                                                       >
+                                        </f:selectItems>
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel value="Кол-во"/>
+                                    <p:inputText value="#{taskEditBean.newEquipment.amount}">
+                                        <f:convertNumber maxFractionDigits="0" maxIntegerDigits="10"></f:convertNumber>   
+                                    </p:inputText>
+
+                                    <h:outputLabel value="Примечание"/>
+                                    <p:inputText value="#{taskEditBean.newEquipment.notes}"/>
+
+                                </p:panelGrid>
+
+
+                                <p:commandButton value="Добавить"
+                                                 action="#{taskEditBean.addNewEquipment()}"
+                                                 update=":#{bnd.growl.clientId} :#{bnd.taskItems.clientId} :#{bnd.newEqipmentInput.clientId}"
+                                                 process="@this :#{bnd.newEqipmentInput.clientId}"
+                                                 ajax="true"
+                                                 >
+
+                                </p:commandButton>
+
+                            </p:panel>
+
+                            <h:outputLabel value="Нужно указать учреждение!"
+                                           rendered="#{taskEditBean.current.partner==null}"
+                                           >
+
+                            </h:outputLabel>
+
+                        </p:tab>
+                    </p:tabView> 
+                  
+                    <p:commandButton value="Сохранить"
+                                     action="#{taskEditBean.save()}"
+                                     ajax="true"
+                                     process="@all"
+                                     update=":#{bnd.taskEditFormHeader.clientId}"
+                                     >
+                            
+                    </p:commandButton> 
+
+                </h:panelGrid>     
+            </p:panel>
+
+        </h:form>     
+    </h:body>
+</html>
+

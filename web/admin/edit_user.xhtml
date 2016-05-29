@@ -1,0 +1,763 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <h:head>
+        <style type="text/css">
+            /* Important required because row */ 
+            .ui-datatable-odd {
+                background-color:lightgray !important;
+                background-position-y: -1400px; /* IE7 hack */
+            }
+            .ui-widget {
+                /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                font-size: 0.90em/*{fsDefault}*/;
+            }                
+
+            .valign_top td{
+                vertical-align: top;
+                position: relative;
+            }
+
+            .TestClass #PatientSelfStory{
+                width:95%;
+                margin-left: 2px;
+                margin-right: 2px;
+                padding: 0px;
+            }
+
+        </style>            
+
+        <script type="text/javascript">
+
+            function openNewWindow(aUrl, aWindowName) {
+                window.open(aUrl, aWindowName);
+                return false;
+            }
+            ;
+
+            function start() {
+                PF('statusDialog').show();
+            }
+            ;
+
+            function stop() {
+                PF('statusDialog').hide();
+            }
+            ;
+
+            jQuery(document).ready(function() {
+                var oldLoadContents = PrimeFaces.widget.Dialog.loadContents;
+                PrimeFaces.widget.Dialog.loadContents = function() {
+                    statusDialog.show();
+                    oldLoadContents();
+                };
+            });
+        </script>
+
+        <script type="text/javascript">
+            PrimeFaces.locales ['ru'] = {
+                closeText: 'Закрыть',
+                prevText: 'Назад',
+                nextText: 'Вперёд',
+                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Субота'],
+                dayNamesShort: ['Воск', 'Пон', 'Вт', 'Ср', 'Четв', 'Пят', 'Суб'],
+                dayNamesMin: ['В', 'П', 'Вт', 'С ', 'Ч', 'П ', 'Сб'],
+                weekHeader: 'Неделя',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Только время',
+                timeText: 'Время',
+                hourText: 'Час',
+                minuteText: 'Минута',
+                secondText: 'Секунда',
+                currentText: 'Сегодня',
+                ampm: false,
+                month: 'Месяц',
+                week: 'неделя',
+                day: 'День',
+                allDayText: 'Весь день'
+            };
+        </script>
+
+
+    </h:head>
+    <h:body>
+        <ui:include src="../ui/login_menu.xhtml"/> 
+        <p:growl id="mainMessages" life="700" binding="#{bnd.growl}" showDetail="true"/>
+
+        <p:panel id="mainPanel" header="#{userEditBean.pageCaption()}" binding="#{bnd.mainPanel}">
+            <h:form>    
+                <h:outputLink value="user_list.xhtml">
+                    <h:outputText value="К списку всех сотрудников"/> 
+                </h:outputLink>
+                <br/>
+                <p:commandLink action="#{userEditBean.clean()}" value ="Очистить" ajax="true" update=":FormInput1"/><br/>
+                <h:commandButton value="Обновить" actionListener="#{userEditBean.refresh}" rendered="#{not userEditBean.doCreateNew}" type="button">
+                    <f:ajax execute="@this" render="@all" event="click"/>
+                </h:commandButton>    
+
+                <p:messages autoUpdate="true"/>
+
+            </h:form>
+            <h:panelGrid columns="2" styleClass="valign_top">
+                <p:panel>   
+                    <h:form id="FormInput1">
+
+                        <f:ajax execute="@form" event="click"/>
+
+                        <p:accordionPanel cache="true">
+                            <p:tab title="Основное">
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="Login:" for="login" />
+                                    <p:inputText id="login" value="#{userEditBean.current.userName}" title="Логин">
+                                        <p:ajax event="blur" process="@this" update="@this"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel value="Фамилия:" for="lastName" />
+                                    <p:inputText id="lastName" value="#{userEditBean.current.lastName}" title="Фамилия">
+                                        <p:ajax event="blur" process="@this" update="@this"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel value="Имя:" for="firstName" />
+                                    <p:inputText id="firstName" value="#{userEditBean.current.firstName}" title="Имя" >
+                                        <p:ajax event="blur" process="@this" update="@this"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel value="Отчество:" for="middleName" />
+                                    <p:inputText id="middleName" value="#{userEditBean.current.middleName}" title="Отчество">
+                                        <p:ajax event="blur" process="@this" update="@this"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel value="Дата рождения:" for="birthDate" />
+                                    <p:calendar id="birthDate" value="#{userEditBean.current.birthDate}"
+                                                required="true"
+                                                requiredMessage="Дата рождения - обязательна"
+                                                pattern="dd.MM.yyyy"
+                                                showButtonPanel="true"
+                                                navigator="true"
+                                                locale="ru"
+                                                lang="ru"
+                                                >
+                                        <p:ajax partialSubmit="true" process="birthDate" update="birthDate" event="dateSelect"/> 
+                                    </p:calendar>
+
+                                    <h:outputLabel value="Тема оформления" for="theme" />
+                                    <p:selectOneMenu value="#{userEditBean.current.theme}">
+                                        <p:ajax />
+                                        <f:selectItems value="#{pfThemeController.itemsAvailableSelectOne}"/>
+                                    </p:selectOneMenu>
+
+                                </h:panelGrid>  
+                            </p:tab>
+
+                            <p:tab title="Права в системе">
+
+                                <p:pickList id="pickList" value="#{userEditBean.rolesPickUpList}" var="rol"   
+                                            itemLabel="#{rol.description}" itemValue="#{rol}"
+                                            converter="roleConverter"
+
+                                            >
+                                    <p:ajax event="transfer" listener="#{userEditBean.onTransfer}" update=":#{bnd.growl.clientId}" />                                      
+                                    <f:facet name="sourceCaption">Доступные</f:facet>  
+                                    <f:facet name="targetCaption">Выданные</f:facet>                                      
+                                </p:pickList>
+
+                            </p:tab>
+
+
+
+                            <p:tab title="Паспорт, Инн, Адрес ">
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel value="Серия:" for="passSer" />
+                                    <p:inputText id="passSer" value="#{userEditBean.current.passSer}" title="Серия" maxlength="4" size="4">
+                                        <p:ajax event="blur" process="@this" update="@this"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel value="Номер:" for="passNo" />
+                                    <p:inputText id="passNo" value="#{userEditBean.current.passNo}" title="Номер" maxlength="8" size="8">
+                                        <p:ajax event="blur" process="@this" update="@this"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel value="Когда выдан:" for="passDate" />
+                                    <p:calendar id="passDate" value="#{userEditBean.current.passGiveoutDate}"
+                                                pattern="dd.MM.yyyy"
+                                                showButtonPanel="true"
+                                                navigator="true"
+                                                locale="ru"
+                                                lang="ru"
+                                                size="12"
+                                                >
+                                        <p:ajax partialSubmit="true" process="passDate" update="passDate" event="dateSelect"/> 
+                                    </p:calendar>
+
+                                    <h:outputLabel value="Кем выдан:" for="passGiveout" />
+                                    <p:inputText id="passGiveout" value="#{userEditBean.current.passGiveout}" title="Кем выдан">
+                                        <p:ajax event="blur" process="@this" update="@this"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel value="ИНН:" for="inn" />
+                                    <p:inputText id="inn" value="#{userEditBean.current.inn}" title="ИНН">
+                                        <p:ajax event="blur" process="@this" update="@this"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel value="Адрес/Область:"/>
+                                    <p:autoComplete id="acState"
+                                                    value="#{userEditBean.current.adrState}"
+                                                    completeMethod="#{userEditBean.stateAutoComplete}"
+                                                    var="state"
+                                                    itemLabel="#{state.ukrName}"
+                                                    itemValue="#{state}"
+                                                    maxResults="30"
+                                                    queryDelay="200"
+                                                    minQueryLength="0"
+                                                    forceSelection="true"
+                                                    dropdown="true"
+                                                    style="width:300px"
+                                                    >
+                                        <p:ajax event="itemSelect" partialSubmit="true"/>
+                                    </p:autoComplete>
+
+                                    <h:outputLabel value="Адрес/Город:" />
+                                    <p:autoComplete id="acTowns"
+                                                    value="#{userEditBean.current.adrTown}"
+                                                    completeMethod="#{userEditBean.townAutoComplete}"
+                                                    var="town"
+                                                    itemLabel="#{town.ukrName}"
+                                                    itemValue="#{town}"
+                                                    maxResults="50"
+                                                    queryDelay="200"
+                                                    minQueryLength="0"
+                                                    forceSelection="true"
+                                                    dropdown="true"
+                                                    style="width:300px"
+                                                    >
+                                        <p:ajax event="itemSelect"/>
+                                    </p:autoComplete>
+
+                                    <h:outputLabel value="Адрес/Улица+дом+кв:" for="address" />
+                                    <p:inputText id="address" value="#{userEditBean.current.address}" title="Адрес">
+                                        <p:ajax event="blur" process="@this" update="@this"/>
+                                    </p:inputText>
+
+                                </h:panelGrid>        
+
+
+                            </p:tab>
+
+                            <p:tab title="Телефоны, email">
+                                <p:panel header="Все связанные телефоны">
+                                    <h:panelGrid columns="1">
+                                        <p:dataTable value="#{userEditBean.current.userPhoneList}"
+                                                     var="phone"
+                                                     binding="#{bnd.userPhoneTable}">
+                                            <p:column headerText="№ телефона">
+                                                <h:outputText value="#{phone.phone}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Тип">
+                                                <h:outputText value="#{phone.phoneType.typeName}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Коммент">
+                                                <h:outputText value="#{phone.notes}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Удалить">
+                                                <p:commandLink value="X"
+                                                               action="#{userEditBean.delPhone(phone)}"   
+                                                               process="@this"
+                                                               update=":#{bnd.userPhoneTable.clientId} :#{bnd.growl.clientId} :#{bnd.addPhoneGrp.clientId}"
+                                                               />
+                                            </p:column>
+
+                                        </p:dataTable>
+                                        <h:panelGrid columns="2" binding="#{bnd.addPhoneGrp}" id="addPhoneGrp">
+
+                                            <h:outputLabel value="№ телефона:" for="newPhone" />
+                                            <p:inputText id="newPhone" value="#{userEditBean.currPhone.phone}" title="№ телефона">
+                                                <p:ajax event="blur" process="@this" update="@this"/>
+                                            </p:inputText>
+
+                                            <h:outputLabel value="Тип телефона:" for="newPhoneType" />
+                                            <p:selectOneMenu value="#{userEditBean.currPhone.phoneType}">
+                                                <f:selectItems value="#{telTypeController.itemsAvailableSelectOne}"/>  
+                                            </p:selectOneMenu>
+
+                                            <h:outputLabel value="Комментарий:" for="newPhoneNotes" />
+                                            <p:inputText id="newPhoneNotes" value="#{userEditBean.currPhone.notes}" title="Коммент"/>
+
+                                        </h:panelGrid>
+
+                                        <p:commandButton value="Добавить телефон"
+                                                         actionListener="#{userEditBean.addPhone}"
+                                                         ajax="true"
+                                                         process="@this :#{bnd.addPhoneGrp.clientId}"
+                                                         update=":#{bnd.userPhoneTable.clientId} :#{bnd.growl.clientId} :#{bnd.addPhoneGrp.clientId}"
+                                                         />
+                                    </h:panelGrid>                                         
+                                </p:panel>
+
+                                <p:panel header="email">
+                                    <h:form>
+                                        <h:panelGrid columns="2">
+                                            <h:outputLabel value="Личный:" for="personalEmail" />
+                                            <p:inputText id="personalEmail" value="#{userEditBean.current.personalEmail}" title="Личный адрес">
+                                                <f:ajax execute="@this" render="@this" event="blur"/>  
+                                            </p:inputText>
+
+                                            <h:outputLabel value="Рабочий:" for="workEmail" />
+                                            <p:inputText id="workEmail" value="#{userEditBean.current.workEmail}" title="Рабочий адрес">
+                                                <f:ajax execute="@this" render="@this" event="blur"/>  
+                                            </p:inputText>
+                                        </h:panelGrid>
+                                    </h:form> 
+                                </p:panel>    
+
+                            </p:tab>
+
+
+                            <!-- ============================= FORM 2 ============================================================= -->
+
+
+                        </p:accordionPanel>
+
+                    </h:form>
+
+                </p:panel>
+
+                <p:panel>
+                    <p:accordionPanel cache="true">
+                        <p:tab title="Фото">
+                            <h:form>
+                                <h:panelGroup id="userPhoto" binding="#{bnd.userPhoto}">
+                                    <p:graphicImage alt="Фото сотрудника"
+                                                    value="#{userEditBean.current.avatarFile.jpgFileDataAsStream}"
+                                                    height="320px"
+                                                    rendered="#{userEditBean.current.avatarFile.fileData!=null}"
+                                                    />
+                                    <h:panelGroup rendered="#{userEditBean.current.avatarFile.fileData==null}">
+                                        <img width="300px" height="320px" alt="Нет фото"/>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+
+
+                                <p:fileUpload id="avaUpload"
+                                              fileUploadListener="#{userEditBean.avatarListener}"
+                                              mode="advanced"  
+                                              update=":#{bnd.growl.clientId} avaUpload userPhoto :#{bnd.filesTable.clientId}"
+                                              process="avaUpload userPhoto"
+                                              auto="false"
+                                              sizeLimit="1048576"
+                                              fileLimit="1"
+                                              invalidSizeMessage="Файл слишком велик, можно максимум 1 мегабайт"
+                                              uploadLabel="Загрузить"
+                                              label="Выбрать файл"
+                                              cancelLabel="Отменить"
+                                              fileLimitMessage="Нельзя выбрать больше одного файла за раз"
+                                              value="#{userEditBean.current.avatarFile.fileData}"
+
+                                              /> 
+                            </h:form> 
+                        </p:tab>
+
+                        <p:tab title="Документы">
+                            <h:panelGrid columns="1">
+
+                                <h:form enctype="multipart/form-data">
+                                    <p:dataTable id="filesTable" value="#{userEditBean.current.userFilesList}"
+                                                 var="doc"
+                                                 paginator="true"
+                                                 rows="8"
+                                                 paginatorPosition="bottom"
+                                                 paginatorAlwaysVisible="false"
+                                                 binding="#{bnd.filesTable}"
+                                                 emptyMessage="Записей не найдено"
+
+                                                 >
+                                        <p:column headerText="Дата" sortBy="#{doc.fileDate}">
+                                            <h:outputText value="#{doc.fileDate}">
+                                                <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT"/>
+                                            </h:outputText>
+                                        </p:column> 
+
+                                        <p:column headerText="Имя файла" sortBy="#{doc.fileName}"
+                                                  filterBy="#{doc.fileName}"
+                                                  filterMatchMode="contains"
+                                                  >
+                                            <h:outputText value="#{doc.fileName}"/>
+                                        </p:column> 
+                                        <!--
+                                                                                <p:column headerText="Размер, кб" sortBy="#{doc.fileSize}">
+                                                                                    <h:outputText value="#{doc.fileSize/1024}">
+                                                                                        <f:convertNumber maxFractionDigits="2"/>
+                                                                                    </h:outputText>
+                                                                                </p:column> 
+                                        -->
+                                        <p:column headerText="Описание" sortBy="#{doc.description}"
+                                                  filterBy="#{doc.description}"
+                                                  filterMatchMode="contains"
+                                                  >
+                                            <h:outputText value="#{doc.description}"/>
+                                        </p:column> 
+
+                                        <p:column headerText="Загружен" sortBy="#{doc.uploaded}">
+                                            <h:outputText value="#{doc.uploaded}">
+                                                <f:convertDateTime pattern="dd.MM.yyyy HH:mm" timeZone="GMT"/>
+                                            </h:outputText>
+                                        </p:column> 
+
+                                        <p:column headerText="Скачать">
+                                            <p:commandButton id="downloadLink"
+                                                             value="Скачать"
+                                                             ajax="false"
+                                                             onclick="PrimeFaces.monitorDownload(start, stop)"
+                                                             icon="ui-icon-arrowthichk-s"
+                                                             >  
+                                                <p:fileDownload value="#{userEditBean.getFile(doc)}" />  
+                                            </p:commandButton>
+                                        </p:column> 
+
+                                        <p:column headerText="Удалить">
+                                            <p:commandLink ajax="true" action="#{userEditBean.delFile(doc)}"
+                                                           value="X"
+                                                           process="@this"
+                                                           update=":#{bnd.filesTable.clientId} :#{bnd.growl.clientId} :#{bnd.grpCurFileInfo.clientId} :#{bnd.userPhoto.clientId}"
+                                                           />  
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:form>  
+                            </h:panelGrid>
+
+
+                            <h:form>
+                                <p:fileUpload id="DocUpload" fileUploadListener="#{userEditBean.handleFileUpload}"
+                                              mode="advanced"  
+                                              update=":#{bnd.growl.clientId} DocUpload grpCurFileInfo"
+                                              auto="true"
+                                              sizeLimit="4194304"
+                                              fileLimit="1"
+                                              invalidSizeMessage="Файл слишком велик, максимум 4 мегабайта"
+                                              uploadLabel="Загрузить"
+                                              label="Выбрать файл"
+                                              fileLimitMessage="Не более одного файла за раз!"
+                                              /> 
+                                <h:panelGrid columns="4" id="grpCurFileInfo" binding="#{bnd.grpCurFileInfo}">
+                                    <h:outputLabel value="Имя файла:"/>  
+                                    <h:outputText id="newFileName" value="#{userEditBean.curFile.fileName}"/>  
+                                    <h:outputText value=""/>
+                                    <h:outputText value=""/>
+                                    <!--                                    
+                                                                        <h:outputLabel value="Размер, кб:"/>  
+                                                                        <h:outputText id="newFileSize" value="#{userEditBean.curFile.fileSize/1024}">
+                                                                            <f:convertNumber maxFractionDigits="2" />
+                                                                        </h:outputText>  
+
+                                    <h:outputText value=""/>
+                                    <h:outputText value=""/>
+                                    -->
+
+                                    <h:outputLabel value="Дата ДОКУМЕНТА:" for="DocDate"/>  
+                                    <p:calendar id="DocDate"
+                                                value="#{userEditBean.curFile.fileDate}"
+                                                pattern="dd.MM.yyyy"
+                                                timeZone="GMT"
+                                                required="true"
+                                                requiredMessage="Дата документа обязательна"
+                                                size="10"
+                                                />
+                                    <p:message for="DocDate"/>
+                                    <h:outputText value=""/>
+
+                                    <h:outputLabel value="Описание документа:" for="DocDescr"/>  
+                                    <p:inputText id="DocDescr"
+                                                 value="#{userEditBean.curFile.description}"
+                                                 size="50"
+                                                 required="true"
+                                                 requiredMessage="Описание документа обязательно!"
+                                                 >
+                                        <p:ajax event="blur" process="@this" update="@this"/>
+                                    </p:inputText>
+
+                                    <p:message for="DocDescr"/>
+                                    <h:outputText value=""/>
+
+                                    <h:commandButton id="btnAddDoc" value="Сохранить документ на сервере" actionListener="#{userEditBean.addFile()}" type="button" rendered="#{userEditBean.curFile.fileData!=null}">
+                                        <f:ajax execute="DocDate DocDescr"
+                                                render="grpCurFileInfo :#{bnd.filesTable.clientId} :#{bnd.growl.clientId}"/> 
+                                    </h:commandButton>
+                                    <p:messages autoUpdate="true"/>
+
+                                </h:panelGrid>
+                            </h:form>        
+
+                        </p:tab>
+
+                        <p:tab title="Образование"> 
+                            <h:form>
+                                <p:dataTable
+                                    value="#{userEditBean.current.userEducaionList}"
+                                    var="edu"
+                                    paginator="true"
+                                    rows="4"
+                                    paginatorPosition="bottom"
+                                    paginatorAlwaysVisible="false"
+                                    binding="#{bnd.eduTable}"
+                                    emptyMessage="Записей не найдено"
+                                    >
+                                    <p:column headerText="Заведение">
+                                        <h:outputText value="#{edu.univer}"/>
+                                    </p:column> 
+
+                                    <p:column headerText="Специальность">
+                                        <h:outputText value="#{edu.spec}"/>
+                                    </p:column> 
+
+                                    <p:column headerText="Номер диплома">
+                                        <h:outputText value="#{edu.diplomNo}"/>
+                                    </p:column> 
+
+                                    <p:column headerText="Дата окончания">
+                                        <h:outputText value="#{edu.endDate}">
+                                            <f:convertDateTime timeZone="GMT" pattern="hh.MM.yyyy"/> 
+                                        </h:outputText>
+                                    </p:column> 
+
+                                    <p:column headerText="Удалить">
+                                        <p:commandLink value="X" action="#{userEditBean.dellEducation(edu)}" process="@this" update=":#{bnd.eduTable.clientId} :#{bnd.eduAddGrp.clientId} :#{bnd.growl.clientId}" ajax="true"/>
+                                    </p:column>
+
+                                </p:dataTable>  
+                                <p:panel header="Добавить диплом">
+                                    <h:panelGrid columns="2" id="eduAddGrp" binding="#{bnd.eduAddGrp}">
+                                        <h:outputLabel value="Заведение:"/>    
+                                        <p:inputText value="#{userEditBean.currEdu.univer}">
+                                            <p:ajax event="blur" process="@this" update="@this"/>
+                                        </p:inputText>
+
+                                        <h:outputLabel value="Специальность:"/>    
+                                        <p:inputText value="#{userEditBean.currEdu.spec}">
+                                            <p:ajax event="blur" process="@this" update="@this"/>
+                                        </p:inputText>
+
+                                        <h:outputLabel value="Номер диплома:"/>    
+                                        <p:inputText value="#{userEditBean.currEdu.diplomNo}">
+                                            <p:ajax event="blur" process="@this" update="@this"/>
+                                        </p:inputText>
+
+                                        <h:outputLabel value="Дата окончания:"/>    
+                                        <p:calendar id="diplDate"
+                                                    value="#{userEditBean.currEdu.endDate}"
+                                                    timeZone="GMT"
+                                                    pattern="dd.MM.yyyy"
+                                                    showButtonPanel="true"
+                                                    navigator="true"
+                                                    locale="ru"
+                                                    lang="ru"
+                                                    >
+                                            <p:ajax partialSubmit="true" process="diplDate" update="diplDate" event="dateSelect"/> 
+                                        </p:calendar>
+                                        <p:commandButton value="Добавить диплом"
+                                                         action="#{userEditBean.addEducation()}"
+                                                         ajax="true"
+                                                         process="@this :#{bnd.eduAddGrp.clientId}"
+                                                         update=":#{bnd.eduAddGrp.clientId} :#{bnd.eduTable.clientId} :#{bnd.growl.clientId}"
+                                                         />  
+                                    </h:panelGrid>
+
+                                </p:panel>
+
+                            </h:form> 
+                        </p:tab>
+
+
+                        <p:tab title="Работа, Фирмы, Должности">
+                            <h:form>
+
+                                <p:dataTable
+                                    value="#{userEditBean.current.userOccupationList}"
+                                    var="firm"
+                                    paginator="true"
+                                    rows="4"
+                                    paginatorPosition="bottom"
+                                    paginatorAlwaysVisible="false"
+                                    binding="#{bnd.firmTable}"
+                                    emptyMessage="Записей не найдено"
+                                    >
+                                    <p:column headerText="Компания">
+                                        <h:outputText value="#{firm.company.name}"/>   
+                                    </p:column>
+
+                                    <p:column headerText="Должность">
+                                        <h:outputText value="#{firm.position}"/>   
+                                    </p:column>
+
+                                    <p:column headerText="С">
+                                        <h:outputText value="#{firm.startDate}">
+                                            <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT"/> 
+                                        </h:outputText>   
+                                    </p:column>
+
+                                    <p:column headerText="По">
+                                        <h:outputText value="#{firm.endDate}">
+                                            <f:convertDateTime pattern="dd.MM.yyyy" timeZone="GMT"/> 
+                                        </h:outputText>   
+                                    </p:column>
+
+                                    <p:column headerText="Удалить">
+                                        <p:commandLink value="X" action="#{userEditBean.delFirmWork(firm)}" process="@this" update=":#{bnd.firmTable.clientId} :#{bnd.firmAddGrp.clientId} :#{bnd.growl.clientId}" ajax="true"/>
+                                    </p:column>
+
+                                </p:dataTable>
+                                <p:panel header="Добавить работу">
+                                    <h:panelGrid columns="2" id="firmAddGrp" binding="#{bnd.firmAddGrp}">
+                                        <h:outputLabel value="Компания"/>
+                                        <p:selectOneMenu value="#{userEditBean.currOccup.company}">
+                                            <f:selectItems value="#{cardioCompanyController.itemsAvailableSelectOne}"/>
+                                        </p:selectOneMenu>
+
+                                        <h:outputLabel value="Должность"/>
+                                        <p:inputText value="#{userEditBean.currOccup.position}">
+                                            <p:ajax event="blur" process="@this" update="@this"/>
+                                        </p:inputText>
+
+                                        <h:outputLabel value="Дата начала"/>
+                                        <p:calendar id="firmBegDate"
+                                                    value="#{userEditBean.currOccup.startDate}"
+                                                    pattern="dd.MM.yyyy"
+                                                    showButtonPanel="true"
+                                                    navigator="true"
+                                                    locale="ru"
+                                                    lang="ru"
+                                                    >
+                                            <p:ajax partialSubmit="true" process="firmBegDate" update="firmBegDate" event="dateSelect"/> 
+                                        </p:calendar>
+
+
+                                        <h:outputLabel value="Дата окончания"/>
+                                        <p:calendar id="firmEndDate"
+                                                    value="#{userEditBean.currOccup.endDate}"
+                                                    pattern="dd.MM.yyyy"
+                                                    showButtonPanel="true"
+                                                    navigator="true"
+                                                    locale="ru"
+                                                    lang="ru"
+                                                    >
+                                            <p:ajax partialSubmit="true" process="firmEndDate" update="firmEndDate" event="dateSelect"/> 
+                                        </p:calendar>
+
+                                    </h:panelGrid>
+                                    <p:commandButton value="Добавить работу"
+                                                     action="#{userEditBean.addFirmWork()}"
+                                                     ajax="true"
+                                                     process="@this :#{bnd.firmAddGrp.clientId}"
+                                                     update=":#{bnd.firmAddGrp.clientId} :#{bnd.firmTable.clientId} :#{bnd.growl.clientId}"
+                                                     />   
+                                </p:panel>
+
+                                <h:panelGrid columns="2" id="workOutsideGrp">
+                                    <h:outputLabel value="Работает за пределами Cardio?"/>
+                                    <p:selectBooleanCheckbox value="#{userEditBean.current.isOutsideEmpl}">
+                                        <f:ajax render="workOutsideGrp" execute="@this"/>  
+                                    </p:selectBooleanCheckbox>
+
+                                    <h:outputLabel value="Где:" rendered="#{userEditBean.current.isOutsideEmpl}"/>
+                                    <p:inputText value="#{userEditBean.current.outsideWorkPlace}" rendered="#{userEditBean.current.isOutsideEmpl}">
+                                        <f:ajax execute="@this" render="@this"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel value="Кем:" rendered="#{userEditBean.current.isOutsideEmpl}"/>
+                                    <p:inputText value="#{userEditBean.current.outsideWorkSpec}" rendered="#{userEditBean.current.isOutsideEmpl}">
+                                        <f:ajax execute="@this" render="@this"/>
+                                    </p:inputText>
+
+                                </h:panelGrid> 
+                            </h:form> 
+                        </p:tab>
+
+                        <p:tab title="Права, авто, прочее">
+                            <h:form>
+                                <h:panelGrid columns="2"> 
+                                    <h:outputLabel value="Есть права?" for="isDriver"/>
+                                    <p:selectBooleanCheckbox value="#{userEditBean.current.isDriver}" id="isDriver">
+                                        <f:ajax execute="@form" render="@form"/>
+                                    </p:selectBooleanCheckbox>
+
+                                    <h:outputLabel value="Номер прав:" rendered="#{userEditBean.current.isDriver}"/>
+                                    <p:inputText value="#{userEditBean.current.drvLicNo}" rendered="#{userEditBean.current.isDriver}">
+                                        <p:ajax event="blur" process="@this" update="@this"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel value="Есть личное авто?" for="isHaveAuto"/>
+                                    <p:selectBooleanCheckbox value="#{userEditBean.current.isHaveAuto}" id="isHaveAuto">
+                                        <f:ajax execute="@form" render="@form"/>
+                                    </p:selectBooleanCheckbox>
+
+                                    <h:outputLabel value="Модель личного авто:" for="licAutoModel" rendered="#{userEditBean.current.isHaveAuto}" />
+                                    <p:inputText value="#{userEditBean.current.licAutoModel}" id="licAutoModel" rendered="#{userEditBean.current.isHaveAuto}">
+                                        <p:ajax event="blur" process="@this" update="@this"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel value="Госномер личного авто:" for="licAutoNo" rendered="#{userEditBean.current.isHaveAuto}"/>
+                                    <p:inputText value="#{userEditBean.current.licAutoNo}" id="licAutoNo" rendered="#{userEditBean.current.isHaveAuto}">
+                                        <p:ajax event="blur" process="@this" update="@this"/>
+                                    </p:inputText>
+
+                                    <h:outputLabel value="Примечание"/>
+                                    <p:inputTextarea value="#{userEditBean.current.notes}" rows="3" cols="40">
+                                        <f:ajax execute="@this" render="@this" event="blur"/>
+                                    </p:inputTextarea>
+
+                                </h:panelGrid>
+                            </h:form>       
+                        </p:tab>
+
+                    </p:accordionPanel>
+
+                </p:panel>
+
+                <p:panel collapsed="true" header="Установить/сменить пароль" toggleable="true">
+                    <h:form>
+                        <h:panelGrid columns="2" id="passGrp" binding="#{bnd.passGrp}">
+                            <h:outputLabel value="Пароль:" for="password" />
+                            <p:inputText id="password" value="#{userEditBean.newPassword1}" title="Пароль" type="password">
+                                <p:ajax event="blur" process="@this" update="@this"/>
+                            </p:inputText>
+
+                            <h:outputLabel value="Пароль, повторно:" for="password2" />
+                            <p:inputText id="password2" value="#{userEditBean.newPassword2}" title="Пароль, повторно" type="password">
+                                <p:ajax event="blur" process="@this" update="@this"/>
+                            </p:inputText>
+
+                        </h:panelGrid>                                     
+                        <p:commandButton value="Установить пароль"
+                                         ajax="true"
+                                         actionListener="#{userEditBean.changePassword}"
+                                         process="@this :#{bnd.passGrp.clientId}"
+                                         update=":#{bnd.growl.clientId}"
+                                         rendered="#{loginBean.admin or loginBean.chief or loginBean.buch}"
+                                         />
+                    </h:form>  
+                </p:panel>
+
+            </h:panelGrid>
+            <h:form>
+                <p:messages autoUpdate="true"/>
+
+                <p:commandButton value="Сохранить" actionListener="#{userEditBean.save}"
+                                 ajax="true"
+                                 process="@this"
+                                 update=":#{bnd.growl.clientId} :#{bnd.mainPanel.clientId}"
+                                 rendered="#{loginBean.admin or loginBean.chief or loginBean.buch}"
+                                 />
+
+            </h:form>
+        </p:panel>
+    </h:body>
+</html>

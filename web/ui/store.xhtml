@@ -1,0 +1,477 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <h:head>
+        <title>Склад</title>
+
+        <script type="text/javascript">
+            PrimeFaces.locales ['ru'] = {
+                closeText: 'Закрыть',
+                prevText: 'Назад',
+                nextText: 'Вперёд',
+                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Субота'],
+                dayNamesShort: ['Воск', 'Пон', 'Вт', 'Ср', 'Четв', 'Пят', 'Суб'],
+                dayNamesMin: ['В', 'П', 'Вт', 'С ', 'Ч', 'П ', 'Сб'],
+                weekHeader: 'Неделя',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Только время',
+                timeText: 'Время',
+                hourText: 'Час',
+                minuteText: 'Минута',
+                secondText: 'Секунда',
+                currentText: 'Сегодня',
+                ampm: false,
+                month: 'Месяц',
+                week: 'неделя',
+                day: 'День',
+                allDayText: 'Весь день'
+            };
+        </script>
+
+    </h:head>
+    <h:body>
+
+        <style type="text/css">
+            /* Important required because row */
+            .ui-datatable-odd {
+                background-color:lightgray !important;
+                background-position-y: -1400px; /* IE7 hack */
+            }
+            .ui-widget {
+                /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                font-size: 0.90em/*{fsDefault}*/;
+            }                
+        </style>
+
+        <ui:include src="../ui/login_menu.xhtml"/> 
+        <h:form>
+            <p:panel header="Склад">
+                <p:growl id="mainMessages" life="750" binding="#{bnd.growl}" showDetail="true"/>
+
+                <p:tabView binding="#{bnd.tabView}">
+                    <p:tab title="Ручная правка склада">
+                        <h:outputLabel value="Временно реализована ручная работа со складом"/>
+
+                        <p:commandButton value="Обновить"
+                                         action="#{TempStoreBean.updateStore()}"
+                                         ajax="true"
+                                         update=":#{bnd.tabView.clientId} :#{bnd.grid1.clientId} :#{bnd.storeRestItems.clientId} :#{bnd.itemInput.clientId} :#{bnd.deliveredItems.clientId}"
+                                         process="@this"
+                                         >
+
+                        </p:commandButton>  
+
+                        <h:panelGrid columns="1" binding="#{bnd.grid1}">
+
+                            <p:tabView activeIndex="#{TempStoreBean.tabIdx}" >
+                                <p:ajax event="tabChange"/> 
+
+                                <p:tab title="Остатки в наличии">
+
+
+                                    <p:dataTable value="#{TempStoreBean.storeRestItems}"
+                                                 var="item"
+                                                 paginator="true"
+                                                 paginatorPosition="bottom"
+                                                 filteredValue="#{TempStoreBean.filteredStoreRestItems}"
+                                                 filterDelay="250"
+                                                 emptyMessage="Записей не найдено"
+                                                 rows="30"
+                                                 binding="#{bnd.storeRestItems}"
+                                                 >
+
+                                        <p:column headerText="Склад"
+                                                  sortBy="#{item.store.name}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.store.name}"
+                                                  >
+                                            <h:outputText value="#{item.store.name}"/>   
+                                        </p:column>
+
+                                        <p:column headerText="Тип"
+                                                  sortBy="#{item.model.type.name}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.model.type.name}"
+
+                                                  >
+
+                                            <h:outputText value="#{item.model.type.name}"/>   
+                                        </p:column>
+
+                                        <p:column headerText="Модель"
+                                                  sortBy="#{item.model.name}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.model.name}"
+
+                                                  >
+                                            <h:outputText value="#{item.model.name}"/>   
+                                        </p:column>
+
+                                        <p:column headerText="Производитель"
+                                                  sortBy="#{item.model.vendor.name}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.model.vendor.name}"
+
+                                                  >
+                                            <h:outputText value="#{item.model.vendor.name}"/>   
+                                        </p:column>
+
+                                        <p:column headerText="Серийник"
+                                                  sortBy="#{item.serial}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.serial}"
+
+                                                  >
+
+                                            <h:outputText value="#{item.serial}"/>   
+                                        </p:column>
+
+                                        <p:column headerText="Дата прихода"
+                                                  sortBy="#{item.deliverDate}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.deliverDate}"
+                                                  >
+
+                                            <h:outputText value="#{item.deliverDate}">
+                                                <f:convertDateTime pattern="dd.MM.yyyy"
+                                                                   timeZone="UTC"
+                                                                   />
+                                            </h:outputText>   
+                                        </p:column>
+
+                                        <p:column headerText="Дата расхода"
+                                                  sortBy="#{item.expenseDate}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.expenseDate}"
+
+                                                  >
+
+                                            <h:outputText value="#{item.expenseDate}">
+                                                <f:convertDateTime pattern="dd.MM.yyyy"
+                                                                   timeZone="UTC"
+                                                                   />
+                                            </h:outputText>   
+                                        </p:column>
+
+                                        <p:column headerText="У кого"
+                                                  sortBy="#{item.partner.name}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.partner.name}"
+
+                                                  >
+                                            <h:outputText value="#{item.partner.name}"/>   
+                                        </p:column>
+
+                                        <p:column headerText="Действия"
+                                                  >
+                                            <p:commandButton value="Удалить/править"
+                                                             action="#{TempStoreBean.deleteItem(item)}"
+                                                             ajax="true"
+                                                             update=":#{bnd.tabView.clientId} :#{bnd.growl.clientId} :#{bnd.storeRestItems.clientId} :#{bnd.itemInput.clientId}"
+                                                             >
+
+                                            </p:commandButton>  
+
+                                        </p:column>
+
+                                    </p:dataTable>
+
+                                </p:tab>
+
+
+
+                                <p:tab title="Поставлено">
+
+                                    <p:dataTable value="#{TempStoreBean.deliveredItems}"
+                                                 var="item"
+                                                 paginator="true"
+                                                 paginatorPosition="bottom"
+                                                 filteredValue="#{TempStoreBean.filteredDeliveredItems}"
+                                                 filterDelay="250"
+                                                 emptyMessage="Записей не найдено"
+                                                 rows="30"
+                                                 binding="#{bnd.deliveredItems}"
+                                                 >
+
+                                        <p:column headerText="Склад"
+                                                  sortBy="#{item.store.name}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.store.name}"
+                                                  >
+                                            <h:outputText value="#{item.store.name}"/>   
+                                        </p:column>
+
+                                        <p:column headerText="Тип"
+                                                  sortBy="#{item.model.type.name}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.model.type.name}"
+
+                                                  >
+
+                                            <h:outputText value="#{item.model.type.name}"/>   
+                                        </p:column>
+
+                                        <p:column headerText="Модель"
+                                                  sortBy="#{item.model.name}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.model.name}"
+
+                                                  >
+                                            <h:outputText value="#{item.model.name}"/>   
+                                        </p:column>
+
+                                        <p:column headerText="Производитель"
+                                                  sortBy="#{item.model.vendor.name}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.model.vendor.name}"
+
+                                                  >
+                                            <h:outputText value="#{item.model.vendor.name}"/>   
+                                        </p:column>
+
+                                        <p:column headerText="Серийник"
+                                                  sortBy="#{item.serial}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.serial}"
+
+                                                  >
+
+                                            <h:outputText value="#{item.serial}"/>   
+                                        </p:column>
+
+                                        <p:column headerText="Дата прихода"
+                                                  sortBy="#{item.deliverDate}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.deliverDate}"
+                                                  >
+
+                                            <h:outputText value="#{item.deliverDate}">
+                                                <f:convertDateTime pattern="dd.MM.yyyy"
+                                                                   timeZone="UTC"
+                                                                   />
+                                            </h:outputText>   
+                                        </p:column>
+
+                                        <p:column headerText="Дата расхода"
+                                                  sortBy="#{item.expenseDate}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.expenseDate}"
+
+                                                  >
+
+                                            <h:outputText value="#{item.expenseDate}">
+                                                <f:convertDateTime pattern="dd.MM.yyyy"
+                                                                   timeZone="UTC"
+                                                                   />
+                                            </h:outputText>   
+                                        </p:column>
+
+                                        <p:column headerText="У кого"
+                                                  sortBy="#{item.partner.name}"
+                                                  filterMatchMode="contains"
+                                                  filterBy="#{item.partner.name}"
+
+                                                  >
+                                            <h:outputText value="#{item.partner.name}"/>   
+                                        </p:column>
+
+                                        <p:column headerText="Действия"
+                                                  >
+                                            <p:commandButton value="Удалить/править"
+                                                             action="#{TempStoreBean.deleteItem(item)}"
+                                                             ajax="true"
+                                                             update=":#{bnd.tabView.clientId} :#{bnd.growl.clientId} :#{bnd.deliveredItems.clientId} :#{bnd.itemInput.clientId}"
+                                                             >
+
+                                            </p:commandButton>  
+
+                                        </p:column>
+
+                                    </p:dataTable>
+
+                                </p:tab>
+
+                            </p:tabView>
+
+
+                            <p:panel header="Добавление записи в ручную"
+                                     binding="#{bnd.itemInput}"
+                                     >
+                                <h:panelGrid columns="2"
+                                             >
+
+                                    <h:outputLabel value="Склад"/>
+                                    <p:selectOneMenu value="#{TempStoreBean.newItem.store}">
+                                        <p:ajax />
+
+                                        <f:selectItems value="#{cardioStoreController.itemsAvailableSelectOne}"
+                                                       >
+                                        </f:selectItems>
+                                    </p:selectOneMenu>
+
+
+                                    <h:outputLabel value="Тип"/>
+                                    <p:selectOneMenu value="#{TempStoreBean.newStoreItemType}"
+                                                     id="selStoreItemType"
+                                                     binding="#{bnd.selStoreItemType}"
+                                                     >
+                                        <p:ajax process="@this"
+                                                update="@this :#{bnd.selStoreItemVendor.clientId} :#{bnd.selStoreItemModel.clientId}"
+                                                event="change"
+                                                />
+                                        <f:selectItems value="#{storeItemTypeController.itemsAvailableSelectOne}"
+                                                       >
+                                        </f:selectItems>
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel value="Производитель"/>
+                                    <p:selectOneMenu value="#{TempStoreBean.newStoreItemVendor}"
+                                                     id="selStoreItemVendor"
+                                                     binding="#{bnd.selStoreItemVendor}"
+                                                     >
+
+                                        <p:ajax process="@this"
+                                                update="@this :#{bnd.selStoreItemModel.clientId}"
+                                                event="change"
+                                                />
+
+                                        <f:selectItems value="#{storeItemVendorController.getItemsAvailableSelectOneFilterByType(TempStoreBean.newStoreItemType)}"
+                                                       >
+                                        </f:selectItems>
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel value="Модель"/>
+                                    <p:selectOneMenu value="#{TempStoreBean.newItem.model}"
+                                                     id="selStoreItemModel"
+                                                     binding="#{bnd.selStoreItemModel}"
+                                                     >
+
+                                        <p:ajax process="@this"
+                                                update="@this"
+                                                event="change"
+                                                />
+
+                                        <f:selectItems value="#{storeItemModelController.getItemsAvailableSelectOneByVendorAndType(TempStoreBean.newStoreItemVendor, TempStoreBean.newStoreItemType)}"
+                                                       >
+                                        </f:selectItems>
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel value="Серийник"/>
+                                    <h:inputText value="#{TempStoreBean.newItem.serial}"
+                                                 >
+                                        <p:ajax />
+
+                                    </h:inputText>
+
+                                    <h:outputLabel value="Статус"/>
+                                    <p:selectOneMenu value="#{TempStoreBean.newItem.status}"
+                                                     binding="#{bnd.newStatus}"
+                                                     >
+                                        <p:ajax event="change"
+                                                listener="#{TempStoreBean.hadleItemStatus}"
+                                                update="@this :#{bnd.growl.clientId} :#{bnd.itemInput.clientId}"
+                                                process="@this :#{bnd.newPartner.clientId}"
+                                                />   
+
+                                        <f:selectItems value="#{storeItemStatusController.itemsAvailableSelectOne}"
+                                                       >
+                                        </f:selectItems>
+
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel value="Кому поставили"
+                                                   rendered="#{TempStoreBean.partnerVisible}"
+                                                   binding="#{bnd.newPartnerLabel}"
+                                                   />
+                                    <p:selectOneMenu value="#{TempStoreBean.newItem.partner}"
+                                                     binding="#{bnd.newPartner}"
+                                                     rendered="#{TempStoreBean.partnerVisible}"
+                                                     >
+                                        <p:ajax event="change"
+                                                listener="#{TempStoreBean.hadleItemStatus}"
+                                                update=":#{bnd.newStatus.clientId} :#{bnd.newPartner.clientId} :#{bnd.growl.clientId}"
+                                                process=":#{bnd.newStatus.clientId} :#{bnd.newPartner.clientId}"
+
+                                                />   
+
+                                        <f:selectItems value="#{cardioPartnerController.itemsAvailableSelectOne}"
+                                                       >
+                                        </f:selectItems>
+                                    </p:selectOneMenu>
+
+
+
+                                    <h:outputLabel value="Дата прихода"/>
+                                    <p:calendar
+                                        value="#{TempStoreBean.newItem.deliverDate}"
+                                        pattern="dd.MM.yyyy"
+                                        timeZone="GMT"
+                                        locale="ru"
+                                        >
+                                        <p:ajax />
+
+                                    </p:calendar>
+
+                                    <h:outputLabel value="Дата расхода"/>
+                                    <p:calendar
+                                        value="#{TempStoreBean.newItem.expenseDate}"
+                                        pattern="dd.MM.yyyy"
+                                        timeZone="GMT"
+                                        locale="ru"
+                                        >
+                                        <p:ajax />
+
+                                    </p:calendar>
+
+                                </h:panelGrid>
+                                <p:commandButton value="Добавить"
+                                                 ajax="true"
+                                                 action="#{TempStoreBean.addItem()}"
+                                                 update=":#{bnd.growl.clientId} :#{bnd.tabView.clientId} :#{bnd.itemInput.clientId}"
+                                                 process="@this :#{bnd.itemInput.clientId}"
+                                                 >
+
+                                </p:commandButton>
+                                <p:messages>
+
+                                </p:messages>
+
+                            </p:panel>
+
+                        </h:panelGrid> 
+
+                    </p:tab>
+
+
+
+
+                    <p:tab title="Приход">
+                        <h:outputLabel value="Автоматическое приходование - в работе"/>
+
+                    </p:tab>
+
+                    <p:tab title="Расход">
+                        <h:outputLabel value="Автоматический расход - в работе"/>
+                    </p:tab>
+
+                    <p:tab title="Возврат">
+                        <h:outputLabel value="Автоматический возврат - в работе"/>
+
+                    </p:tab>
+
+                </p:tabView>
+
+            </p:panel>      
+        </h:form>             
+    </h:body>
+
+</html>
+

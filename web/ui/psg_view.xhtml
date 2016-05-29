@@ -1,0 +1,1127 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+
+      xmlns:p="http://primefaces.org/ui">
+    <f:view locale="ru"/>
+    <h:head>
+        <title>Правка ПСГ #{paramsBean.psgId}</title>
+
+        <style type="text/css">
+            /* Important required because row */
+            .ui-datatable-odd {
+                background-color:lightgray !important;
+                background-position-y: -1400px; /* IE7 hack */
+            }
+            .ui-widget {
+                /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                font-size: 0.90em/*{fsDefault}*/;
+            }
+
+            .my-class1 td{
+                vertical-align: top;
+            }  
+
+            .my_err_msg{
+                color: red; 
+            }
+
+            .my_done_msg{
+                color: blue; 
+            }
+        </style>            
+
+        <script type="text/javascript">
+            
+            function openNewWindow(aUrl, aWindowName) {
+                window.open(aUrl, aWindowName);
+                return false;
+            }
+        </script>
+
+     <script type="text/javascript">
+PrimeFaces.locales ['ru'] = {
+    closeText: 'Закрыть',
+    prevText: 'Назад',
+    nextText: 'Вперёд',
+    monthNames: ['Январь', 'Февраль' , 'Март' , 'Апрель' , 'Май' , 'Июнь' , 'Июль' , 'Август' , 'Сентябрь','Октябрь','Ноябрь','Декабрь' ],
+    monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек' ],
+    dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Субота'],
+    dayNamesShort: ['Воск','Пон' , 'Вт' , 'Ср' , 'Четв' , 'Пят' , 'Суб'],
+    dayNamesMin: ['В', 'П', 'Вт', 'С ', 'Ч', 'П ', 'Сб'],
+    weekHeader: 'Неделя',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix:'',
+    timeOnlyTitle: 'Только время',
+    timeText: 'Время',
+    hourText: 'Час',
+    minuteText: 'Минута',
+    secondText: 'Секунда',
+    currentText: 'Сегодня',
+    ampm: false,
+    month: 'Месяц',
+    week: 'неделя',
+    day: 'День',
+    allDayText: 'Весь день'
+};
+    </script>
+        
+    </h:head>
+    <h:body>
+        <h:panelGroup>
+            <ui:include src="login_menu.xhtml"/> 
+        </h:panelGroup>
+        <h:form id="psg_view_form">
+            <h:link value="К списку пациентов" outcome="patient_list.xhtml"/><br/>
+            <h:outputLink value="patient_profile.xhtml">
+                <f:param name="id" value="#{psgBean.curr.patientId.id}"/>
+                <f:param name="tabId" value="1" />
+                <h:outputText value="Перейти к анкете"/>
+            </h:outputLink>
+            <br/>
+        </h:form>   
+        <p:panel header="#{psgBean.curr.patientId.toString()}Ведение ПСГ">
+
+            <h:form>
+                <p:growl id="msgBlock" binding="#{bnd.msgBlock}"/>
+<!--                <h:messages id="msgBlock" errorClass="my_err_msg" infoClass="my_done_msg" binding="#{bnd.msgBlock}"/> -->
+                <p:commandButton id="BtnPrint"
+                                 type="button"
+                                 ajax="true"
+                                 onclick="openNewWindow('../../webresources/report/psg/#{psgBean.curr.id}', 'Печать ПСГ')"
+                                 value="Печать ПСГ">
+                </p:commandButton>
+            </h:form>   
+
+
+            <p:panel header="ПСГ №#{psgBean.curr.psgNo} : Общие данные">
+                <h:form>    
+                    <h:panelGrid columns="1">
+                        <h:panelGrid columns="3" id="grpCmnInput1" binding="#{bnd.grpCmnInput1}">
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Дата/время начала ПСГ:"/>
+                                <p:calendar id="PsgDate"
+                                            pattern="dd.MM.yyyy HH:mm"
+                                            showButtonPanel="true"
+                                            timeZone="GMT"
+                                            value="#{psgBean.curr.psgDate}"
+                                            disabled="#{psgBean.curr.isDone and not loginBean.admin}"
+                                            locale="ru"
+                                            >
+                                    <p:ajax partialSubmit="true" process="PsgDate" update="PsgDate" event="dateSelect"/> 
+                                </p:calendar>
+                                <h:outputLabel value="Пациент:"/>
+                                <h:outputLink value="patient_profile.xhtml">
+                                    <f:param name="id" value="#{psgBean.curr.patientId.id}"/>
+                                    <f:param name="tabId" value="1" />
+                                    <h:outputText value="#{psgBean.curr.patientId.toString()}"/>
+                                </h:outputLink>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Рост,см:"/>
+                                <p:inputText value="#{psgBean.curr.currentHeight}" disabled="#{psgBean.curr.isDone and not loginBean.admin}" size="5"/>
+                                <h:outputLabel value="Вес,кг:"/>
+                                <p:inputText value="#{psgBean.curr.currentWeigth}" disabled="#{psgBean.curr.isDone and not loginBean.admin}" size="5"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Палата:"/>
+                                <h:selectOneMenu value="#{psgBean.curr.cabinetId}" disabled="#{psgBean.curr.isDone}">
+                                    <f:selectItems value="#{cabinetController.itemsAvailableSelectOne}"/>
+                                </h:selectOneMenu>
+                                <h:outputLabel value="Медсестра:"/>
+                                <h:selectOneMenu value="#{psgBean.curr.nurseId}" disabled="#{not loginBean.admin}">
+                                    <f:selectItems value="#{cardioUserController.itemsAvailableSelectOne}"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:commandButton value="Сохранить в базу" action="#{psgBean.save()}" rendered="#{not psgBean.curr.isDone or loginBean.admin}" type="button">
+                            <f:ajax execute=":#{bnd.grpCmnInput3.clientId} :#{bnd.grpCmnInput1.clientId} :#{bnd.grpCmnInput2.clientId}" render=":#{bnd.msgBlock.clientId}"/>
+                        </h:commandButton>
+                    </h:panelGrid>
+                    <h:outputLink value="psg_result.xhtml">
+                        <f:param name="psgId" value="#{psgBean.curr.id}" />
+                        <h:outputText value="Результат ПСГ"/>
+                    </h:outputLink>
+                </h:form>                       
+            </p:panel>
+
+
+            <p:tabView>
+
+                <!--================================================================================================================================ -->
+
+                <p:tab title="Замеры">
+                    <h:panelGrid columns="3" styleClass="my-class1" columnClasses="my-class1">
+                        <p:panel header="Артериальное давление"  toggleable="true" collapsed="false" toggleSpeed="300">
+                            <h:form>
+                                <h:panelGrid columns="1">
+                                    <p:dataTable id="AdTable" value="#{psgBean.curr.psgAttrAdList}" var="ad"
+                                                 binding="#{bnd.adTable}"
+                                                 paginator="true" paginatorPosition="bottom" rows="5"
+                                                 sortBy="#{ad.measuringTime}"
+                                                 >
+                                        <p:column headerText="Время" sortBy="#{ad.measuringTime}">
+                                            <h:outputText value="#{ad.measuringTime}">
+                                                <f:convertDateTime pattern="HH:mm" timeZone="UTC"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Рука" sortBy="Рука">
+                                            <h:outputText value="#{ad.hand}"/>
+                                        </p:column>
+                                        <p:column headerText="Давление">
+                                            <h:outputText value="#{ad.systolPressue}/#{ad.diastolPressue}"/>
+                                        </p:column>
+                                        <p:column headerText="Удалить" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                            <h:commandLink value="X" action="#{psgBean.delAD(ad)}">
+                                                <f:ajax render=":#{bnd.adTable.clientId} :#{bnd.PressueInput.clientId} :#{bnd.AdTime.clientId} :#{bnd.msgBlock.clientId}"/> 
+                                            </h:commandLink>
+                                        </p:column>
+                                    </p:dataTable>
+                                    <h:message for="PressueInput" tooltip="true" id="ErrBloodPressueValue"/>
+                                    <h:panelGrid columns="2" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                        <h:outputLabel value="Рука:"/>  
+                                        <h:selectOneMenu id="adHand" value="#{psgBean.currAd.hand}" binding="#{bnd.adHand}">
+                                            <f:selectItem itemValue="R" itemLabel="Правая"/>
+                                            <f:selectItem itemValue="L" itemLabel="Левая"/>
+                                        </h:selectOneMenu>
+                                        <h:outputLabel value="Давление:"/>    
+                                        <h:panelGroup id="PressueInput" binding="#{bnd.PressueInput}">
+                                            <h:inputText id="ADSis" style="width: 50px;" value="#{psgBean.currAd.systolPressue}"/>/<h:inputText id="ADDia" style="width: 50px;" value="#{psgBean.currAd.diastolPressue}"/>
+                                        </h:panelGroup>
+                                        <h:outputLabel value="Время:"/>   
+                                        <p:calendar id="AdTime"
+                                                    pattern="HH:mm"
+                                                    timeOnly="true"
+                                                    showButtonPanel="true"
+                                                    timeZone="UTC"
+                                                    value="#{psgBean.currAd.measuringTime}"
+                                                    binding="#{bnd.AdTime}"
+                                                    locale="ru"
+                                                    />                                        
+                                    </h:panelGrid>
+                                    <h:commandButton value="Добавить замер" action="#{psgBean.addAD()}" rendered="#{not psgBean.curr.isDone or loginBean.admin}" type="button">
+                                        <f:ajax render="AdTable  PressueInput AdTime :#{bnd.msgBlock.clientId}" execute="PressueInput AdTime :#{bnd.adHand.clientId}"/>
+                                    </h:commandButton>
+                                </h:panelGrid>  
+                            </h:form>                                    
+                        </p:panel>
+
+
+                        <p:panel header="Пульс" toggleable="true" collapsed="false" toggleSpeed="300">
+                            <h:form>                                
+                                <h:panelGrid columns="1">
+                                    <p:dataTable id="PulsTable" value="#{psgBean.curr.psgAttrPullsList}" var="puls"
+                                                 paginator="true" paginatorPosition="bottom" rows="5"
+                                                 sortBy="#{puls.measuringTime}"
+                                                 >
+                                        <p:column headerText="Время" sortBy="#{puls.measuringTime}">
+                                            <h:outputText value="#{puls.measuringTime}">
+                                                <f:convertDateTime pattern="HH:mm" timeZone="UTC"/>  
+                                            </h:outputText>  
+
+                                        </p:column>
+                                        <p:column headerText="Рука" sortBy="Рука">
+                                            <h:outputText value="#{puls.hand}"/>
+                                        </p:column>
+                                        <p:column headerText="Уд/мин" sortBy="Ударов/мин">
+                                            <h:outputText value="#{puls.hitsPerMin}"/>
+                                        </p:column>
+                                        <p:column headerText="Удалить"  rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                            <h:commandLink value="X" action="#{psgBean.delPuls(puls)}">
+                                                <f:ajax execute="@this" render="PulsTable :#{bnd.PulsParamInput.clientId} :#{bnd.msgBlock.clientId}"/>
+                                            </h:commandLink>
+                                        </p:column>
+                                    </p:dataTable>
+                                    <h:panelGrid columns="2" rendered="#{not psgBean.curr.isDone or loginBean.admin}" id="PulsParamInput" binding="#{bnd.PulsParamInput}">
+                                        <h:outputLabel value="Рука:"/>    
+                                        <h:selectOneMenu id="CurrPullshand" value="#{psgBean.currPulls.hand}" binding="#{bnd.CurrPullshand}">
+                                            <f:selectItem itemValue="R" itemLabel="Правая"/>
+                                            <f:selectItem itemValue="L" itemLabel="Левая"/>
+                                        </h:selectOneMenu>
+                                        <h:outputLabel value="Уд/мин:"/>    
+                                        <h:inputText id="PullsInp" value="#{psgBean.currPulls.hitsPerMin}" style="width: 50px;"/>
+                                        <h:outputLabel value="Время:"/>    
+                                        <p:calendar id="PulsTime"
+                                                    pattern="HH:mm"
+                                                    timeZone="UTC"
+                                                    timeOnly="true"
+                                                    showButtonPanel="true"
+                                                    locale="ru"
+                                                    value="#{psgBean.currPulls.measuringTime}"
+                                                    />                                        
+                                    </h:panelGrid>
+                                    <h:commandButton value="Добавить замер" action="#{psgBean.addPulse()}" rendered="#{not psgBean.curr.isDone or loginBean.admin}" type="button">
+                                        <f:ajax render=":#{bnd.PulsParamInput.clientId} :#{bnd.msgBlock.clientId} PulsTable" execute="CurrPullshand PullsInp PulsTime"/>
+                                    </h:commandButton>
+                                </h:panelGrid>
+                            </h:form>    
+                        </p:panel>
+
+
+                        <p:panel header="ЕКГ"  toggleable="true" collapsed="false" toggleSpeed="300">
+                            <h:form>                                
+                                <h:panelGrid columns="1" columnClasses="my-class1">
+                                    <p:dataTable id="EKGTable" value="#{psgBean.curr.psgAttrEcgList}" var="ekg"
+                                                 paginator="true" paginatorPosition="bottom" rows="5"
+                                                 sortBy="#{ekg.measuringTime}"
+
+                                                 >
+                                        <p:column headerText="Время" sortBy="#{ekg.measuringTime}">
+                                            <h:outputText value="#{ekg.measuringTime}">
+                                                <f:convertDateTime pattern="HH:mm:ss" timeZone="UTC"/>  
+                                            </h:outputText>
+                                        </p:column>
+                                        
+                                        <p:column headerText="Примечание" sortBy="#{ekg.notes}">
+                                            <h:outputText value="#{ekg.notes}"/>
+                                        </p:column>
+                                        
+                                        <p:column headerText="Удалить" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                            <h:commandLink value="X" action="#{psgBean.delEcg(ekg)}">
+                                                <f:ajax execute="@this" render="EKGTable :#{bnd.grpEkgInput.clientId} :#{bnd.msgBlock.clientId}"/>  
+                                            </h:commandLink>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                    <h:panelGrid columns="2" rendered="#{not psgBean.curr.isDone or loginBean.admin}" id="grpEkgInput" binding="#{bnd.grpEkgInput}">
+                                        <h:outputLabel value="Время:"/>    
+                                        <p:calendar id="EcgTime"
+                                                    pattern="HH:mm:ss"
+                                                    timeOnly="true"
+                                                    showButtonPanel="true"
+                                                    timeZone="UTC"
+                                                    locale="ru"
+                                                    value="#{psgBean.currEcg.measuringTime}"
+                                                    />   
+                                        <h:outputLabel value="Примечание:"/>
+                                        <p:inputText value="#{psgBean.currEcg.notes}"/>
+                                    </h:panelGrid>
+                                    <h:commandButton value="Добавить замер" action="#{psgBean.addEcg()}" rendered="#{not psgBean.curr.isDone or loginBean.admin}" type="button">
+                                        <f:ajax execute=":#{bnd.grpEkgInput.clientId}" render=":#{bnd.grpEkgInput.clientId} :#{bnd.msgBlock.clientId} EKGTable"/>
+                                    </h:commandButton>
+                                </h:panelGrid>
+                            </h:form>    
+                        </p:panel>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="3" styleClass="my-class1" columnClasses="my-class1">
+
+                        <p:panel header="Апное" toggleable="true" collapsed="false" toggleSpeed="300">
+                            <h:form>                                
+                                <p:dataTable id="ApnoeTable" value="#{psgBean.curr.psgAttrApnoeList}" var="ap"
+                                             paginator="true" paginatorPosition="bottom" rows="5"
+                                             sortBy="#{ap.beginTime}"                                             
+                                             >
+                                    <p:column headerText="Время" sortBy="#{ap.beginTime}"
+                                              >
+                                        <h:outputText value="#{ap.beginTime}">
+                                            <f:convertDateTime pattern="HH:mm" timeZone="UTC"/> 
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Длит." sortBy="#{ap.durationSec}">
+                                        <h:outputText value="#{ap.durationSec}"/>
+                                    </p:column>
+                                    <p:column headerText="Тип" sortBy="#{ap.apnoeTypeId.shortName}">
+                                        <h:outputText value="#{ap.apnoeTypeId.shortName}"/>
+                                    </p:column>
+                                    <p:column headerText="Удалить" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                        <h:commandLink value="X" action="#{psgBean.delApnoe(ap)}">
+                                            <f:ajax execute="@this" render=":#{bnd.msgBlock.clientId} ApnoeTable :#{bnd.grpApnoeInput.clientId}"/>
+                                        </h:commandLink>
+                                    </p:column>
+
+                                </p:dataTable>
+                                <h:panelGrid columns="2" rendered="#{not psgBean.curr.isDone or loginBean.admin}" id="grpApnoeInput" binding="#{bnd.grpApnoeInput}">
+                                    <h:outputLabel value="Длительность, сек:"/>    
+                                    <h:inputText value="#{psgBean.currApnoe.durationSec}"  style="width: 50px;"/>
+                                    <h:outputLabel value="Тип:"/>
+                                    <h:selectOneMenu value="#{psgBean.currApnoe.apnoeTypeId}">
+                                        <f:selectItems value="#{psgAttrApnoeTypeController.itemsAvailableSelectOne}"/>
+                                    </h:selectOneMenu>
+                                    <h:outputLabel value="Время:"/>    
+                                    <p:calendar id="ApnoeTime"
+                                                pattern="HH:mm"
+                                                timeOnly="true"
+                                                timeZone="UTC"
+                                                locale="ru"
+                                                showButtonPanel="true"
+                                                value="#{psgBean.currApnoe.beginTime}"
+                                                />                                        
+                                </h:panelGrid>
+                                <h:commandButton value="Добавить замер" action="#{psgBean.addApnoe()}" rendered="#{not psgBean.curr.isDone or loginBean.admin}" type="button">
+                                    <f:ajax execute=":#{bnd.grpApnoeInput.clientId}" render=":#{bnd.msgBlock.clientId} ApnoeTable :#{bnd.grpApnoeInput.clientId}"/>
+                                </h:commandButton>
+                            </h:form>                                
+                        </p:panel>
+
+
+                        <p:panel header="Храп" toggleable="true" collapsed="false" toggleSpeed="300">
+                            <h:form>                                
+                                <p:dataTable id="SnoringTable" value="#{psgBean.curr.psgAttrSnoringList}" var="snor"
+                                             paginator="true" paginatorPosition="bottom" rows="5"
+                                             sortBy="#{snor.beginTime}"
+                                             >
+                                    <p:column headerText="Начало" sortBy="#{snor.beginTime}">
+                                        <h:outputText value="#{snor.beginTime}">
+                                            <f:convertDateTime pattern="HH:mm" timeZone="UTC"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Конец" sortBy="Время заверш">
+                                        <h:outputText value="#{snor.endTime}">
+                                            <f:convertDateTime pattern="HH:mm" timeZone="UTC"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Удалить" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                        <h:commandLink value="X" action="#{psgBean.delSnoring(snor)}">
+                                            <f:ajax execute="@this" render=":#{bnd.msgBlock.clientId} SnoringTable :#{bnd.grpApnoeInput.clientId}"/>
+                                        </h:commandLink>
+                                    </p:column>
+
+                                </p:dataTable>
+                                <h:panelGrid columns="2" rendered="#{not psgBean.curr.isDone or loginBean.admin}" id="grpSnorInput" binding="#{bnd.grpSnorInput}">
+                                    <h:outputLabel value="Начало:" />    
+                                    <p:calendar id="SnorBegTime"
+                                                pattern="HH:mm:ss"
+                                                timeOnly="true"
+                                                timeZone="UTC"
+                                                locale="ru"
+                                                showButtonPanel="true"
+                                                value="#{psgBean.currSnoring.beginTime}"
+                                                />                                        
+                                    <h:outputLabel value="Конец:"/>    
+                                    <p:calendar id="SnorEndTime"
+                                                pattern="HH:mm:ss"
+                                                timeZone="UTC"
+                                                timeOnly="true"
+                                                locale="ru"
+                                                showButtonPanel="true"
+                                                value="#{psgBean.currSnoring.endTime}"
+                                                />                                        
+                                </h:panelGrid>
+                                <h:commandButton value="Добавить храп" action="#{psgBean.addSnoring()}"
+                                                 rendered="#{not psgBean.curr.isDone or loginBean.admin}"
+                                                 type="button"
+                                                 >
+                                    <f:ajax execute=":#{bnd.grpSnorInput.clientId}" render=":#{bnd.msgBlock.clientId} SnoringTable :#{bnd.grpSnorInput.clientId}"/>  
+                                </h:commandButton>
+                            </h:form>                                
+                        </p:panel>
+
+
+
+                        <p:panel header="SpO2" toggleable="true" collapsed="false" toggleSpeed="300">
+                            <h:form>                                
+                                <p:dataTable id="SpO2Table" value="#{psgBean.curr.psgAttrSpO2List}" var="sp"
+                                             paginator="true" paginatorPosition="bottom" rows="5"
+                                             sortBy="#{sp.measuringTime}"
+                                             >
+                                    <p:column headerText="Время" sortBy="#{sp.measuringTime}">
+                                        <h:outputText value="#{sp.measuringTime}">
+                                            <f:convertDateTime pattern="HH:mm" timeZone="UTC"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Знач." sortBy="#{sp.spO2Min}">
+                                        <h:outputText value="#{sp.spO2Min}"/>
+                                    </p:column>
+                                    <p:column headerText="Удалить" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                        <h:commandLink value="X" action="#{psgBean.delSp02(sp)}">
+                                            <f:ajax execute="@this" render=":#{bnd.msgBlock.clientId} SpO2Table :#{bnd.grpSpO2Input.clientId}"/>  
+                                        </h:commandLink>
+                                    </p:column>
+
+                                </p:dataTable>
+                                <h:panelGrid columns="2" rendered="#{not psgBean.curr.isDone or loginBean.admin}" id="grpSpO2Input" binding="#{bnd.grpSpO2Input}">
+                                    <h:outputLabel value="Значение:"/>    
+                                    <h:inputText value ="#{psgBean.currSpO2.spO2Min}" style="width: 50px;"/>
+                                    <h:outputLabel value="Время:"/>    
+                                    <p:calendar id="SpO2Time"
+                                                pattern="HH:mm"
+                                                timeZone="UTC"
+                                                timeOnly="true"
+                                                locale="ru"
+                                                showButtonPanel="true"
+                                                value="#{psgBean.currSpO2.measuringTime}"
+                                                />                                        
+                                </h:panelGrid>
+                                <h:commandButton value="Добавить замер" action="#{psgBean.addSpO2()}"
+                                                 rendered="#{not psgBean.curr.isDone or loginBean.admin}"
+                                                 type="button"
+                                                 >
+                                    <f:ajax execute=":#{bnd.grpSpO2Input.clientId}" render=":#{bnd.msgBlock.clientId} SpO2Table :#{bnd.grpSpO2Input.clientId}"/>  
+                                </h:commandButton>
+                            </h:form>                                
+                        </p:panel>
+
+                    </h:panelGrid>
+
+                </p:tab>    
+
+                <!--================================================================================================================================ -->
+
+                <p:tab title="CPAP терапия">
+                    <h:panelGrid columns="3" class="my-class1" columnClasses="my-class1">
+                        <h:form>
+                            <h:panelGroup id="grpCmnInput2" binding="#{bnd.grpCmnInput2}">
+                                <f:ajax>
+                                    <h:panelGrid columns="2">
+                                        <h:outputLabel value="Время подкл CPAP:" />
+                                        <p:calendar id="CpapBeginTime"
+                                                    pattern="HH:mm"
+                                                    timeZone="UTC"
+                                                    timeOnly="true"
+                                                    locale="ru"
+                                                    showButtonPanel="true"
+                                                    value="#{psgBean.curr.cpapBeginTime}"
+                                                    disabled="#{psgBean.curr.isDone and not loginBean.admin}"
+                                                    >
+                                            <p:ajax partialSubmit="true" process="CpapBeginTime" update="CpapBeginTime" event="dateSelect"/> 
+                                        </p:calendar>
+
+                                        <h:outputLabel value="Тип CPAP:" />
+                                        <h:selectOneMenu value="#{psgBean.curr.cpapTypeId}" disabled="#{psgBean.curr.isDone and not loginBean.admin}">
+                                            <f:selectItems value="#{cpapTypeController.itemsAvailableSelectOne}"/>
+                                            <f:ajax execute="@this :#{bnd.grpSomnoVentParamsPanel.clientId}" render=":#{bnd.grpSomnoVentParamsPanel.clientId}"/>
+                                        </h:selectOneMenu>
+
+                                        <h:outputLabel value="Серийник CPAP:" />
+                                        <h:inputText value="#{psgBean.curr.cpapSerial}" disabled="#{psgBean.curr.isDone and not loginBean.admin}"/>
+
+                                        <h:outputLabel value="Маска(тип/размер):" />
+                                        <h:panelGroup>
+                                            <h:selectOneMenu value="#{psgBean.curr.cpapMaskTypeId}" disabled="#{psgBean.curr.isDone and not loginBean.admin}">
+                                                <f:selectItems value="#{maskTypeController.itemsAvailableSelectOne}"/>
+                                            </h:selectOneMenu> / 
+                                            <h:selectOneMenu value="#{psgBean.curr.cpapMaskSizeId }" disabled="#{psgBean.curr.isDone and not loginBean.admin}">
+                                                <f:selectItems value="#{maskSizeController.itemsAvailableSelectOne}"/>
+                                            </h:selectOneMenu>
+                                        </h:panelGroup>   
+
+                                        <h:outputLabel value="Подушка:" />
+                                        <h:selectOneMenu value="#{psgBean.curr.cushionTypeId}" disabled="#{psgBean.curr.isDone and not loginBean.admin}">
+                                            <f:selectItems value="#{cushionTypeController.itemsAvailableSelectOne}"/>
+                                        </h:selectOneMenu>
+
+                                        <h:outputLabel value="Увлажнение:"/>
+                                        <p:selectOneMenu value="#{psgBean.curr.breathHumidity}">
+                                            <f:selectItem itemValue="#{null}" itemLabel="нет"/>
+                                            <f:selectItem itemValue="1" itemLabel="1"/>
+                                            <f:selectItem itemValue="2" itemLabel="2"/>
+                                            <f:selectItem itemValue="3" itemLabel="3"/>
+                                            <f:selectItem itemValue="4" itemLabel="4"/>
+                                            <f:selectItem itemValue="5" itemLabel="5"/>
+                                            <f:selectItem itemValue="6" itemLabel="6"/>
+                                        </p:selectOneMenu>
+
+                                        <h:outputLabel value="Плавный старт:"/>
+                                        <p:selectBooleanCheckbox value="#{psgBean.curr.isSmoothStart}">
+<!--                                            <f:ajax event="click" execute="@this" render="smoothStartDur"/>  -->
+                                            <p:ajax process="@this" update="smoothStartDur" />
+                                        </p:selectBooleanCheckbox>
+                                    </h:panelGrid>
+
+                                    <h:panelGrid columns="2" id="smoothStartDur">   
+
+                                        <h:outputLabel id="smoothStartDurationLbl" value="Длительность плавного старта, мин:" rendered="#{psgBean.curr.isSmoothStart}"/>
+                                        <p:selectOneMenu id="smoothStartDuration" value="#{psgBean.curr.smoothStartDuration}" rendered="#{psgBean.curr.isSmoothStart}">
+                                            <f:selectItem itemValue="5" itemLabel="5"/>
+                                            <f:selectItem itemValue="10" itemLabel="10"/>
+                                            <f:selectItem itemValue="15" itemLabel="15"/>
+                                            <f:selectItem itemValue="20" itemLabel="20"/>
+                                            <f:selectItem itemValue="25" itemLabel="25"/>
+                                            <f:selectItem itemValue="30" itemLabel="30"/>
+                                        </p:selectOneMenu>
+
+                                    </h:panelGrid>
+
+
+                                    <h:panelGrid columns="1">
+                                        <p:panel header="Кислородный концентратор"  toggleable="true" collapsed="false" toggleSpeed="300">
+                                            <h:panelGrid columns="2">
+                                                <h:outputLabel value="Тип кислр. концентр:" />
+                                                <h:selectOneMenu value="#{psgBean.curr.oxymatTypeId}" disabled="#{psgBean.curr.isDone and not loginBean.admin}">
+                                                    <f:selectItems value="#{oxymatTypeController.itemsAvailableSelectOne}"/>
+                                                </h:selectOneMenu> 
+                                                <h:outputLabel value="Время подкл:" />
+                                                <p:calendar id="OxymatBeginTime"
+                                                            pattern="HH:mm"
+                                                            timeZone="UTC"
+                                                            timeOnly="true"
+                                                            locale="ru"
+                                                            showButtonPanel="true"
+                                                            value="#{psgBean.curr.oxymatBeginTime}"
+                                                            disabled="#{psgBean.curr.isDone and not loginBean.admin}"
+                                                            >                                        
+                                                    <p:ajax partialSubmit="true" process="OxymatBeginTime" update="OxymatBeginTime" event="dateSelect"/> 
+                                                </p:calendar>
+                                                <h:outputLabel value="Маска(тип/размер):" />
+                                                <h:panelGroup>
+                                                    <h:selectOneMenu value="#{psgBean.curr.oxymatMaskTypeId}" disabled="#{psgBean.curr.isDone and not loginBean.admin}">
+                                                        <f:selectItems value="#{maskTypeController.itemsAvailableSelectOne}"/>
+                                                    </h:selectOneMenu> / 
+                                                    <h:selectOneMenu value="#{psgBean.curr.oxymatMaskSizeId}" disabled="#{psgBean.curr.isDone and not loginBean.admin}">
+                                                        <f:selectItems value="#{maskSizeController.itemsAvailableSelectOne}"/>
+                                                    </h:selectOneMenu>
+                                                </h:panelGroup>                                
+                                            </h:panelGrid>
+                                        </p:panel>  
+                                    </h:panelGrid>   
+
+                                </f:ajax>
+                                <h:commandButton value="Сохранить в базу" action="#{psgBean.save()}"
+                                                 rendered="#{not psgBean.curr.isDone or loginBean.admin}"
+                                                 type="button"
+                                                 >
+                                    <f:ajax execute=":#{bnd.grpCmnInput3.clientId} :#{bnd.grpCmnInput1.clientId} :#{bnd.grpCmnInput2.clientId}" render=":#{bnd.msgBlock.clientId}"/>
+                                </h:commandButton>
+
+                            </h:panelGroup>                             
+                        </h:form>
+
+                        <p:panel header="CPAP: Текущее давление">
+                            <h:form>
+                                <p:dataTable id="CurrPressTable" value="#{psgBean.curr.psgAttrCpapCurrPressList}" var="p"
+                                             paginator="true" paginatorPosition="bottom" rows="5"
+                                             sortBy="#{p.measuringTime}"
+                                             binding="#{bnd.CurrPressTable}"
+                                             >
+                                    <p:column headerText="Время" sortBy="#{p.measuringTime}">
+                                        <h:outputText value="#{p.measuringTime}">
+                                            <f:convertDateTime pattern="HH:mm" timeZone="UTC"/>
+                                        </h:outputText>
+                                    </p:column>
+<!--
+                                    <p:column headerText="Текущее давление">
+                                        <h:outputText value="#{p.val1}-#{p.val2}-#{p.val3}-#{p.val4}"/>
+                                    </p:column>
+-->
+                                    <p:column headerText="1">
+                                        <h:outputText value="#{p.val1}"/>
+                                    </p:column>
+
+                                    <p:column headerText="2">
+                                        <h:outputText value="#{p.val2}"/>
+                                    </p:column>
+
+                                    <p:column headerText="3">
+                                        <h:outputText value="#{p.val3}"/>
+                                    </p:column>
+
+                                    <p:column headerText="4">
+                                        <h:outputText value="#{p.val4}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="Удалить" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                        <h:commandLink value="X" action="#{psgBean.delCurrPressue(p)}">
+                                            <f:ajax execute="@this" render=":#{bnd.msgBlock.clientId} :#{bnd.CurrPressTable.clientId} :#{bnd.grpCurrPressInput.clientId}"/>  
+                                        </h:commandLink>
+                                    </p:column>
+                                </p:dataTable>
+
+                                <h:panelGrid id="grpCurrPressInput" columns="4" binding="#{bnd.grpCurrPressInput}">
+                                    <h:outputLabel value="Время:"/> 
+                                    <p:calendar id="CurrPressTime"
+                                                pattern="HH:mm"
+                                                timeZone="UTC"
+                                                timeOnly="true"
+                                                locale="ru"
+                                                showButtonPanel="true"
+                                                value="#{psgBean.currCpapPress.measuringTime}"
+                                                disabled="#{psgBean.curr.isDone and not loginBean.admin}"
+                                                required="true"
+                                                requiredMessage="Время замера обязательно"
+                                                label="Время замера"
+                                                >                                        
+                                        <p:ajax partialSubmit="true" process="CurrPressTime" update="CurrPressTime" event="dateSelect"/> 
+                                    </p:calendar>
+                                    <h:message for="CurrPressTime"/>
+                                    <h:outputText value=""/>
+
+                                    <h:outputLabel value="Замер 1:" for="pressVal1" /> 
+                                    <p:inputText id="pressVal1" label="Замер 1" value="#{psgBean.currCpapPress.val1}" maxlength="4">
+                                        <f:convertNumber maxFractionDigits="1" integerOnly="false" locale="us"/>
+                                        <f:validateDoubleRange minimum="4.0" maximum="20.0" />
+                                    </p:inputText>
+                                    <h:message for="pressVal1"/>
+                                    <h:outputText value=""/>
+
+                                    <h:outputLabel value="Замер 2:" for="pressVal2" /> 
+                                    <p:inputText id="pressVal2" label="Замер 1" value="#{psgBean.currCpapPress.val2}" maxlength="4">
+                                        <f:convertNumber maxFractionDigits="1" integerOnly="false" locale="us"/>
+                                        <f:validateDoubleRange minimum="4.0" maximum="20.0" />
+                                    </p:inputText>
+                                    <h:message for="pressVal2"/>
+                                    <h:outputText value=""/>
+
+
+                                    <h:outputLabel value="Замер 3:" for="pressVal3" /> 
+                                    <p:inputText id="pressVal3" label="Замер 3" value="#{psgBean.currCpapPress.val3}" maxlength="4">
+                                        <f:convertNumber maxFractionDigits="1" integerOnly="false" locale="us"/>
+                                        <f:validateDoubleRange minimum="4.0" maximum="20.0" />
+                                    </p:inputText>
+                                    <h:message for="pressVal3"/>
+                                    <h:outputText value=""/>
+
+                                    <h:outputLabel value="Замер 4:" for="pressVal4" /> 
+                                    <p:inputText id="pressVal4" label="Замер 4" value="#{psgBean.currCpapPress.val4}" maxlength="4">
+                                        <f:convertNumber maxFractionDigits="1" integerOnly="false" locale="us"/>
+                                        <f:validateDoubleRange minimum="4.0" maximum="20.0" />
+                                    </p:inputText>
+                                    <h:message for="pressVal4"/>
+                                    <h:outputText value=""/>
+
+                                </h:panelGrid>
+
+                                <h:commandButton value="Добавить замер" actionListener="#{psgBean.addCurrPressue()}"
+                                                 rendered="#{not psgBean.curr.isDone or loginBean.admin}"
+                                                 type="button"
+                                                 >
+                                    <f:ajax execute=":#{bnd.grpCurrPressInput.clientId}" render=":#{bnd.msgBlock.clientId} :#{bnd.CurrPressTable.clientId} :#{bnd.grpCurrPressInput.clientId}"/>  
+                                </h:commandButton>
+
+
+
+                            </h:form>
+
+                        </p:panel>   
+
+
+                        <h:panelGroup id="grpSomnoVentParamsPanel" binding="#{bnd.grpSomnoVentParamsPanel}"> 
+                            <p:panel header="SomnoVent: Давление" id="SomnoVentParamsPanel" binding="#{bnd.SomnoVentParamsPanel}" rendered="#{psgBean.somnoVentSelected}">
+                                <h:form>
+                                    <p:dataTable id="SomnoventParamsTable" value="#{psgBean.curr.psgAttrCpapVentPressueList}" var="sp"
+                                                 paginator="true" paginatorPosition="bottom" rows="5"
+                                                 sortBy="#{sp.measuringTime}"
+                                                 binding="#{bnd.SomnoventParamsTable}"
+                                                 >
+                                        <p:column headerText="Время" sortBy="#{sp.measuringTime}">
+                                            <h:outputText value="#{sp.measuringTime}">
+                                                <f:convertDateTime pattern="HH:mm" timeZone="UTC"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column headerText="EEPAP" sortBy="#{sp.eepap}">
+                                            <h:outputText value="#{sp.eepap}"/>
+                                        </p:column>
+
+                                        <p:column headerText="IPAP" sortBy="#{sp.ipap}">
+                                            <h:outputText value="#{sp.ipap}"/>
+                                        </p:column>
+
+                                        <p:column headerText="EPAP" sortBy="#{sp.epap}">
+                                            <h:outputText value="#{sp.epap}"/>
+                                        </p:column>
+
+                                        <p:column headerText="PDIFF" sortBy="#{sp.pdiff}">
+                                            <h:outputText value="#{sp.pdiff}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Удалить" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                            <h:commandLink value="X" action="#{psgBean.delCpapVentPress(sp)}">
+                                                <f:ajax execute="@this" render=":#{bnd.msgBlock.clientId} :#{bnd.SomnoventParamsTable.clientId} :#{bnd.SomnoventParamsInput.clientId}"/>  
+                                            </h:commandLink>
+                                        </p:column>
+                                    </p:dataTable>
+
+
+                                    <h:panelGrid columns="4" id="SomnoventParamsInput" binding="#{bnd.SomnoventParamsInput}" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                        <h:outputLabel value="Время:"/> 
+                                        <p:calendar id="SomnoventParamTime"
+                                                    pattern="HH:mm"
+                                                    timeZone="UTC"
+                                                    timeOnly="true"
+                                                    locale="ru"
+                                                    showButtonPanel="true"
+                                                    value="#{psgBean.currCpapVentPress.measuringTime}"
+                                                    disabled="#{psgBean.curr.isDone and not loginBean.admin}"
+                                                    required="true"
+                                                    requiredMessage="Время замера обязательно"
+                                                    label="Время замера"
+                                                    >                                        
+                                            <p:ajax partialSubmit="true" process="SomnoventParamTime" update="SomnoventParamTime" event="dateSelect"/> 
+                                        </p:calendar>
+                                        <h:message for="SomnoventParamTime"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputLabel value="EEPAP:" for="somnoventEepap" /> 
+                                        <p:inputText id="somnoventEepap" label="EEPAP" value="#{psgBean.currCpapVentPress.eepap}" maxlength="4">
+                                            <f:convertNumber maxFractionDigits="1" integerOnly="false" locale="us"/>
+                                            <f:validateDoubleRange minimum="4.0" maximum="20.0" />
+                                        </p:inputText>
+                                        <h:message for="somnoventEepap"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputLabel value="IPAP:" for="somnoventIpap" /> 
+                                        <p:inputText id="somnoventIpap" label="IPAP" value="#{psgBean.currCpapVentPress.ipap}" maxlength="4">
+                                            <f:convertNumber maxFractionDigits="1" integerOnly="false" locale="us"/>
+                                            <f:validateDoubleRange minimum="4.0" maximum="20.0" />
+                                        </p:inputText>
+                                        <h:message for="somnoventIpap"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputLabel value="EPAP:" for="somnoventEpap" /> 
+                                        <p:inputText id="somnoventEpap" label="EPAP" value="#{psgBean.currCpapVentPress.epap}" maxlength="4">
+                                            <f:convertNumber maxFractionDigits="1" integerOnly="false" locale="us"/>
+                                            <f:validateDoubleRange minimum="4.0" maximum="20.0" />
+                                        </p:inputText>
+                                        <h:message for="somnoventEpap"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputLabel value="PDIFF:" for="somnoventPdiff" /> 
+                                        <p:inputText id="somnoventPdiff" label="PDIFF" value="#{psgBean.currCpapVentPress.pdiff}" maxlength="5">
+                                            <f:convertNumber maxFractionDigits="1" integerOnly="false" locale="us"/>
+                                            <f:validateDoubleRange minimum="-16" maximum="16" />
+                                        </p:inputText>
+                                        <h:message for="somnoventPdiff"/>
+                                        <h:outputText value=""/>
+                                    </h:panelGrid>
+
+                                    <h:commandButton value="Добавить замер" actionListener="#{psgBean.addCpapVentPress}"
+                                                     rendered="#{not psgBean.curr.isDone or loginBean.admin}"
+                                                     type="button"
+                                                     >
+                                        <f:ajax execute=":#{bnd.SomnoventParamsInput.clientId}" render=":#{bnd.msgBlock.clientId} :#{bnd.SomnoventParamsTable.clientId} :#{bnd.SomnoventParamsInput.clientId}"/>  
+                                    </h:commandButton>
+                                </h:form>
+                            </p:panel >   
+
+
+
+                            <p:panel header="SomnoVent: Частота дыхания" rendered="#{psgBean.somnoVentSelected}">
+                                <h:form>
+                                    <p:dataTable id="BreathFreqTable"
+                                                 value="#{psgBean.curr.psgAttrBreathFreqList}" var="p"
+                                                 paginator="true" paginatorPosition="bottom" rows="5"
+                                                 sortBy="#{p.measuringTime}"
+                                                 binding="#{bnd.BreathFreqTable}"
+                                                 >
+                                        <p:column headerText="Время" sortBy="#{p.measuringTime}">
+                                            <h:outputText value="#{p.measuringTime}">
+                                                <f:convertDateTime pattern="HH:mm" timeZone="UTC"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column headerText="Частота" sortBy="#{p.breathFreq}">
+                                            <h:outputText value="#{p.breathFreq}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Удалить" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                            <h:commandLink value="X" action="#{psgBean.delBreathFreq(p)}">
+                                                <f:ajax execute="@this" render=":#{bnd.msgBlock.clientId} :#{bnd.BreathFreqTable.clientId} :#{bnd.BreathFreqInput.clientId}"/>  
+                                            </h:commandLink>
+                                        </p:column>
+
+                                    </p:dataTable>
+
+                                    <h:panelGrid columns="4" id="BreathFreqInput" binding="#{bnd.BreathFreqInput}" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                        <h:outputLabel value="Время:"/> 
+                                        <p:calendar id="BreathFreqTime"
+                                                    pattern="HH:mm"
+                                                    timeZone="UTC"
+                                                    timeOnly="true"
+                                                    locale="ru"
+                                                    showButtonPanel="true"
+                                                    value="#{psgBean.currBreathFreq.measuringTime}"
+                                                    disabled="#{psgBean.curr.isDone and not loginBean.admin}"
+                                                    required="true"
+                                                    requiredMessage="Время замера обязательно"
+                                                    label="Время замера"
+                                                    >                                        
+                                            <p:ajax partialSubmit="true" process="BreathFreqTime" update="BreathFreqTime" event="dateSelect"/> 
+                                        </p:calendar>
+                                        <h:message for="BreathFreqTime"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputLabel value="Частота дыхания:" for="BreathFreq" /> 
+                                        <p:inputText id="BreathFreq" label="Частота дыхания" value="#{psgBean.currBreathFreq.breathFreq}" maxlength="4">
+                                            <f:convertNumber maxFractionDigits="1" integerOnly="false" locale="us"/>
+                                            <f:validateDoubleRange minimum="5" maximum="180" />
+                                        </p:inputText>
+                                        <h:message for="BreathFreq"/>
+                                        <h:outputText value=""/>
+                                    </h:panelGrid>
+
+                                    <h:commandButton value="Добавить замер" actionListener="#{psgBean.addBreathFreq}"
+                                                     rendered="#{not psgBean.curr.isDone or loginBean.admin}"
+                                                     type="button"
+                                                     >
+                                        <f:ajax execute=":#{bnd.BreathFreqInput.clientId}" render=":#{bnd.msgBlock.clientId} :#{bnd.BreathFreqTable.clientId} :#{bnd.BreathFreqInput.clientId}"/>  
+                                    </h:commandButton>
+                                </h:form>
+                            </p:panel>   
+                            
+                        
+                            <p:panel header="SomnoBalance: Параметры" id="SomnoBalancePanel" binding="#{bnd.SomnoBalancePanel}" rendered="#{psgBean.somnoBalanceSelected}">
+                                <h:form>
+                                    <p:dataTable id="SomnoBalanceParamsTable" value="#{psgBean.curr.psgAttrCpapBalancePrmList}" var="p"
+                                                 paginator="true" paginatorPosition="bottom" rows="5"
+                                                 sortBy="#{sp.measuringTime}"
+                                                 binding="#{bnd.SomnoBalanceParamsTable}"
+                                                 >
+                                        <p:column headerText="Время" sortBy="#{p.measuringTime}">
+                                            <h:outputText value="#{p.measuringTime}">
+                                                <f:convertDateTime pattern="HH:mm" timeZone="UTC"/>
+                                            </h:outputText>
+                                        </p:column>
+
+                                        <p:column headerText="Верх. гр" sortBy="#{p.prUpperTreshold}">
+                                            <h:outputText value="#{p.prUpperTreshold}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Нижн. гр" sortBy="#{p.prLowerTreshold}">
+                                            <h:outputText value="#{p.prLowerTreshold}"/>
+                                        </p:column>
+
+                                        <p:column headerText="SoftPAP" sortBy="#{p.softPapFunction}">
+                                            <h:outputText value="#{p.softPapFunction}"/>
+                                        </p:column>
+                                        
+                                        <p:column headerText="Удалить" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                            <h:commandLink value="X" action="#{psgBean.delCpapBalPrm(p)}">
+                                                <f:ajax execute="@this" render=":#{bnd.msgBlock.clientId} :#{bnd.SomnoBalanceParamsTable.clientId} :#{bnd.SomnoBalanceParamsInput.clientId}"/>  
+                                            </h:commandLink>
+                                        </p:column>
+                                    </p:dataTable>
+
+
+                                    <h:panelGrid columns="4" id="SomnoBalanceParamsInput" binding="#{bnd.SomnoBalanceParamsInput}" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                        <h:outputLabel value="Время:"/> 
+                                        <p:calendar id="SomnoBalanceParamsTime"
+                                                    pattern="HH:mm"
+                                                    timeZone="UTC"
+                                                    timeOnly="true"
+                                                    locale="ru"
+                                                    showButtonPanel="true"
+                                                    value="#{psgBean.currCpapBalPrm.measuringTime}"
+                                                    disabled="#{psgBean.curr.isDone and not loginBean.admin}"
+                                                    required="true"
+                                                    requiredMessage="Время замера обязательно"
+                                                    label="Время замера"
+                                                    >                                        
+                                            <p:ajax partialSubmit="true" process="SomnoBalanceParamsTime" update="SomnoBalanceParamsTime" event="dateSelect"/> 
+                                        </p:calendar>
+                                        <h:message for="SomnoventParamTime"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputLabel value="Верхн. гр. давления:" for="somnoBalUpTr" /> 
+                                        <p:inputText id="somnoBalUpTr" label="Верхн. гр. давления" value="#{psgBean.currCpapBalPrm.prUpperTreshold}" maxlength="4">
+                                            <f:convertNumber maxFractionDigits="1" integerOnly="false" locale="us"/>
+                                            <f:validateDoubleRange minimum="4.0" maximum="20.0" />
+                                        </p:inputText>
+                                        <h:message for="somnoBalUpTr"/>
+                                        <h:outputText value=""/>
+
+                                        <h:outputLabel value="Нижн. гр. давления:" for="somnoBalLwTr" /> 
+                                        <p:inputText id="somnoBalLwTr" label="Верхн. гр. давления" value="#{psgBean.currCpapBalPrm.prLowerTreshold}" maxlength="4">
+                                            <f:convertNumber maxFractionDigits="1" integerOnly="false" locale="us"/>
+                                            <f:validateDoubleRange minimum="4.0" maximum="20.0" />
+                                        </p:inputText>
+                                        <h:message for="somnoBalLwTr"/>
+                                        <h:outputText value=""/>
+
+                                        
+                                        <h:outputLabel value="Функция softPAP:" for="somnoBalSoftPAP" />
+                                        <p:selectOneMenu id="somnoBalSoftPAP" label="Функция softPAP" value="#{psgBean.currCpapBalPrm.softPapFunction}">
+                                            <f:selectItem itemValue="softPAP0" itemLabel="выкл."/>
+                                            <f:selectItem itemValue="softPAP1" itemLabel="облег. режим"/>
+                                            <f:selectItem itemValue="softPAP2" itemLabel="норм режим"/>
+                                        </p:selectOneMenu>
+                                        <h:message for="somnoBalSoftPAP"/>
+                                        <h:outputText value=""/>
+                                    </h:panelGrid>
+                                        
+                                        <h:commandButton value="Добавить замер" actionListener="#{psgBean.addCpapBalPrm}"
+                                                     rendered="#{not psgBean.curr.isDone or loginBean.admin}"
+                                                     type="button"
+                                                     >
+                                        <f:ajax execute=":#{bnd.SomnoBalanceParamsInput.clientId}" render=":#{bnd.msgBlock.clientId} :#{bnd.SomnoBalanceParamsTable.clientId} :#{bnd.SomnoBalanceParamsInput.clientId}"/>  
+                                    </h:commandButton>
+                                </h:form>
+                            </p:panel >  
+                            
+                        </h:panelGroup>                        
+
+
+                    </h:panelGrid> 
+
+                </p:tab>
+
+
+                <!--================================================================================================================================ -->
+
+
+                <p:tab title="Протокол"> 
+                    <h:panelGrid columns="3"  styleClass="my-class1" columnClasses="my-class1">
+                        <h:form>
+                            <h:panelGrid columns="2" id="grpCmnInput3" binding="#{bnd.grpCmnInput3}">
+                                <h:outputLabel value="Время подкл. датчиков:" />
+                                <p:calendar id="DetOnTime"
+                                            pattern="HH:mm"
+                                            timeZone="UTC"
+                                            timeOnly="true"
+                                            locale="ru"
+                                            showButtonPanel="true"
+                                            value="#{psgBean.curr.detectorOnTime}"
+                                            disabled="#{psgBean.curr.isDone and not loginBean.admin}"
+                                            >
+                                    <p:ajax partialSubmit="true" process="DetOnTime" update="DetOnTime" event="dateSelect"/> 
+                                </p:calendar>
+                                <h:outputLabel value="Время выкл. света:" />
+                                <p:calendar id="LightOffTime"
+                                            pattern="HH:mm"
+                                            timeZone="UTC"
+                                            timeOnly="true"
+                                            locale="ru"
+                                            showButtonPanel="true"
+                                            value="#{psgBean.curr.lightOffTime}"
+                                            disabled="#{psgBean.curr.isDone and not loginBean.admin}"
+                                            >                                        
+                                    <p:ajax partialSubmit="true" process="LightOffTime" update="LightOffTime" event="dateSelect"/> 
+                                </p:calendar>
+
+                                <h:outputLabel value="Время засыпания:" />
+                                <p:calendar id="GoToSleepTime"
+                                            pattern="HH:mm"
+                                            timeZone="UTC"
+                                            timeOnly="true"
+                                            locale="ru"
+                                            showButtonPanel="true"
+                                            value="#{psgBean.curr.goToSleepTime}"
+                                            disabled="#{psgBean.curr.isDone and not loginBean.admin}"
+                                            >                                        
+                                    <p:ajax partialSubmit="true" process="GoToSleepTime" update="GoToSleepTime" event="dateSelect"/> 
+                                </p:calendar>
+                                <h:outputLabel value="Время пробуждения:" />
+                                <p:calendar id="WakeUpTime"
+                                            pattern="HH:mm"
+                                            timeZone="UTC"
+                                            timeOnly="true"
+                                            locale="ru"
+                                            showButtonPanel="true"
+                                            value="#{psgBean.curr.wakeUpTime}"
+                                            disabled="#{psgBean.curr.isDone and not loginBean.admin}"
+                                            >                                        
+                                    <p:ajax partialSubmit="true" process="WakeUpTime" update="WakeUpTime" event="dateSelect"/> 
+                                </p:calendar>
+                                <h:outputLabel value="Общее время сна, часов:" />
+                                <p:inputText value="#{psgBean.curr.totalSleepTimeHour}" disabled="#{psgBean.curr.isDone and not loginBean.admin}" size="4"/>
+                                <h:outputLabel value="Примечания:" />
+                                <h:inputText value="#{psgBean.curr.notes}" disabled="#{psgBean.curr.isDone and not loginBean.admin}"/>
+                            </h:panelGrid>
+
+                            <h:commandButton value="Сохранить" action="#{psgBean.save()}"
+                                             rendered="#{not psgBean.curr.isDone or loginBean.admin}"
+                                             type="button"
+                                             >
+                                <f:ajax execute=":#{bnd.grpCmnInput3.clientId} :#{bnd.grpCmnInput1.clientId} :#{bnd.grpCmnInput2.clientId}" render=":#{bnd.msgBlock.clientId}"/>
+                            </h:commandButton>
+                        </h:form>
+
+                        <p:panel header="Правка датчиков" toggleable="true" collapsed="false" toggleSpeed="300">
+                            <h:form>                                
+                                <h:panelGrid columns="1">
+                                    <p:dataTable id="DetTuneTable" value="#{psgBean.curr.psgAttrDetectorTuneList}" var="det"
+                                                 paginator="true" paginatorPosition="bottom" rows="5"
+                                                 sortBy="#{det.measuringTime}"
+                                                 >
+                                        <p:column headerText="Время" sortBy="#{det.measuringTime}">
+                                            <h:outputText value="#{det.measuringTime}">
+                                                <f:convertDateTime timeZone="UTC" pattern="HH:mm"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Наименование" sortBy="#{det.detectorId.name}">
+                                            <h:outputText value="#{det.detectorId.name}"/>
+                                        </p:column>
+                                        <p:column headerText="Удалить" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                            <h:commandLink value="X" action="#{psgBean.delDetTune(det)}">
+                                                <f:ajax execute="@this" render=":#{bnd.msgBlock.clientId} DetTuneTable :#{bnd.grpDetTuneInput.clientId}"/>  
+                                            </h:commandLink>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                    <h:panelGrid columns="2" rendered="#{not psgBean.curr.isDone or loginBean.admin}" id="grpDetTuneInput" binding="#{bnd.grpDetTuneInput}">
+                                        <h:outputLabel value="Датчик:"/>
+                                        <h:selectOneMenu value="#{psgBean.currDetTune.detectorId}">
+                                            <f:selectItems value="#{psgAttrDetectorController.itemsAvailableSelectOne}"/>    
+                                        </h:selectOneMenu>
+                                        <h:outputLabel value="Время:"/>    
+                                        <p:calendar id="DetTuneTime"
+                                                    pattern="HH:mm"
+                                                    timeZone="UTC"
+                                                    timeOnly="true"
+                                                    locale="ru"
+                                                    showButtonPanel="true"
+                                                    value="#{psgBean.currDetTune.measuringTime}"
+                                                    />                                        
+                                    </h:panelGrid>
+                                    <h:commandButton value="Добавить правку" action="#{psgBean.addDetectorTune()}"
+                                                     rendered="#{not psgBean.curr.isDone or loginBean.admin}"
+                                                     type="button"
+                                                     >
+                                        <f:ajax execute=":#{bnd.grpDetTuneInput.clientId}" render=":#{bnd.msgBlock.clientId} DetTuneTable :#{bnd.grpDetTuneInput.clientId}"/>  
+                                    </h:commandButton>
+                                </h:panelGrid>
+                            </h:form>    
+                        </p:panel>
+
+                        <p:panel header="Походы в туалет"  toggleable="true" collapsed="false" toggleSpeed="300">
+                            <h:form>                                
+                                <h:panelGrid columns="1">
+                                    <p:dataTable id="ToiletTable" value="#{psgBean.curr.psgAttrToiletWakeList}" var="toilet"
+                                                 paginator="true" paginatorPosition="bottom" rows="5"
+                                                 sortBy="#{toilet.measuringTime}"
+                                                 >
+                                        <p:column headerText="Время" sortBy="#{toilet.measuringTime}">
+                                            <h:outputText value="#{toilet.measuringTime}">
+                                                <f:convertDateTime timeZone="UTC" pattern="HH:mm"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column headerText="Удалить" rendered="#{not psgBean.curr.isDone or loginBean.admin}">
+                                            <h:commandLink value="X" action="#{psgBean.delToiletWake(toilet)}">
+                                                <f:ajax execute=":#{bnd.grpToiletInput.clientId}" render=":#{bnd.msgBlock.clientId} ToiletTable :#{bnd.grpToiletInput.clientId}"/>  
+                                            </h:commandLink>
+                                        </p:column>
+
+                                    </p:dataTable>
+                                    <h:panelGrid columns="2" rendered="#{not psgBean.curr.isDone or loginBean.admin}" id="grpToiletInput" binding="#{bnd.grpToiletInput}">
+                                        <h:outputLabel value="Время:"/>    
+                                        <p:calendar id="ToiletWalkTime"
+                                                    pattern="HH:mm"
+                                                    timeZone="UTC"
+                                                    timeOnly="true"
+                                                    locale="ru"
+                                                    showButtonPanel="true"
+                                                    value="#{psgBean.currToiletWake.measuringTime}"
+                                                    />                                        
+                                    </h:panelGrid>
+                                    <h:commandButton value="Добавить поход" action="#{psgBean.addToiletWalk()}"
+                                                     rendered="#{not psgBean.curr.isDone or loginBean.admin}"
+                                                     type="button"
+                                                     >
+                                        <f:ajax execute=":#{bnd.grpToiletInput.clientId}" render=":#{bnd.msgBlock.clientId} ToiletTable :#{bnd.grpToiletInput.clientId}"/>  
+                                    </h:commandButton>
+                                </h:panelGrid>
+                            </h:form>    
+                        </p:panel>
+
+
+                    </h:panelGrid>       
+                </p:tab> 
+
+
+            </p:tabView>
+
+            <h:form>
+
+<!--                <h:commandButton value="Обновить из базы (текущие правки теряются!)" action="#{psgBean.refresh()}"/><br/> -->
+                <br/><h:commandButton value="Завершить ПСГ!" action="#{psgBean.commitPsg()}" rendered="#{not psgBean.curr.isDone}"/>
+                <h:commandButton value="Открыть ПСГ для правки" action="#{psgBean.openPsg()}" rendered="#{psgBean.curr.isDone and loginBean.admin}"/>
+            </h:form>
+        </p:panel>          
+    </h:body>
+</html>
+

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Сотрудники</title>
+        
+     <script type="text/javascript">
+PrimeFaces.locales ['ru'] = {
+    closeText: 'Закрыть',
+    prevText: 'Назад',
+    nextText: 'Вперёд',
+    monthNames: ['Январь', 'Февраль' , 'Март' , 'Апрель' , 'Май' , 'Июнь' , 'Июль' , 'Август' , 'Сентябрь','Октябрь','Ноябрь','Декабрь' ],
+    monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек' ],
+    dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Субота'],
+    dayNamesShort: ['Воск','Пон' , 'Вт' , 'Ср' , 'Четв' , 'Пят' , 'Суб'],
+    dayNamesMin: ['В', 'П', 'Вт', 'С ', 'Ч', 'П ', 'Сб'],
+    weekHeader: 'Неделя',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix:'',
+    timeOnlyTitle: 'Только время',
+    timeText: 'Время',
+    hourText: 'Час',
+    minuteText: 'Минута',
+    secondText: 'Секунда',
+    currentText: 'Сегодня',
+    ampm: false,
+    month: 'Месяц',
+    week: 'неделя',
+    day: 'День',
+    allDayText: 'Весь день'
+};
+    </script>
+        
+    </h:head>
+    
+    
+    <h:body>
+        <ui:include src="../ui/login_menu.xhtml"/> 
+        <h:form>
+            <style type="text/css">
+                /* Important required because row */
+                .ui-datatable-odd {
+                    background-color:lightgray !important;
+                    background-position-y: -1400px; /* IE7 hack */
+                }
+                .ui-widget {
+                    /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                    font-size: 0.90em/*{fsDefault}*/;
+                }                
+            </style>
+
+            <p:panel header="Сотрудники">
+                <h:panelGrid columns="1">
+                    <br/>
+                    <p:commandButton action="#{partnerEmployeListVMBean.goCreateNew()}"
+                                     value="Добавить сотрудника"
+                                     ajax="false"
+                                     />
+                    <br/>
+                    <h:commandButton value="Показать всех"
+                                     type="button"
+                                     actionListener="#{partnerEmployeListVMBean.clearFilter}"
+                                     >
+                        <f:ajax execute="@this" render="employeList"/>
+
+                    </h:commandButton>
+
+                    <h:commandButton value="Обновить"
+                                     type="button"
+                                     actionListener="#{partnerEmployeListVMBean.refresh()}"
+                                     >
+                        <f:ajax execute="@this" render="employeList"/>
+
+                    </h:commandButton>
+                    
+                    <p:dataTable id="employeList"
+                                 value="#{partnerEmployeListVMBean.value}" 
+                                 var="row"
+                                 paginator="true"
+                                 paginatorPosition="bottom" 
+                                 rows="30"
+                                 filteredValue="#{partnerEmployeListVMBean.filtered}"
+                                 filterDelay="250"
+                                 emptyMessage="Записей не найдено"
+
+                                 >
+                        
+                        <p:column headerText="Имя"
+                                  sortBy="#{row.fio}"
+                                  filterBy="#{row.fio}"
+                                  filterMatchMode="contains"
+                                  >          
+                            <p:commandLink action="#{partnerEmployeListVMBean.goEdit(row)}">
+                                <h:outputText value="#{row.fio}"/>
+                            </p:commandLink>
+                        </p:column>
+
+                        
+                        <p:column headerText="Учреждение"
+                                  sortBy="#{row.partner.name}"
+                                  filterBy="#{row.partner.name}"
+                                  filterMatchMode="contains"
+                                  width="380"
+                                  >
+                            <p:commandLink action="#{partnerEmployeListVMBean.goToCompany(row.partner)}">
+                                <h:outputText value="#{row.partner.name}"/>
+                            </p:commandLink>
+                        </p:column>
+                        
+
+                        <p:column headerText="ИНН фирмы"
+                                  sortBy="#{row.partner.inn}"
+                                  filterBy="#{row.partner.inn}"
+                                  filterMatchMode="contains"
+                                  width="110"
+                                  >          
+                            <h:outputText value="#{row.partner.inn}"/>
+                        </p:column>
+                        
+                        
+                        <p:column headerText="Область"
+                                  sortBy="#{row.partner.jurAddrUaState.rusName}"
+                                  filterBy="#{row.partner.jurAddrUaState.rusName}"
+                                  filterMatchMode="contains"
+                                  width="140"
+                                  >          
+                            <h:outputText value="#{row.partner.jurAddrUaState.rusName}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Должность"
+                                  sortBy="#{row.position.name}"
+                                  filterBy="#{row.position.name}"
+                                  filterMatchMode="contains"
+                                  width="140"
+                                  >          
+                            <h:outputText value="#{row.position.name}"/>
+                        </p:column>
+                        
+                        <p:column headerText="Специальность"
+                                  sortBy="#{row.position.name}"
+                                  filterBy="#{row.position.name}"
+                                  filterMatchMode="contains"
+                                  width="150"
+                                  >          
+                            <h:outputText value="#{row.position.name}"/>
+                        </p:column>
+                        
+                        
+                            
+                        <p:column headerText="Менеджер"
+                                  sortBy="#{row.manager.toString()}"
+                                  filterBy="#{row.manager.toString()}"
+                                  filterMatchMode="contains"
+                                  width="140"
+                                  >          
+                            <h:outputText value="#{row.manager.toString()}"/>
+                        </p:column>
+                        
+                        <p:column headerText="email"
+                                  sortBy="#{row.email1}"
+                                  filterBy="#{row.email1}"
+                                  filterMatchMode="contains"
+                                  >          
+                            <h:outputText value="#{row.email1}"/>
+                        </p:column>
+<!--                        
+                        <p:column headerText="Действия">
+                            <p:commandButton value="Править" action="#{partnerEmployeListVMBean.goEdit(row)}"/>
+                        </p:column>
+                        -->
+                    </p:dataTable>
+
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+    </h:body>
+</html>

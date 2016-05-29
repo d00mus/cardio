@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      lang="ru"
+      >
+    <h:head>
+        <style type="text/css">
+            /* Important required because row */
+            .ui-datatable-odd {
+                background-color:lightgray !important;
+                background-position-y: -1400px; /* IE7 hack */
+            }
+            .ui-widget {
+                /* font-family: Verdana,Arial,sans-serif {ffDefault}*/
+                font-size: 0.90em/*{fsDefault}*/;
+            } 
+
+            .valign_top td{
+                vertical-align: top;
+                position: relative;
+            }
+
+        </style>            
+
+        <script type="text/javascript">
+
+            function openNewWindow(aUrl, aWindowName) {
+                window.open(aUrl, aWindowName);
+                return false;
+            }
+            ;
+        </script>
+
+     <script type="text/javascript">
+PrimeFaces.locales ['ru'] = {
+    closeText: 'Закрыть',
+    prevText: 'Назад',
+    nextText: 'Вперёд',
+    monthNames: ['Январь', 'Февраль' , 'Март' , 'Апрель' , 'Май' , 'Июнь' , 'Июль' , 'Август' , 'Сентябрь','Октябрь','Ноябрь','Декабрь' ],
+    monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек' ],
+    dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Субота'],
+    dayNamesShort: ['Воск','Пон' , 'Вт' , 'Ср' , 'Четв' , 'Пят' , 'Суб'],
+    dayNamesMin: ['В', 'П', 'Вт', 'С ', 'Ч', 'П ', 'Сб'],
+    weekHeader: 'Неделя',
+    firstDay: 1,
+    isRTL: false,
+    showMonthAfterYear: false,
+    yearSuffix:'',
+    timeOnlyTitle: 'Только время',
+    timeText: 'Время',
+    hourText: 'Час',
+    minuteText: 'Минута',
+    secondText: 'Секунда',
+    currentText: 'Сегодня',
+    ampm: false,
+    month: 'Месяц',
+    week: 'неделя',
+    day: 'День',
+    allDayText: 'Весь день'
+};
+    </script>
+
+        <title>Результат ПСГ #{paramsBean.psgId}</title>
+    </h:head>
+    <h:body>
+        <h:panelGroup>
+            <ui:include src="login_menu.xhtml"/> 
+        </h:panelGroup> 
+        <p:panel header="ПСГ №#{psgBean.curr.psgNo} : Общие данные">
+            <h:form>    
+                <h:panelGrid columns="1">
+                    <h:panelGrid columns="3" id="grpCmnInput1" binding="#{bnd.grpCmnInput1}">
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Дата/время начала ПСГ:"/>
+                            <p:calendar id="PsgDate"
+                                        pattern="dd.MM.yyyy HH:mm"
+                                        showButtonPanel="true"
+                                        timeZone="UTC"
+                                        value="#{psgBean.curr.psgDate}"
+                                        disabled="true"
+                                        locale="ru"
+                                        >
+                                <p:ajax partialSubmit="true" process="PsgDate" update="PsgDate" event="dateSelect"/> 
+                            </p:calendar>
+                            <h:outputLabel value="Пациент:"/>
+                            <h:outputLink value="patient_profile.xhtml">
+                                <f:param name="id" value="#{psgBean.curr.patientId.id}"/>
+                                <f:param name="tabId" value="1" />
+                                <h:outputText value="#{psgBean.curr.patientId.toString()}"/>
+                            </h:outputLink>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Рост,см:"/>
+                            <p:inputText value="#{psgBean.curr.currentHeight}" disabled="true" size="5"/>
+                            <h:outputLabel value="Вес,кг:"/>
+                            <p:inputText value="#{psgBean.curr.currentWeigth}" disabled="true" size="5"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputLabel value="Палата:"/>
+                            <h:selectOneMenu value="#{psgBean.curr.cabinetId}" disabled="true">
+                                <f:selectItems value="#{cabinetController.itemsAvailableSelectOne}"/>
+                            </h:selectOneMenu>
+                            <h:outputLabel value="Медсестра:"/>
+                            <h:selectOneMenu value="#{psgBean.curr.nurseId}" disabled="true">
+                                <f:selectItems value="#{cardioUserController.itemsAvailableSelectOne}"/>
+                            </h:selectOneMenu>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <!--
+                    <h:commandButton value="Сохранить в базу" action="#{psgBean.save()}" rendered="#{not psgBean.curr.isDone or loginBean.admin}" type="button">
+                        <f:ajax execute=":#{bnd.grpCmnInput3.clientId} :#{bnd.grpCmnInput1.clientId} :#{bnd.grpCmnInput2.clientId}" render=":#{bnd.msgBlock.clientId}"/>
+                    </h:commandButton>
+                    -->
+                </h:panelGrid>
+                <h:outputLink value="psg_view.xhtml">
+                    <f:param name="psgId" value="#{psgBean.curr.id}" />
+                    <h:outputText value="Подробные данные по ПСГ"/>
+                </h:outputLink>
+            </h:form>                       
+        </p:panel>
+        <h:form>
+            <h:panelGrid id="grpBtnCreate" rendered="#{psgBean.curr.psgResult==null}" columns="1">
+                <h:commandButton id="btnCreateResult"
+                                 value="Создать результат"
+                                 actionListener="#{psgBean.createResult}"
+                                 rendered="#{not psgBean.curr.psgResult != null}"
+                                 >
+                    <!--
+                    <f:ajax render=":grpResult grpBtnCreate btnCreateResult :#{bnd.messages.clientId}"/>   
+                    -->
+                    
+                </h:commandButton>
+            </h:panelGrid>     
+        </h:form>  
+        <h:panelGrid columns="1">
+            <p:panel header="Результат ПСГ" id="grpResult">
+                <h:form id="mainForm">
+                    <p:growl id="messages" binding="#{bnd.messages}"/>
+                    <p:panel id="grpResultCommon" header="Общие данные" rendered="#{psgBean.curr.psgResult!=null}">
+                        <h:panelGrid columns="4" id="cmnGrid">
+                            <h:outputLabel for="author" value="Автор результата:"/>
+                            <p:selectOneMenu id="author" value="#{psgBean.curr.psgResult.author}" required="true" requiredMessage="Автор результата - обязательное поле!">
+                                <f:selectItems value="#{psgResultAuthorController.itemsAvailableSelectMany}"/>   
+                            </p:selectOneMenu>
+                            <p:message for="author"/>
+                            <h:outputLabel value=""/>
+
+
+                            <h:outputLabel value="Размер шеи:"/>
+                            <p:inputText id="neckSize" value="#{psgBean.curr.psgResult.neckSize}" size="6" label="Размер шеи">
+                                <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                <f:validateDoubleRange minimum="5" maximum="100" />
+                            </p:inputText>
+                            <p:message for="neckSize"/>
+                            <h:outputLabel value=""/>
+
+                            <h:outputLabel value="Рост, см:"/>
+                            <p:inputText id="height" value="#{psgBean.curr.psgResult.height}" size="6" label="Рост">
+                                <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                <f:validateDoubleRange minimum="50" maximum="300" />
+                            </p:inputText>
+                            <p:message for="height"/>
+                            <h:outputLabel value=""/>
+
+                            <h:outputLabel value="Вес, кг:"/>
+                            <p:inputText id="weigth" value="#{psgBean.curr.psgResult.weigth}" size="6" label="Вес">
+                                <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                <f:validateDoubleRange minimum="25" maximum="400" />
+                            </p:inputText>
+                            <p:message for="weigth"/>
+                            <h:outputLabel value=""/>
+
+                            <h:outputLabel value="Индекс массы тела:"/>
+                            <p:inputText id="wgIdx" value="#{psgBean.curr.psgResult.wgIdx}" size="6" label="Индекс массы тела">
+                                <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                <f:validateDoubleRange minimum="5" maximum="100" />
+                            </p:inputText>
+                            <p:message for="wgIdx"/>
+                            <h:outputLabel value=""/>
+
+                            <h:outputLabel value="Талия, см:"/>
+                            <p:inputText id="waist" value="#{psgBean.curr.psgResult.waist}" size="6" label="Талия">
+                                <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                <f:validateDoubleRange minimum="20" maximum="300" />
+                            </p:inputText>
+                            <p:message for="waist"/>
+                            <h:outputLabel value=""/>
+
+                            <h:outputLabel value="Бёдра, см:"/>
+                            <p:inputText id="stegna" value="#{psgBean.curr.psgResult.stegna}" size="6" label="Стегна">
+                                <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                <f:validateDoubleRange minimum="5" maximum="300" />
+                            </p:inputText>
+                            <p:message for="stegna"/>
+                            <h:outputLabel value=""/>
+
+                            <h:outputLabel value="Обьём груди, см:"/>
+                            <p:inputText id="chest" value="#{psgBean.curr.psgResult.chest}" size="6" label="Обьём груди">
+                                <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                <f:validateDoubleRange minimum="40" maximum="300" />
+                            </p:inputText>
+                            <p:message for="chest"/>
+                            <h:outputLabel value=""/>
+
+                        </h:panelGrid>
+
+                    </p:panel>
+
+                    <p:tabView id="TabsResultDetails"
+                               rendered="#{psgBean.curr.psgResult!=null}"
+                               activeIndex="#{psgBean.curPsgResTabIdx}"
+                               binding="#{bnd.TabsResultDetails}"
+                               >
+
+                        <p:tab title="Диагностическая ночь" >
+                            <h:panelGrid columns="4" id="dgGrid" binding="#{bnd.dgGrid}">
+                                <h:outputLabel value="ІАГ:" for="dgIag"/>
+                                <p:inputText id="dgIag" value="#{psgBean.curr.psgResult.dgIag}" size="4" label="ІАГ">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="dgIag"/>
+                                <h:outputLabel value=""/>
+
+                                <h:outputLabel for="dgOaEpis" value="Епізоди ОА:"/>
+                                <p:inputText id="dgOaEpis" value="#{psgBean.curr.psgResult.dgOaEpis}" size="4" label="Епізоди ОА">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="dgOaEpis"/>
+                                <h:outputLabel value=""/>
+
+                                <h:outputLabel for="dgGipoEpis" value="Епізоди гіпопное:"/>
+                                <p:inputText id="dgGipoEpis" value="#{psgBean.curr.psgResult.dgGipoEpis}" size="4" label="Епізоди гіпопное">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="dgGipoEpis"/>
+                                <h:outputLabel value=""/>
+
+                                <h:outputLabel for="dgCaEpis" value="Епізоди ЦА:"/>
+                                <p:inputText id="dgCaEpis" value="#{psgBean.curr.psgResult.dgCaEpis}" size="4" label="Епізоди ЦА">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="dgCaEpis"/>
+                                <h:outputLabel value=""/>
+
+                                <h:outputLabel for="dgAvgSpo2" value="Сер. SpO2:"/>
+                                <p:inputText id="dgAvgSpo2" value="#{psgBean.curr.psgResult.dgAvgSpo2}" size="4" label="Сер. SpO2">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="dgAvgSpo2"/>
+                                <h:outputLabel value=""/>
+
+                                <h:outputLabel for="dgMinSpo2" value="Мін.SpO2:"/>
+                                <p:inputText id="dgMinSpo2" value="#{psgBean.curr.psgResult.dgMinSpo2}" size="4" label="Мін.SpO2">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="dgMinSpo2"/>
+                                <h:outputLabel value=""/>
+
+                                <h:outputLabel for="dgDesaturIdx" value="Індекс десатурації:"/>
+                                <p:inputText id="dgDesaturIdx" value="#{psgBean.curr.psgResult.dgDesaturIdx}" size="4" label="Індекс десатурації">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="dgDesaturIdx"/>
+                                <h:outputLabel value=""/>
+
+                            </h:panelGrid>
+
+                        </p:tab> 
+
+                        <p:tab title="Терапевтическая ночь" id="trGrid" binding="#{bnd.trGrid}">
+                            <b><h:outputLabel value="Данные на фоне терапии"/></b>
+                            <h:panelGrid columns="4">
+                                <h:outputLabel value="ІАГ:" for="trIag"/>
+                                <p:inputText id="trIag" value="#{psgBean.curr.psgResult.trIag}" size="4" label="ІАГ">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="trIag"/>
+                                <h:outputLabel value=""/>
+
+                                <h:outputLabel for="trOaEpis" value="Епізоди ОА:"/>
+                                <p:inputText id="trOaEpis" value="#{psgBean.curr.psgResult.trOaEpis}" size="4" label="Епізоди ОА">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="trOaEpis"/>
+                                <h:outputLabel value=""/>
+
+                                <h:outputLabel for="trGipoEpis" value="Епізоди гіпопное:"/>
+                                <p:inputText id="trGipoEpis" value="#{psgBean.curr.psgResult.trGipoEpis}" size="4" label="Епізоди гіпопное">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="trGipoEpis"/>
+                                <h:outputLabel value=""/>
+
+                                <h:outputLabel for="trCaEpis" value="Епізоди ЦА:"/>
+                                <p:inputText id="trCaEpis" value="#{psgBean.curr.psgResult.trCaEpis}" size="4" label="Епізоди ЦА">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="trCaEpis"/>
+                                <h:outputLabel value=""/>
+
+                                <h:outputLabel for="trAvgSpo2" value="Сер. SpO2:"/>
+                                <p:inputText id="trAvgSpo2" value="#{psgBean.curr.psgResult.trAvgSpo2}" size="4" label="Сер. SpO2">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="trAvgSpo2"/>
+                                <h:outputLabel value=""/>
+
+                                <h:outputLabel for="trMinSpo2" value="Мін.SpO2:"/>
+                                <p:inputText id="trMinSpo2" value="#{psgBean.curr.psgResult.trMinSpo2}" size="4" label="Мін.SpO2">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="trMinSpo2"/>
+                                <h:outputLabel value=""/>
+
+                                <h:outputLabel for="trDesaturIdx" value="Індекс десатурації:"/>
+                                <p:inputText id="trDesaturIdx" value="#{psgBean.curr.psgResult.trDesaturIdx}" size="4" label="Індекс десатурації">
+                                    <f:convertNumber maxFractionDigits="2" maxIntegerDigits="4"/>
+                                    <f:validateDoubleRange minimum="0" maximum="1000" />
+                                </p:inputText>
+                                <p:message for="trDesaturIdx"/>
+                                <h:outputLabel value=""/>
+
+                            </h:panelGrid>
+
+                        </p:tab>
+
+                        <f:ajax event="tabChange"/>
+                    </p:tabView>
+                    <h:commandButton actionListener="#{psgBean.save}" value="Сохранить" type="button">
+                        <!--                        
+                                               <p:ajax update="messages cmnGrid #{bnd.TabsResultDetails.clientId}"
+                                                       process="cmnGrid #{bnd.trGrid.clientId} #{bnd.dgGrid.clientId}"
+                                                       />
+                        -->
+                        <f:ajax execute="cmnGrid #{bnd.trGrid.clientId} #{bnd.dgGrid.clientId} #{bnd.TabsResultDetails.clientId}"
+                                render="messages cmnGrid #{bnd.TabsResultDetails.clientId}"
+                                />
+                    </h:commandButton> 
+                    <p:messages autoUpdate="true"/>
+
+                    <!--                        
+                                           
+                                       <p:commandButton value="Сохранить результат"
+                                                        actionListener="#{psgBean.save}"
+                                                        process="cmnGrid #{bnd.trGrid.clientId} #{bnd.dgGrid.clientId} #{bnd.TabsResultDetails.clientId}"
+                                                        update="messages cmnGrid #{bnd.TabsResultDetails.clientId}"
+                                                        ajax="true"
+                                                        validateClient="true"
+                                                        rendered="false"
+                                                        />  
+                    -->
+
+
+                </h:form>     
+            </p:panel>   
+        </h:panelGrid>       
+
+    </h:body>
+
+</html>

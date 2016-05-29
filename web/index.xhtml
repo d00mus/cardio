@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='windows-1251' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      >
+    <h:head>
+
+        <title>Cardio system</title>
+        <style type="text/css">
+            .myButton {
+                -moz-box-shadow:inset 0px 1px 15px 0px #f5978e;
+                -webkit-box-shadow:inset 0px 1px 15px 0px #f5978e;
+                box-shadow:inset 0px 1px 15px 0px #f5978e;
+                background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f24537), color-stop(1, #c62d1f));
+                background:-moz-linear-gradient(top, #f24537 5%, #c62d1f 100%);
+                background:-webkit-linear-gradient(top, #f24537 5%, #c62d1f 100%);
+                background:-o-linear-gradient(top, #f24537 5%, #c62d1f 100%);
+                background:-ms-linear-gradient(top, #f24537 5%, #c62d1f 100%);
+                background:linear-gradient(to bottom, #f24537 5%, #c62d1f 100%);
+                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f24537', endColorstr='#c62d1f',GradientType=0);
+                background-color:#f24537;
+                -moz-border-radius:6px;
+                -webkit-border-radius:6px;
+                border-radius:6px;
+                border:1px solid #d02718;
+                display:inline-block;
+                cursor:pointer;
+                color:#ffffff;
+                font-family:arial;
+                font-size:15px;
+                font-weight:bold;
+                padding:6px 24px;
+                text-decoration:none;
+                text-shadow:0px 1px 0px #810e05;
+            }
+            .myButton:hover {
+                background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #c62d1f), color-stop(1, #f24537));
+                background:-moz-linear-gradient(top, #c62d1f 5%, #f24537 100%);
+                background:-webkit-linear-gradient(top, #c62d1f 5%, #f24537 100%);
+                background:-o-linear-gradient(top, #c62d1f 5%, #f24537 100%);
+                background:-ms-linear-gradient(top, #c62d1f 5%, #f24537 100%);
+                background:linear-gradient(to bottom, #c62d1f 5%, #f24537 100%);
+                filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#c62d1f', endColorstr='#f24537',GradientType=0);
+                background-color:#c62d1f;
+            }
+            .myButton:active {
+                position:relative;
+                top:1px;
+            }
+
+            .my-class1 td{
+                vertical-align: top;
+            }  
+
+
+            #calendar3 {
+                width: 100%;
+                font: monospace;
+                line-height: 1.2em;
+                font-size: 15px;
+                text-align: center;
+            }
+            #calendar3 thead tr:last-child {
+                font-size: small;
+                color: rgb(85, 85, 85);
+            }
+            #calendar3 tbody td {
+                color: rgb(44, 86, 122);
+            }
+            #calendar3 tbody td:nth-child(n+6), #calendar3 .holiday {
+                color: rgb(231, 140, 92);
+            }
+            #calendar3 tbody td.today {
+                outline: 3px solid red;
+            }            
+
+
+        </style>
+        <script src="http://i.i.ua/js/i/finance_informer.js?1" type="text/javascript"  charset="windows-1251"></script>  
+
+        <script type="text/javascript">
+            PrimeFaces.locales ['ru'] = {
+                closeText: 'Закрыть',
+                prevText: 'Назад',
+                nextText: 'Вперёд',
+                monthNames: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
+                monthNamesShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Субота'],
+                dayNamesShort: ['Воск', 'Пон', 'Вт', 'Ср', 'Четв', 'Пят', 'Суб'],
+                dayNamesMin: ['В', 'П', 'Вт', 'С ', 'Ч', 'П ', 'Сб'],
+                weekHeader: 'Неделя',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Только время',
+                timeText: 'Время',
+                hourText: 'Час',
+                minuteText: 'Минута',
+                secondText: 'Секунда',
+                currentText: 'Сегодня',
+                ampm: false,
+                month: 'Месяц',
+                week: 'неделя',
+                day: 'День',
+                allDayText: 'Весь день'
+            };
+        </script>
+
+    </h:head>
+    <h:body>
+
+        <p:panel header="Система Cardio"
+                 >
+            <h:form>
+
+                <p:panel header="Текущий пользователь">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="#{loginBean.currentUser.toString()} (#{loginBean.userName})"/>
+                        <h:commandLink action="#{loginBean.logout()}" value="Выйти из системы"/> 
+                    </h:panelGrid> 
+                </p:panel>
+
+                <h:panelGrid columns="3" style="width: 1000px; margin:0 auto;" styleClass="my-class1" columnClasses="my-class1">
+                    <h:panelGrid columns="1">
+                        <p:calendar id="inline"
+                                    mode="inline"
+                                    locale="ru"
+                                    lang="Календарь"
+                                    label="Календарь"
+                                    selectOtherMonths="true"
+                                    showOtherMonths="true"
+                                    />  
+                        <div>
+                            <div id="SinoptikInformer" style="width:100%;" class="SinoptikInformer type5c1"><div class="siHeader"><div class="siLh"><div class="siMh"><a onmousedown="siClickCount();" href="https://sinoptik.ua/" target="_blank">Погода</a><a onmousedown="siClickCount();" class="siLogo" href="https://sinoptik.ua/" target="_blank"> </a> <span id="siHeader"></span></div></div></div><div class="siBody"><div class="siCity"><div class="siCityName"><a onmousedown="siClickCount();" href="https://sinoptik.ua/погода-киев" target="_blank">Погода в <span>Киеве</span></a></div><div id="siCont0" class="siBodyContent"><div class="siLeft"><div class="siTerm"></div><div class="siT" id="siT0"></div><div id="weatherIco0"></div></div><div class="siInf"><p>влажность: <span id="vl0"></span></p><p>давление: <span id="dav0"></span></p><p>ветер: <span id="wind0"></span></p></div></div></div><div class="siCity"><div class="siCityName"><a onmousedown="siClickCount();" href="https://sinoptik.ua/погода-глеваха" target="_blank">Погода в <span>Глевахе</span></a></div><div id="siCont1" class="siBodyContent"><div class="siLeft"><div class="siTerm"></div><div class="siT" id="siT1"></div><div id="weatherIco1"></div></div><div class="siInf"><p>влажность: <span id="vl1"></span></p><p>давление: <span id="dav1"></span></p><p>ветер: <span id="wind1"></span></p></div></div></div><div class="siLinks"><span><a onmousedown="siClickCount();" href="https://sinoptik.ua/погода-одесса" target="_blank">Погода в Одессе</a>&nbsp;</span><span><a onmousedown="siClickCount();" href="https://sinoptik.ua/погода-львов" target="_blank">Погода во Львове</a>&nbsp;</span></div></div><div class="siFooter"><div class="siLf"><div class="siMf"></div></div></div></div><script type="text/javascript" charset="UTF-8" src="//sinoptik.ua/informers_js.php?title=4&amp;wind=2&amp;cities=303010783,303005323&amp;lang=ru"></script>
+                        </div>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="1">
+
+                        <p:commandButton value="Мой кабинет"
+                                         action="#{indexBean.onBtnClickRedir('/ui/cabinet')}"
+                                         ajax="false"
+                                         style="width:100%"
+                                         />
+
+                        <p:commandButton value="Лаборатория сна"
+                                         action="#{indexBean.onBtnClickRedir('/ui/patient_list')}"
+                                         ajax="false"
+                                         style="width:15em"
+                                         />
+
+                        <p:commandButton value="Учреждения"
+                                         action="#{indexBean.onBtnClickRedir('/ui/partner_list')}"
+                                         ajax="false"
+                                         style="width:15em"
+                                         />
+
+                        <p:commandButton value="Клиенты/Врачи"
+                                         action="#{indexBean.onBtnClickRedir('/ui/employe_list')}"
+                                         ajax="false"
+                                         style="width:15em"
+                                         />
+
+                        <p:commandButton value="Проекты/Задачи"
+                                         action="#{indexBean.onBtnClickRedir('/ui/project_task')}"
+                                         ajax="false"
+                                         style="width:15em"
+                                         />
+
+
+                        <p:commandButton value="Склад"
+                                         action="#{indexBean.onBtnClickRedir('/ui/store')}"
+                                         ajax="false"
+                                         style="width:15em"
+                                         />
+
+                        <p:commandButton value="Мероприятия"
+                                         ajax="false"
+                                         style="width:15em"
+                                         />
+
+
+                        <p:commandButton value="Пользователи"
+                                         action="#{indexBean.onBtnClickRedir('/admin/user_list')}"
+                                         ajax="false"
+                                         style="width:15em"
+                                         />
+                    </h:panelGrid>
+
+
+                    <h:panelGrid columns="1">
+                        <a href="http://finance.i.ua/" target="_blank"
+                           style="margin-right: 8px"
+                           ><img src="http://f.i.ua/fp2_b1_c0_l2.png" border="0" alt="НБУ курс долара"/></a>
+                        <a href="http://finance.i.ua/" target="_blank"
+                           style="margin-left: 7px"
+                           ><img src="http://f.i.ua/fp2_b1_c2_l2.png" border="0" alt="НБУ курс євро"/></a>
+
+                        <style>
+                            #IUAfinance79 { min-width: 175px; width: 220px; cursor: pointer;}
+                            #IUAfinance79 * {margin: 0; padding: 0;}
+                            #IUAfinance79 .content {overflow: hidden; padding: 4px; font-family: Arial; font-size: 10px; color: #000000; background: #f6f6f6; border: 1px solid #000000;}
+                            #IUAfinance79 h1 {overflow: hidden; margin-top: -4px; font-size: 12px; font-weight: bold; height: 20px; line-height: 20px; color: #000000;}
+                            #IUAfinance79 h1 span {float: left; white-space: nowrap;}
+                            #IUAfinance79 h1 i {float: right; display: inline-block; width: 36px; height: 15px; background: url(http://i.i.ua/v2/logo/logo_small_14_black.png) no-repeat 0 1px transparent; opacity: .3;}
+                            #IUAfinance79 a, #IUAfinance79 a:hover {border: none; text-decoration: underline; color: #000000;}
+                            #IUAfinance79 dl {overflow: hidden; background: #ffffff; padding: 4px; margin-bottom: 4px;}
+                            #IUAfinance79 dl dt {font-weight: bold; font-size: 12px;}
+                            #IUAfinance79 dl dd {clear: left; border-top: 1px dotted #DDD;}
+                            #IUAfinance79 dl span {display: block; float: left; width: 39%; white-space: nowrap; text-align: right;}
+                            #IUAfinance79 dl span.th {width: 22%; text-align: left;}
+                            #IUAfinance79 dl dt span {font-size: 10px; font-weight: normal;}
+                            #IUAfinance79 dl dd span {line-height: 24px; font-size: 20px; font-family: Trebuchet MS;}
+                            #IUAfinance79 dl dd span img {vertical-align: middle; margin-right: 1px;}
+                        </style>
+
+                        <div id="IUAfinance79">
+                            <div class="content">
+                                <h1><span><a href="http://finance.i.ua/bank/10/" id="IUAfinance79TitleLink">Курси валют</a></span><i></i></h1>
+                                <dl id="IUAfinance79Embed"></dl>
+                                <a href="http://finance.i.ua/">Курси долара, євро і рубля по банках</a>
+                            </div>
+                        </div>
+
+                        <script type="text/javascript">
+                                iFinanceData = [];
+                                iFinanceData.push({b: 10, c: [840, 978], enc: 0, lang: 0, p: '79'});
+                                window['oiFinance79'] = new iFinance();
+                                window['oiFinance79'].gogo({b: 10, c: [840, 978], enc: 0, lang: 0, p: '79'});
+                        </script>
+
+                        <div id="minfincomua_i_usd" style="margin-top: 5px">Загружаем межбанк от <a href="http://minfin.com.ua/">minfin.com.ua</a></div><script type="text/javascript" src="http://informer.minfin.com.ua/interbank/usd.js"></script>
+
+                        <div id="minfincomua_i_eur">Загружаем межбанк от <a href="http://minfin.com.ua/">minfin.com.ua</a></div><script type="text/javascript" src="http://informer.minfin.com.ua/interbank/eur.js"></script>
+
+                    </h:panelGrid>
+
+
+                </h:panelGrid>
+            </h:form> 
+        </p:panel>
+        <br />
+    </h:body>
+</html>
+
